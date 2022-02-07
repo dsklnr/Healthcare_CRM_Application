@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         JDBC.openConnection();
 
-        System.out.println("Hello world from client");
+        System.out.println("Hello world");
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
         stage.setTitle("Main Screen");
