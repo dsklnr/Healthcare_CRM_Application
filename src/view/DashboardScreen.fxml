@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardController">
+   <children>
+      <Label layoutX="35.0" layoutY="29.0" text="Dashboard">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TableView layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="1342.0">
+        <columns>
+          <TableColumn prefWidth="99.0" text="Appointment ID" />
+            <TableColumn prefWidth="126.0" text="Contact" />
+            <TableColumn prefWidth="120.0" text="Type" />
+          <TableColumn prefWidth="114.0" text="Title" />
+            <TableColumn prefWidth="214.0" text="Description" />
+            <TableColumn prefWidth="169.0" text="Location" />
+            <TableColumn prefWidth="175.0" text="Start Time" />
+            <TableColumn prefWidth="156.0" text="End Time" />
+            <TableColumn text="Customer ID" />
+            <TableColumn prefWidth="88.0" text="User ID" />
+        </columns>
+      </TableView>
+      <RadioButton layoutX="1238.0" layoutY="149.0" mnemonicParsing="false" text="This Month" />
+      <RadioButton layoutX="1339.0" layoutY="149.0" mnemonicParsing="false" text="This Week" />
+      <TextField layoutX="1006.0" layoutY="145.0" prefHeight="25.0" prefWidth="200.0" promptText="Search Appointments" />
+      <Button layoutX="914.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Button layoutX="1002.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Customers">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Button layoutX="1106.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Schedule Appointment">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Button layoutX="1285.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Generate Report">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Label layoutX="73.0" layoutY="147.0" text="Upcoming Appointments" underline="true">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
