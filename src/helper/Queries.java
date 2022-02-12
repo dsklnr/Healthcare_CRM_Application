@@ -1,5 +1,14 @@
 package helper;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.awt.desktop.AboutEvent;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,6 +53,19 @@ public abstract class Queries {
             String password = rs.getString("Password");
             System.out.print(userId + " | " + username + ", " + password + "\n");
         }
+    }
+
+    public static boolean login(String username, String password) throws SQLException {
+        String sql = "SELECT User_ID FROM users WHERE User_Name = ? AND Password = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, username);
+        ps.setString(2, password);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()){
+            return true;
+        }
+        return false;
+
     }
 
     public static void selectAppointment(int userId) throws SQLException {
