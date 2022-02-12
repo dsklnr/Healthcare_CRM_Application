@@ -18,7 +18,7 @@ public class MainScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("Initialized");
+
     }
 
     public void onLogin(javafx.event.ActionEvent actionEvent) throws IOException {
