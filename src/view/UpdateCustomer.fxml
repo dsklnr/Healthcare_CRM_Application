@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateCustomer">
+   <children>
+      <Label layoutX="37.0" layoutY="58.0" text="Update Customer">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="37.0" layoutY="134.0" text="Customer ID">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField editable="false" layoutX="155.0" layoutY="132.0" />
+      <Label layoutX="37.0" layoutY="194.0" text="Name">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField layoutX="155.0" layoutY="192.0" />
+      <Label layoutX="37.0" layoutY="254.0" text="Address">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="37.0" layoutY="314.0" text="Postal Code">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="37.0" layoutY="374.0" text="Phone Number">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Button layoutX="400.0" layoutY="548.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="300.0" layoutY="548.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <TextField layoutX="155.0" layoutY="252.0" />
+      <TextField layoutX="155.0" layoutY="312.0" />
+      <TextField layoutX="155.0" layoutY="372.0" />
+   </children>
+</AnchorPane>
