@@ -23,17 +23,17 @@
          </font>
       </Label>
       <TextField layoutX="155.0" layoutY="192.0" />
-      <Label layoutX="37.0" layoutY="254.0" text="Address">
+      <Label layoutX="37.0" layoutY="374.0" text="Address">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="37.0" layoutY="314.0" text="Postal Code">
+      <Label layoutX="37.0" layoutY="434.0" text="Postal Code">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="37.0" layoutY="374.0" text="Phone Number">
+      <Label layoutX="37.0" layoutY="494.0" text="Phone Number">
          <font>
             <Font size="15.0" />
          </font>
@@ -48,8 +48,30 @@
             <Font size="15.0" />
          </font>
       </Button>
-      <TextField layoutX="155.0" layoutY="252.0" />
-      <TextField layoutX="155.0" layoutY="312.0" />
-      <TextField layoutX="155.0" layoutY="372.0" />
+      <TextField layoutX="155.0" layoutY="371.0" />
+      <TextField layoutX="155.0" layoutY="431.0" />
+      <TextField layoutX="155.0" layoutY="491.0" />
+      <Label layoutX="37.0" layoutY="254.0" text="Country">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <MenuButton layoutX="155.0" layoutY="252.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Select">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+      </MenuButton>
+      <Label layoutX="37.0" layoutY="314.0" text="State/Province">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <MenuButton layoutX="155.0" layoutY="312.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Select">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+      </MenuButton>
    </children>
 </AnchorPane>
