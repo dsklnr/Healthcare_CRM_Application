@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -20,7 +21,7 @@ import java.util.ResourceBundle;
 public class MainScreenController implements Initializable {
     public Button login;
     public TextField username;
-    public TextField password;
+    public PasswordField password;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -46,8 +47,13 @@ public class MainScreenController implements Initializable {
         }
     }
 
-    public void onCreateAccount(MouseEvent mouseEvent) {
-
+    public void onCreateAccount(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CreateAccount.fxml"));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        stage.setTitle("User Login");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.show();
     }
 
     public void onForgotPassword(MouseEvent mouseEvent) {

@@ -15,14 +15,13 @@ import java.sql.SQLException;
 
 public abstract class Queries {
 
-    public static int insertUser(int userId, String username, String password) throws SQLException {
-        String sql = "INSERT INTO users (User_ID, User_Name, Password)" +
-                "VALUES(?, ?, ?)";
+    public static String insertUser(String username, String password) throws SQLException {
+        String sql = "INSERT INTO users (User_Name, Password)" +
+                "VALUES(?, ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, userId);
-        ps.setString(2, username);
-        ps.setString(3, password);
-        int rowsAffected = ps.executeUpdate();
+        ps.setString(1, username);
+        ps.setString(2, password);
+        String rowsAffected = String.valueOf(ps.executeUpdate());
         return rowsAffected;
     }
 

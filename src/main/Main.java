@@ -16,16 +16,7 @@ public class Main extends Application {
     public void start(Stage stage) throws SQLException, IOException {
         JDBC.openConnection();
 
-        /*
-        int rowsAffected = Queries.deleteUser(3);
-
-        if (rowsAffected > 0){
-            System.out.println("Delete Successful");
-        }
-        else {
-            System.out.println("Insert Unsuccessful");
-        }
-         */
+        Queries.deleteUser(4);
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
         stage.setTitle("User Login");

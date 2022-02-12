@@ -7,7 +7,6 @@
 <AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainScreenController">
    <children>
       <TextField fx:id="username" layoutX="117.0" layoutY="220.0" prefHeight="25.0" prefWidth="167.0" promptText="Username" />
-      <TextField fx:id="password" layoutX="117.0" layoutY="287.0" prefHeight="25.0" prefWidth="167.0" promptText="Password" />
       <Button fx:id="login" layoutX="113.0" layoutY="416.0" mnemonicParsing="false" onAction="#onLogin" prefHeight="25.0" prefWidth="167.0" style="-fx-background-radius: 45;" text="Login" />
       <Label alignment="CENTER" layoutX="113.0" layoutY="569.0" prefHeight="17.0" prefWidth="167.0" text="Time Zone" textAlignment="JUSTIFY" underline="true" />
       <Label layoutX="117.0" layoutY="270.0" text="Password" />
@@ -17,7 +16,8 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <Label layoutX="156.0" layoutY="344.0" onMouseClicked="#onCreateAccount" text="Create Account" textFill="#001aff" />
-      <Label layoutX="152.0" layoutY="367.0" onMouseClicked="#onForgotPassword" text="Forgot Password" textFill="#001aff" />
+      <Label layoutX="156.0" layoutY="344.0" onMouseClicked="#onCreateAccount" style="-fx-cursor: hand;" text="Create Account" textFill="#001aff" />
+      <Label layoutX="152.0" layoutY="367.0" onMouseClicked="#onForgotPassword" style="-fx-cursor: hand;" text="Forgot Password" textFill="#001aff" />
+      <PasswordField fx:id="password" layoutX="117.0" layoutY="288.0" prefHeight="25.0" prefWidth="167.0" promptText="Password" />
    </children>
 </AnchorPane>
