@@ -13,15 +13,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class MainScreenController implements Initializable {
     public AnchorPane anchorPane;
@@ -36,6 +35,7 @@ public class MainScreenController implements Initializable {
     public Label time;
     public Label locationLabel;
 
+    //Initialize the main screen
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         LocalDateTime ldt = LocalDateTime.now();
@@ -72,48 +72,45 @@ public class MainScreenController implements Initializable {
         String country = Locale.getDefault(Locale.Category.FORMAT).getCountry();
         locationLabel.setText(country);
 
+        if (Locale.getDefault().getLanguage().equals("fr")) {
+            try {
+                ResourceBundle rb = ResourceBundle.getBundle("properties/Language", Locale.getDefault());
 
-        Locale france = new Locale("fr", "FR");
-        Locale america = new Locale("en", "US");
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter a language (fr, en): ");
-        String languageCode = scanner.nextLine();
-
-        if (languageCode.equals("fr")){
-            Locale.setDefault(france);
-        }
-        else if (languageCode.equals("en")){
-            Locale.setDefault(america);
-        }
-        else {
-            System.out.println("Language not supported");
-        }
-
-        try{
-            ResourceBundle rb = ResourceBundle.getBundle("properties/Language", Locale.getDefault());
-
-            if (Locale.getDefault().getLanguage().equals("fr")){
-                crmLabel.setText(rb.getString("crmLogin"));
+                if (Locale.getDefault().getLanguage().equals("fr"))
+                    crmLabel.setText(rb.getString("crmLogin"));
                 usernameLabel.setText(rb.getString("username"));
                 passwordLabel.setText(rb.getString("password"));
                 createLabel.setText(rb.getString("createAccount"));
                 forgotLabel.setText(rb.getString("forgotPassword"));
                 login.setText(rb.getString("login"));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
         }
     }
 
+    //Handle login events
     public void onLogin(ActionEvent actionEvent) throws IOException, SQLException {
         String user = username.getText();
         String pass = password.getText();
 
+        LocalDateTime ldt = LocalDateTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
+        String formatDateTime1 = ldt.format(format);
+
+        String country = Locale.getDefault(Locale.Category.FORMAT).getCountry();
 
         if (Queries.login(user, pass)) {
+
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter("login_activity.txt", true));
+                bw.write("Username: " + user + " " + formatDateTime1 + " " + country + " SUCCESSFUL LOGIN \n");
+                bw.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -125,6 +122,15 @@ public class MainScreenController implements Initializable {
 
         else if (!Queries.login(user, pass)){
             if (Locale.getDefault().getLanguage().equals("fr")) {
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter("login_activity.txt", true));
+                    bw.write("Username: " + user + " " + formatDateTime1 + " " + country + " UNSUCCESSFUL LOGIN \n");
+                    bw.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Informations D'Identification Incorrectes");
                 alert.setContentText("Nom d'utilisateur ou mot de passe invalide");
@@ -132,15 +138,25 @@ public class MainScreenController implements Initializable {
             }
 
             else{
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter("login_activity.txt", true));
+                    bw.write("Username: " + user + " " + formatDateTime1 + " " + country + " UNSUCCESSFUL LOGIN \n");
+                    bw.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Incorrect Credentials");
                 alert.setContentText("Invalid username or password");
                 alert.show();
-            }
 
+            }
         }
     }
 
+    //Create a new account
     public void onCreateAccount(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CreateAccount.fxml"));
         Parent root = loader.load();
@@ -150,6 +166,7 @@ public class MainScreenController implements Initializable {
         stage.show();
     }
 
+    //Recover lost password
     public void onForgotPassword(MouseEvent mouseEvent) {
 
     }
