@@ -1,11 +1,11 @@
 package model;
 
-public class Contact {
+public class Contacts {
     private int contactId;
     private String name;
     private String email;
 
-    public Contact(int contactId, String name, String email) {
+    public Contacts(int contactId, String name, String email) {
         this.contactId = contactId;
         this.name = name;
         this.email = email;
