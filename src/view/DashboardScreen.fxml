@@ -25,22 +25,22 @@
       <RadioButton layoutX="1238.0" layoutY="149.0" mnemonicParsing="false" text="This Month" />
       <RadioButton layoutX="1339.0" layoutY="149.0" mnemonicParsing="false" text="This Week" />
       <TextField layoutX="1006.0" layoutY="145.0" prefHeight="25.0" prefWidth="200.0" promptText="Search Appointments" />
-      <Button layoutX="914.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home" wrapText="true">
+      <Label layoutX="916.0" layoutY="35.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand;" text="Home">
          <font>
             <Font size="15.0" />
-         </font></Button>
-      <Button layoutX="1002.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Customers">
+         </font></Label>
+      <Label layoutX="1002.0" layoutY="35.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand;" text="Customers">
          <font>
             <Font size="15.0" />
-         </font></Button>
-      <Button layoutX="1106.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Schedule Appointment">
+         </font></Label>
+      <Label layoutX="1106.0" layoutY="35.0" onMouseClicked="#onScheduleClick" style="-fx-cursor: hand;" text="Schedule Appointment">
          <font>
             <Font size="15.0" />
-         </font></Button>
-      <Button layoutX="1285.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Generate Report">
+         </font></Label>
+      <Label layoutX="1285.0" layoutY="35.0" onMouseClicked="#onReportClick" style="-fx-cursor: hand;" text="Generate Report">
          <font>
             <Font size="15.0" />
-         </font></Button>
+         </font></Label>
       <Label layoutX="73.0" layoutY="147.0" text="Upcoming Appointments" underline="true">
          <font>
             <Font size="15.0" />

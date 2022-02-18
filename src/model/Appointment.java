@@ -1,7 +1,5 @@
 package model;
 
-import javafx.beans.value.ObservableValue;
-
 public class Appointment {
     private int appointmentId;
     private String title;

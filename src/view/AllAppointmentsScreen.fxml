@@ -4,58 +4,62 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardController">
+<AnchorPane prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AllAppointmentsController">
    <children>
       <Label layoutX="73.0" layoutY="30.0" text="All Appointments">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <TableView layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="1342.0">
+      <TableView fx:id="allAppointmentsTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="1342.0">
         <columns>
-          <TableColumn prefWidth="99.0" text="Appointment ID" />
-            <TableColumn prefWidth="126.0" text="Contact" />
-            <TableColumn prefWidth="120.0" text="Type" />
-          <TableColumn prefWidth="114.0" text="Title" />
-            <TableColumn prefWidth="214.0" text="Description" />
-            <TableColumn prefWidth="169.0" text="Location" />
-            <TableColumn prefWidth="175.0" text="Start Time" />
-            <TableColumn prefWidth="156.0" text="End Time" />
-            <TableColumn text="Customer ID" />
-            <TableColumn prefWidth="88.0" text="User ID" />
+            <TableColumn fx:id="appointmentIdCol" prefWidth="99.0" text="Appointment ID" />
+            <TableColumn fx:id="titleCol" prefWidth="74.0" text="Title" />
+            <TableColumn fx:id="descriptionCol" prefWidth="103.0" text="Description" />
+            <TableColumn fx:id="locationCol" prefWidth="89.0" text="Location" />
+            <TableColumn fx:id="typeCol" prefWidth="87.0" text="Type" />
+            <TableColumn fx:id="startTimeCol" prefWidth="139.0" text="Start Time" />
+            <TableColumn fx:id="endTimeCol" prefWidth="127.0" text="End Time" />
+            <TableColumn fx:id="createDateCol" prefWidth="128.0" text="Create Date" />
+            <TableColumn fx:id="createdByCol" prefWidth="76.0" text="Created By" />
+            <TableColumn fx:id="lastUpdateCol" prefWidth="115.0" text="Last Updated" />
+            <TableColumn fx:id="lastUpdatedByCol" prefWidth="101.0" text="Last Updated By" />
+            <TableColumn fx:id="customerIdCol" prefWidth="76.0" text="Customer ID" />
+            <TableColumn fx:id="userIdCol" prefWidth="60.0" text="User ID" />
+            <TableColumn fx:id="contactIdCol" prefWidth="67.0" text="Contact ID" />
         </columns>
       </TableView>
       <TextField layoutX="1215.0" layoutY="145.0" prefHeight="25.0" prefWidth="200.0" promptText="Search Appointments" />
-      <Button layoutX="914.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home" wrapText="true">
-         <font>
-            <Font size="15.0" />
-         </font></Button>
-      <Button layoutX="1002.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Customers">
-         <font>
-            <Font size="15.0" />
-         </font></Button>
-      <Button layoutX="1106.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Schedule Appointment">
-         <font>
-            <Font size="15.0" />
-         </font></Button>
-      <Button layoutX="1285.0" layoutY="29.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Generate Report">
-         <font>
-            <Font size="15.0" />
-         </font></Button>
-      <Label layoutX="73.0" layoutY="147.0" text="Appointments" underline="true">
+       <Label layoutX="916.0" layoutY="35.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand;" text="Home">
+           <font>
+               <Font size="15.0" />
+           </font></Label>
+       <Label layoutX="1002.0" layoutY="35.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand;" text="Customers">
+           <font>
+               <Font size="15.0" />
+           </font></Label>
+       <Label layoutX="1106.0" layoutY="35.0" onMouseClicked="#onScheduleClick" style="-fx-cursor: hand;" text="Schedule Appointment">
+           <font>
+               <Font size="15.0" />
+           </font></Label>
+       <Label layoutX="1285.0" layoutY="35.0" onMouseClicked="#onReportClick" style="-fx-cursor: hand;" text="Generate Report">
+           <font>
+               <Font size="15.0" />
+           </font></Label>
+      <Label layoutX="73.0" layoutY="147.0" text="All Appointments" underline="true">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-       <Button layoutX="1124.0" layoutY="706.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45;" text="Schedule">
+       <Button layoutX="1124.0" layoutY="706.0" mnemonicParsing="false" onAction="#onScheduleAppointment" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45;" text="Schedule">
            <font>
                <Font size="15.0" />
            </font></Button>
-       <Button layoutX="1224.0" layoutY="706.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45;" text="Update">
+       <Button layoutX="1224.0" layoutY="706.0" mnemonicParsing="false" onAction="#onUpdateAppointment" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45;" text="Update">
            <font>
                <Font size="15.0" />
            </font></Button>
-       <Button layoutX="1324.0" layoutY="706.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45;" text="Delete">
+       <Button layoutX="1324.0" layoutY="706.0" mnemonicParsing="false" onAction="#onDeleteAppointment" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45;" text="Delete">
            <font>
                <Font size="15.0" />
            </font></Button>

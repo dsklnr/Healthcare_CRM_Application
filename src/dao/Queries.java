@@ -69,6 +69,23 @@ public abstract class Queries {
         return 0;
     }
 
+    /*
+    public static int selectUserId(int userId) throws SQLException {
+        String sql = "SELECT * FROM users WHERE User_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.getGeneratedKeys();
+        //ResultSet rs = ps.executeQuery();
+        while (rs.next()){
+            int userId = rs.getInt("User_ID");
+            String username = rs.getString("User_Name");
+            String password = rs.getString("Password");
+            System.out.print(userId + " | " + username + ", " + password + "\n");
+        }
+    }
+
+     */
+
     public static boolean login(String username, String password) throws SQLException {
         String sql = "SELECT User_ID FROM users WHERE User_Name = ? AND Password = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -111,7 +128,7 @@ public abstract class Queries {
         }
     }
 
-    public static ObservableList<Appointment> getAllAppointments(int userId){
+    public static ObservableList<Appointment> getAllAppointmentsFromId(int userId){
         ObservableList<Appointment> aList = FXCollections.observableArrayList();
 
         try{
@@ -133,15 +150,15 @@ public abstract class Queries {
                 String start = rs.getString("Start");
                 String end = rs.getString("End");
                 String createDate = rs.getString("Create_Date");
+                String contact = rs.getString("Created_By");
                 String lastUpdate = rs.getString("Last_Update");
                 String updateBy = rs.getString("Last_Updated_By");
-                String contact = rs.getString("Created_By");
                 int customerIdFK = rs.getInt("Customer_ID");
                 int userIdFK = rs.getInt("User_ID");
                 int contactIdFK = rs.getInt("Contact_ID");
 
                 aList.add(new Appointment(appointmentId, title, description, location,
-                        type, start, end, createDate, lastUpdate, updateBy, contact,
+                        type, start, end, createDate, contact, lastUpdate, updateBy,
                         customerIdFK, userIdFK, contactIdFK));
             }
 
@@ -150,5 +167,45 @@ public abstract class Queries {
         }
 
         return aList;
+    }
+
+    public static ObservableList<Appointment> getAllAppointments(){
+        ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
+
+        try{
+            String sql =
+                    "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
+                            "FROM appointments, users, customers, contacts\n" +
+                            "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID";
+
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()){
+                int appointmentId = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                String start = rs.getString("Start");
+                String end = rs.getString("End");
+                String createDate = rs.getString("Create_Date");
+                String contact = rs.getString("Created_By");
+                String lastUpdate = rs.getString("Last_Update");
+                String updateBy = rs.getString("Last_Updated_By");
+                int customerIdFK = rs.getInt("Customer_ID");
+                int userIdFK = rs.getInt("User_ID");
+                int contactIdFK = rs.getInt("Contact_ID");
+
+                allAppointmentList.add(new Appointment(appointmentId, title, description, location,
+                        type, start, end, createDate, contact, lastUpdate, updateBy,
+                        customerIdFK, userIdFK, contactIdFK));
+            }
+
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        }
+
+        return allAppointmentList;
     }
 }
