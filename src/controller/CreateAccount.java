@@ -1,8 +1,8 @@
 package controller;
 
-import helper.Queries;
+import dao.JDBC;
+import dao.Queries;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -24,7 +23,7 @@ public class CreateAccount implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        JDBC.openConnection();
     }
 
     public void onCreateAccount(ActionEvent actionEvent) throws SQLException, IOException {
@@ -40,6 +39,7 @@ public class CreateAccount implements Initializable {
         stage.setTitle("User Login");
         stage.setScene(new Scene(root, 400, 600));
         stage.show();
+        JDBC.closeConnection();
 
     }
 }

@@ -1,7 +1,5 @@
 package main;
 
-import helper.JDBC;
-import helper.Queries;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,9 +12,7 @@ import java.sql.SQLException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws SQLException, IOException {
-        JDBC.openConnection();
-
-        Queries.deleteUser(4);
+        //Queries.selectAppointment(1);
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
         stage.setTitle("User Login");

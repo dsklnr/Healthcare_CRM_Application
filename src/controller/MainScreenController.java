@@ -1,6 +1,7 @@
 package controller;
 
-import helper.Queries;
+import dao.JDBC;
+import dao.Queries;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.User;
 
 import java.io.*;
 import java.net.URL;
@@ -38,6 +40,8 @@ public class MainScreenController implements Initializable {
     //Initialize the main screen
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        JDBC.openConnection();
+
         LocalDateTime ldt = LocalDateTime.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm   " +
                 "MM-dd-yyyy");
@@ -111,13 +115,20 @@ public class MainScreenController implements Initializable {
                 e.printStackTrace();
             }
 
+            User currentUser = new User(Queries.selectUser(user, pass), user, pass);
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
             Parent root = loader.load();
+
+            DashboardController dashboardUser = loader.getController();
+            dashboardUser.initialize(currentUser);
+
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();
             stage.setTitle("CRM Dashboard");
             stage.setScene(new Scene(root, 1500, 800));
             stage.show();
+            JDBC.closeConnection();
         }
 
         else if (!Queries.login(user, pass)){
@@ -164,6 +175,7 @@ public class MainScreenController implements Initializable {
         stage.setTitle("User Login");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();
+        JDBC.closeConnection();
     }
 
     //Recover lost password

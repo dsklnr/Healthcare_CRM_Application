@@ -1,30 +1,40 @@
 package model;
 
+import javafx.beans.value.ObservableValue;
+
 public class Appointment {
     private int appointmentId;
     private String title;
     private String description;
     private String location;
-    private String contact;
     private String type;
     private String startDateTime;
     private String endDateTime;
+    private String createDate;
+    private String createdBy;
+    private String lastUpdate;
+    private String lastUpdatedBy;
     private int customerId;
     private int userId;
+    private int contactId;
 
-    public Appointment(int appointmentId, String title, String description, String location,
-                       String contact, String type, String startDateTime, String endDateTime,
-                       int customerId, int userId){
+    public Appointment(int appointmentId, String title, String description, String location, String type,
+                       String startDateTime, String endDateTime, String createDate, String createdBy,
+                       String lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
         this.location = location;
-        this.contact = contact;
         this.type = type;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        this.customerId =customerId;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.customerId = customerId;
         this.userId = userId;
+        this.contactId = contactId;
     }
 
     public int getAppointmentId() {
@@ -59,14 +69,6 @@ public class Appointment {
         this.location = location;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
     public String getType() {
         return type;
     }
@@ -91,6 +93,38 @@ public class Appointment {
         this.endDateTime = endDateTime;
     }
 
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getLastUpdatedBy() {
+        return lastUpdatedBy;
+    }
+
+    public void setLastUpdatedBy(String lastUpdatedBy) {
+        this.lastUpdatedBy = lastUpdatedBy;
+    }
+
     public int getCustomerId() {
         return customerId;
     }
@@ -105,5 +139,13 @@ public class Appointment {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
     }
 }
