@@ -9,6 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,6 +20,7 @@ import model.Appointment;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AllAppointmentsController implements Initializable {
@@ -118,5 +121,23 @@ public class AllAppointmentsController implements Initializable {
     }
 
     public void onDeleteAppointment(ActionEvent actionEvent) {
+        Appointment deleteAppointment = (Appointment) allAppointmentsTable.getSelectionModel().getSelectedItem();
+
+        if (deleteAppointment == null){
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete Appointment");
+        alert.setContentText("Are you sure you want to delete this appointment?");
+        Optional <ButtonType> action = alert.showAndWait();
+
+        if (action.get() == ButtonType.YES){
+            //TODO REMOVE APPOINTMENT
+        }
+
+        else{
+            alert.close();
+        }
     }
 }
