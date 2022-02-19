@@ -2,10 +2,7 @@ package dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Appointment;
-import model.Country;
-import model.Customer;
-import model.User;
+import model.*;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
@@ -292,7 +289,7 @@ public abstract class Queries {
         ObservableList<Country> countryList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Country_ID, Country FROM countries";
+            String sql = "SELECT * FROM countries";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -309,4 +306,32 @@ public abstract class Queries {
         }
         return countryList;
     }
+
+    public static ObservableList<Division> getAllDivisions(){
+        ObservableList<Division> divisionList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT * FROM first_level_divisions";
+
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int divisionId = rs.getInt("Division_ID");
+                String division = rs.getString("Division");
+                String createDate = rs.getString("Create_Date");
+                String createdBy = rs.getString("Created_By");
+                String lastUpdate = rs.getString("Last_Update");
+                String lastUpdateBy = rs.getString("Last_Updated_By");
+                int countryId = rs.getInt("Country_ID");
+                Division d = new Division(divisionId, division, createDate, createdBy, lastUpdate, lastUpdateBy, countryId);
+                divisionList.add(d);
+            }
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return divisionList;
+    }
+
 }

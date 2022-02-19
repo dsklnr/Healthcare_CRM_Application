@@ -61,12 +61,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <MenuButton layoutX="155.0" layoutY="312.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Select">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-      </MenuButton>
-      <ComboBox fx:id="userComboBox" layoutX="155.0" layoutY="252.0" prefWidth="150.0" />
+      <ComboBox fx:id="countryComboBox" layoutX="155.0" layoutY="252.0" prefWidth="150.0" />
+      <ComboBox fx:id="stateComboBox" layoutX="155.0" layoutY="312.0" prefWidth="150.0" />
    </children>
 </AnchorPane>
