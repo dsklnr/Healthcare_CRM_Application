@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointment;
+import model.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,6 +40,7 @@ public class AllAppointmentsController implements Initializable {
     public TableColumn userIdCol;
     public TableColumn contactIdCol;
     public TableView allAppointmentsTable;
+    private User user;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -76,7 +78,6 @@ public class AllAppointmentsController implements Initializable {
     }
 
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
-        /*
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -84,8 +85,6 @@ public class AllAppointmentsController implements Initializable {
         stage.setTitle("CRM Customers");
         stage.setScene(new Scene(root, 1500, 800));
         stage.show();
-
-         */
     }
 
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {

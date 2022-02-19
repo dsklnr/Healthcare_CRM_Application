@@ -3,12 +3,16 @@ package dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
+import model.Country;
+import model.Customer;
 import model.User;
 
+import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public abstract class Queries {
 
@@ -96,7 +100,8 @@ public abstract class Queries {
 
         while (rs.next()){
             int userId = rs.getInt("User_ID");
-            userList.add(new User(userId, username, password));
+            User user = new User(userId, username, password);
+            userList.add(user);
             return true;
         }
         return false;
@@ -132,8 +137,7 @@ public abstract class Queries {
         ObservableList<Appointment> aList = FXCollections.observableArrayList();
 
         try{
-            String sql =
-                    "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
+            String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
                             "FROM appointments, users, customers, contacts\n" +
                             "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID AND users.User_ID = ?";
 
@@ -173,8 +177,7 @@ public abstract class Queries {
         ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
 
         try{
-            String sql =
-                    "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
+            String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
                             "FROM appointments, users, customers, contacts\n" +
                             "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID";
 
@@ -207,5 +210,103 @@ public abstract class Queries {
         }
 
         return allAppointmentList;
+    }
+
+    public static ObservableList<Customer> getAllCustomers(){
+        ObservableList<Customer> allCustomerList = FXCollections.observableArrayList();
+
+        try{
+            String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, customers.Create_Date, customers.Created_By, customers.Last_Update, customers.Last_Updated_by, first_level_divisions.Division_ID\n" +
+                            "FROM customers, first_level_divisions\n" +
+                            "WHERE customers.Division_ID = first_level_divisions.Division_ID";
+
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()){
+                int customerId = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String postalCode = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                String createDate = rs.getString("Create_Date");
+                String createdBy = rs.getString("Created_By");
+                String lastUpdate = rs.getString("Last_Update");
+                String lastUpdatedBy = rs.getString("Last_Updated_by");
+                int divisionId = rs.getInt("Division_ID");
+
+                allCustomerList.add(new Customer(customerId, name, address, postalCode, phone, createDate,
+                        createdBy, lastUpdate, lastUpdatedBy, divisionId));
+            }
+
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        }
+
+        return allCustomerList;
+    }
+
+    public static void createCustomer(String name, String address, int postalCode, String phoneNumber,
+                                      String createDate, String createdBy, String lastUpdate, String lastUpdateBy,
+                                      int divisionId){
+        try {
+            String sql = "INSERT INTO customers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, address);
+            ps.setInt(3, postalCode);
+            ps.setString(4, phoneNumber);
+            ps.setString(5, createDate);
+            ps.setString(6, createdBy);
+            ps.setString(7, lastUpdate);
+            ps.setString(8, lastUpdateBy);
+            ps.setInt(9, divisionId);
+            ps.execute();
+
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public static ArrayList<String> getAllCountryNames(){
+        ArrayList<String> allCountriesList = new ArrayList<>();
+
+        try {
+            String sql = "SELECT Country FROM countries";
+
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()){
+                String country = rs.getString("Country");
+                allCountriesList.add(country);
+            }
+
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return allCountriesList;
+    }
+
+    public static ObservableList<Country> getAllCountries(){
+        ObservableList<Country> countryList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT Country_ID, Country FROM countries";
+
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int countryId = rs.getInt("Country_ID");
+                String countryName = rs.getString("Country");
+                Country c = new Country(countryId, countryName);
+                countryList.add(c);
+            }
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return countryList;
     }
 }

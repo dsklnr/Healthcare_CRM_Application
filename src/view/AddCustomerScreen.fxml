@@ -22,7 +22,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField layoutX="155.0" layoutY="192.0" />
+      <TextField fx:id="name" layoutX="155.0" layoutY="192.0" />
       <Label layoutX="37.0" layoutY="374.0" text="Address">
          <font>
             <Font size="15.0" />
@@ -38,30 +38,24 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Button layoutX="400.0" layoutY="548.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
+      <Button layoutX="400.0" layoutY="548.0" mnemonicParsing="false" onAction="#onSaveAddCustomer" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <Button layoutX="300.0" layoutY="548.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
+      <Button layoutX="300.0" layoutY="548.0" mnemonicParsing="false" onAction="#onCancelAddCustomer" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <TextField layoutX="155.0" layoutY="371.0" />
-      <TextField layoutX="155.0" layoutY="431.0" />
-      <TextField layoutX="155.0" layoutY="491.0" />
+      <TextField fx:id="address" layoutX="155.0" layoutY="371.0" />
+      <TextField fx:id="postalCode" layoutX="155.0" layoutY="431.0" />
+      <TextField fx:id="phoneNumber" layoutX="155.0" layoutY="491.0" />
       <Label layoutX="37.0" layoutY="254.0" text="Country">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <MenuButton layoutX="155.0" layoutY="252.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Select">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-      </MenuButton>
       <Label layoutX="37.0" layoutY="314.0" text="State/Province">
          <font>
             <Font size="15.0" />
@@ -73,5 +67,6 @@
           <MenuItem mnemonicParsing="false" text="Action 2" />
         </items>
       </MenuButton>
+      <ComboBox fx:id="userComboBox" layoutX="155.0" layoutY="252.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

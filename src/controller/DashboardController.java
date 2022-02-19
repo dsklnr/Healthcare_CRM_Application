@@ -31,6 +31,7 @@ public class DashboardController implements Initializable {
     public TableColumn startTimeCol;
     public TableColumn endTimeCol;
     public TableView<Appointment> dashboardTable;
+    private User user;
 
     //ObservableList<User> currentUser = FXCollections.observableArrayList();
     //private ObservableList<Appointment> fewapp = FXCollections.observableArrayList();
@@ -43,8 +44,6 @@ public class DashboardController implements Initializable {
 
         JDBC.closeConnection();
 
-        //System.out.println(currentUser.getUsername());
-        //System.out.println(currentUser.getPassword());
     }
 
     @Override
@@ -60,6 +59,11 @@ public class DashboardController implements Initializable {
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
         endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
+
+        ObservableList<Appointment> appointmentList = Queries.getAllAppointments();
+        for (Appointment a : appointmentList){
+            System.out.println(a.getTitle());
+        }
 
         JDBC.closeConnection();
 
