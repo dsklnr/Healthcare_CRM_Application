@@ -2,7 +2,6 @@ package controller;
 
 import dao.JDBC;
 import dao.Queries;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,7 +18,6 @@ import model.User;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -36,9 +34,11 @@ public class DashboardController implements Initializable {
     //ObservableList<User> currentUser = FXCollections.observableArrayList();
     //private ObservableList<Appointment> fewapp = FXCollections.observableArrayList();
 
-    public void initialize(User currentUser) throws SQLException {
+    public void setUser(User currentUser) {
         //Queries.selectAppointment(currentUser.getUserId());
         JDBC.openConnection();
+
+        user = currentUser;
 
         dashboardTable.setItems(Queries.getAllAppointmentsFromId(currentUser.getUserId()));
 
@@ -73,8 +73,8 @@ public class DashboardController implements Initializable {
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
-        //DashboardController dashboardUser = loader.getController();
-        //dashboardUser.initialize(currentUser);
+        DashboardController dashboardUser = loader.getController();
+        dashboardUser.setUser(user);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");

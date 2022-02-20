@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.Appointment;
 import model.User;
 
 import java.io.*;
@@ -122,7 +121,7 @@ public class MainScreenController implements Initializable {
             Parent root = loader.load();
 
             DashboardController dashboardUser = loader.getController();
-            dashboardUser.initialize(currentUser);
+            dashboardUser.setUser(currentUser);
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();
@@ -183,4 +182,5 @@ public class MainScreenController implements Initializable {
     public void onForgotPassword(MouseEvent mouseEvent) {
 
     }
+
 }

@@ -4,11 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.*;
 
-import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public abstract class Queries {
@@ -42,17 +40,20 @@ public abstract class Queries {
         return rowsAffected;
     }
 
-    public static void select() throws SQLException {
-        String sql = "SELECT * FROM users";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+    public static User selectCurrentUser(String username) throws SQLException {
+        ObservableList<User> currentUser = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM users WHERE User_Name = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, username);
         ResultSet rs = ps.getGeneratedKeys();
         //ResultSet rs = ps.executeQuery();
         while (rs.next()){
             int userId = rs.getInt("User_ID");
-            String username = rs.getString("User_Name");
             String password = rs.getString("Password");
-            System.out.print(userId + " | " + username + ", " + password + "\n");
+            User current = new User(userId, username, password);
+            return current;
         }
+        return null;
     }
 
     public static int selectUser(String username, String password) throws SQLException {
@@ -88,7 +89,7 @@ public abstract class Queries {
      */
 
     public static boolean login(String username, String password) throws SQLException {
-        String sql = "SELECT User_ID FROM users WHERE User_Name = ? AND Password = ?";
+        String sql = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, username);
         ps.setString(2, password);
