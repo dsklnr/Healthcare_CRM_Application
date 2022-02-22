@@ -8,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,6 +20,8 @@ import model.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerController implements Initializable {
@@ -102,7 +106,8 @@ public class CustomerController implements Initializable {
         Parent root = loader.load();
         AddCustomer customerUser = loader.getController();
         customerUser.setUser(currentUser);
-        Stage stage = new Stage();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
         stage.setTitle("Add A Customer");
         stage.setScene(new Scene(root, 500, 600));
         stage.show();
@@ -130,7 +135,29 @@ public class CustomerController implements Initializable {
         }
     }
 
-    public void onDeleteCustomer(ActionEvent actionEvent) {
+    public void onDeleteCustomer(ActionEvent actionEvent) throws SQLException, IOException {
+        JDBC.openConnection();
+
+        Customer customer = (Customer) customersTable.getSelectionModel().getSelectedItem();
+
+        if (customer != null){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Customer");
+            alert.setContentText("Are you sure you want to delete this customer?");
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get().equals(ButtonType.OK)){
+                Queries.deleteCustomer(customer.getCustomerId());
+            }
+            else {
+                return;
+            }
+
+            customersTable.setItems(Queries.getAllCustomers());
+
+        }
+
+        JDBC.closeConnection();
     }
 
 }

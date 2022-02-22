@@ -8,17 +8,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.User;
 
+import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 
 public class DashboardController implements Initializable {
     public TableColumn appointmentIdCol;
@@ -29,20 +32,18 @@ public class DashboardController implements Initializable {
     public TableColumn startTimeCol;
     public TableColumn endTimeCol;
     public TableView<Appointment> dashboardTable;
-    private User currentUser;
+    public RadioButton monthButton;
+    public RadioButton weekButton;
+    public ToggleGroup toggle;
+    private User user;
+    public int userId;
 
     //ObservableList<User> currentUser = FXCollections.observableArrayList();
     //private ObservableList<Appointment> fewapp = FXCollections.observableArrayList();
 
     public void setUser(User currentUser) {
-        //Queries.selectAppointment(currentUser.getUserId());
-        JDBC.openConnection();
-
-        this.currentUser = currentUser;
-
-        dashboardTable.setItems(Queries.getAllAppointmentsFromId(currentUser.getUserId()));
-
-        JDBC.closeConnection();
+        user = currentUser;
+        userId = currentUser.getUserId();
 
     }
 
@@ -50,7 +51,7 @@ public class DashboardController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
-        //dashboardTable.setItems(Queries.getAllAppointments());
+        monthButton.setSelected(true);
 
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -60,9 +61,21 @@ public class DashboardController implements Initializable {
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
         endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
 
-        ObservableList<Appointment> appointmentList = Queries.getAllAppointments();
-        for (Appointment a : appointmentList){
-            System.out.println(a.getTitle());
+        try {
+            dashboardTable.setItems(Queries.getNextMonthAppointments(userId));
+            Queries.immediateAppointment(userId);
+
+            if (!Queries.immediateAppointment(userId)){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Upcoming Appointments");
+                alert.setContentText("No immediate upcoming appointments.");
+                alert.showAndWait();
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
         }
 
         JDBC.closeConnection();
@@ -74,7 +87,7 @@ public class DashboardController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
         DashboardController dashboardUser = loader.getController();
-        dashboardUser.setUser(currentUser);
+        dashboardUser.setUser(user);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
@@ -87,7 +100,7 @@ public class DashboardController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
         CustomerController customerUser = loader.getController();
-        customerUser.setUser(currentUser);
+        customerUser.setUser(user);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Customers");
@@ -99,7 +112,7 @@ public class DashboardController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
         AllAppointmentsController appointmentsUser = loader.getController();
-        appointmentsUser.setUser(currentUser);
+        appointmentsUser.setUser(user);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
@@ -118,5 +131,35 @@ public class DashboardController implements Initializable {
         stage.show();
 
          */
+    }
+    public void onMonthButton(ActionEvent actionEvent) {
+        JDBC.openConnection();
+
+        monthButton.setSelected(true);
+
+        try {
+            dashboardTable.setItems(Queries.getNextMonthAppointments(user.getUserId()));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JDBC.closeConnection();
+
+    }
+
+    public void onWeekButton(ActionEvent actionEvent) {
+        JDBC.openConnection();
+
+        weekButton.setSelected(true);
+
+        try {
+            dashboardTable.setItems(Queries.getNextWeekAppointments(user.getUserId()));
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        JDBC.closeConnection();
     }
 }

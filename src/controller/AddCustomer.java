@@ -4,8 +4,11 @@ import dao.JDBC;
 import dao.Queries;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -13,6 +16,7 @@ import model.Country;
 import model.Division;
 import model.User;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -48,7 +52,7 @@ public class AddCustomer implements Initializable {
         this.currentUser = currentUser;
     }
 
-    public void onSaveAddCustomer(ActionEvent actionEvent) throws SQLException {
+    public void onSaveAddCustomer(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
         String customerName = name.getText();
@@ -71,8 +75,16 @@ public class AddCustomer implements Initializable {
         Queries.createCustomer(customerName, customerAddress, postal, customerPhone, formatCreateDateTime,
                 createdBy, formatUpdateDateTime, lastUpdateBy, divisionId);
 
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.close();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        Parent root = loader.load();
+        CustomerController customerUser = loader.getController();
+        customerUser.setUser(currentUser);
+        Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage2.close();
+        stage2.setTitle("CRM Customers");
+        stage2.setScene(new Scene(root, 1500, 800));
+        stage2.show();
+
 
         JDBC.closeConnection();
     }

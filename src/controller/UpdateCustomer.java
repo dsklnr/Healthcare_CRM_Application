@@ -4,19 +4,26 @@ import dao.JDBC;
 import dao.Queries;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
 import model.Division;
 import model.User;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class UpdateCustomer implements Initializable {
@@ -29,6 +36,8 @@ public class UpdateCustomer implements Initializable {
     public TextField postalCode;
     public TextField phoneNumber;
     public Customer selectedCustomer;
+    public String createDate;
+    public String createdBy;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -54,10 +63,9 @@ public class UpdateCustomer implements Initializable {
         String address = customer.getAddress();
         String postal = customer.getPostalCode();
         String phone = customer.getPhoneNumber();
-        String createDate = customer.getCreateDate();
-        String createdBy = customer.getCreatedBy();
-        String lastUpdate = customer.getLastUpdate();
-        String lastUpdateBy = customer.getLastUpdateBy();
+        createDate = customer.getCreateDate();
+        createdBy = customer.getCreatedBy();
+
         int divisionId = customer.getDivisionId();
 
         String state = Queries.getDivisionName(divisionId);
@@ -79,9 +87,42 @@ public class UpdateCustomer implements Initializable {
         this.currentUser = currentUser;
     }
 
-    public void onSaveUpdateCustomer(ActionEvent actionEvent) {
+    public void onSaveUpdateCustomer(ActionEvent actionEvent) throws SQLException, IOException {
+        JDBC.openConnection();
+
+        String customerName = name.getText();
+        String customerAddress = address.getText();
+        String postal = postalCode.getText();
+        String customerPhone = phoneNumber.getText();
+
+        //String createdBy = currentUser.getUsername();
+        LocalDateTime lastUpdate = LocalDateTime.now();
+        String lastUpdateBy = currentUser.getUsername();
+        String division = String.valueOf(stateComboBox.getSelectionModel().getSelectedItem());
+        int divisionId = Queries.getDivisionId(division);
+
+        DateTimeFormatter updateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
+        String formatUpdateDateTime = lastUpdate.format(updateFormat);
+
+
+        Queries.createCustomer(customerName, customerAddress, postal, customerPhone, createDate,
+                createdBy, formatUpdateDateTime, lastUpdateBy, divisionId);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        Parent root = loader.load();
+        CustomerController customerUser = loader.getController();
+        customerUser.setUser(currentUser);
+        Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage2.close();
+        stage2.setTitle("CRM Customers");
+        stage2.setScene(new Scene(root, 1500, 800));
+        stage2.show();
+
+        JDBC.closeConnection();
     }
 
     public void onCancelUpdateCustomer(ActionEvent actionEvent) {
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

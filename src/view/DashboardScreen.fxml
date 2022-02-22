@@ -22,9 +22,11 @@
             <TableColumn fx:id="endTimeCol" prefWidth="193.0" text="End Time" />
         </columns>
       </TableView>
-      <RadioButton layoutX="1238.0" layoutY="149.0" mnemonicParsing="false" text="This Month" />
-      <RadioButton layoutX="1339.0" layoutY="149.0" mnemonicParsing="false" text="This Week" />
-      <TextField layoutX="1006.0" layoutY="145.0" prefHeight="25.0" prefWidth="200.0" promptText="Search Appointments" />
+      <RadioButton fx:id="monthButton" layoutX="1170.0" layoutY="149.0" mnemonicParsing="false" onAction="#onMonthButton" text="Upcoming Month">
+         <toggleGroup>
+            <ToggleGroup fx:id="toggle" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="weekButton" layoutX="1306.0" layoutY="149.0" mnemonicParsing="false" onAction="#onWeekButton" text="Upcoming Week" toggleGroup="$toggle" />
       <Label layoutX="916.0" layoutY="35.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand;" text="Home">
          <font>
             <Font size="15.0" />
