@@ -16,7 +16,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField editable="false" layoutX="155.0" layoutY="132.0" promptText="Disabled" />
+      <TextField disable="true" editable="false" layoutX="155.0" layoutY="132.0" promptText="Disabled" />
       <Label layoutX="37.0" layoutY="194.0" text="Name">
          <font>
             <Font size="15.0" />

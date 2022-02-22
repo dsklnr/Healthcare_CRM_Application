@@ -13,6 +13,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import model.Customer;
+import model.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +32,7 @@ public class CustomerController implements Initializable {
     public TableColumn lastUpdatedByCol;
     public TableColumn divisionIdCol;
     public TableView customersTable;
+    public User currentUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -51,9 +54,15 @@ public class CustomerController implements Initializable {
         JDBC.closeConnection();
     }
 
+    public void setUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
+        DashboardController dashboardUser = loader.getController();
+        dashboardUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
@@ -64,6 +73,8 @@ public class CustomerController implements Initializable {
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
+        CustomerController customerUser = loader.getController();
+        customerUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Customers");
@@ -74,6 +85,8 @@ public class CustomerController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
+        AllAppointmentsController appointmentsUser = loader.getController();
+        appointmentsUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
@@ -87,6 +100,8 @@ public class CustomerController implements Initializable {
     public void onAddCustomer(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddCustomerScreen.fxml"));
         Parent root = loader.load();
+        AddCustomer customerUser = loader.getController();
+        customerUser.setUser(currentUser);
         Stage stage = new Stage();
         stage.setTitle("Add A Customer");
         stage.setScene(new Scene(root, 500, 600));
@@ -94,14 +109,28 @@ public class CustomerController implements Initializable {
     }
 
     public void onUpdateCustomer(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateCustomerScreen.fxml"));
-        Parent root = loader.load();
-        Stage stage = new Stage();
-        stage.setTitle("Add A Customer");
-        stage.setScene(new Scene(root, 500, 600));
-        stage.show();
+        Customer customer = (Customer) customersTable.getSelectionModel().getSelectedItem();
+
+        if (customer != null){
+            try{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateCustomerScreen.fxml"));
+                Parent root = loader.load();
+                UpdateCustomer selectedCustomer = loader.getController();
+                selectedCustomer.setCustomer(customer);
+                UpdateCustomer customerUser = loader.getController();
+                customerUser.setUser(currentUser);
+                Stage stage = new Stage();
+                stage.setTitle("Add A Customer");
+                stage.setScene(new Scene(root, 500, 600));
+                stage.show();
+
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
     }
 
     public void onDeleteCustomer(ActionEvent actionEvent) {
     }
+
 }

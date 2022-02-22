@@ -244,15 +244,15 @@ public abstract class Queries {
         return allCustomerList;
     }
 
-    public static void createCustomer(String name, String address, int postalCode, String phoneNumber,
+    public static void createCustomer(String name, String address, String postalCode, String phoneNumber,
                                       String createDate, String createdBy, String lastUpdate, String lastUpdateBy,
                                       int divisionId){
         try {
-            String sql = "INSERT INTO customers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+            String sql = "INSERT INTO customers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setString(1, name);
             ps.setString(2, address);
-            ps.setInt(3, postalCode);
+            ps.setString(3, postalCode);
             ps.setString(4, phoneNumber);
             ps.setString(5, createDate);
             ps.setString(6, createdBy);
@@ -333,6 +333,63 @@ public abstract class Queries {
             ex.printStackTrace();
         }
         return divisionList;
+    }
+
+    public static int getDivisionId(String division) throws SQLException {
+        String sql = "SELECT Division_ID FROM first_level_divisions WHERE Division = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, division);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int divisionId=  rs.getInt("Division_ID");
+            return divisionId;
+        }
+        return 0;
+
+    }
+
+    public static String getDivisionName(int divisionId) throws SQLException {
+        String sql = "SELECT Division FROM first_level_divisions WHERE Division_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, divisionId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            String division = rs.getString("Division");
+            return division;
+        }
+        return null;
+
+    }
+
+    public static int getCountryId(int divisionId) throws SQLException {
+        String sql = "SELECT Country_ID FROM first_level_divisions WHERE Division_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, divisionId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int countryId = rs.getInt("Country_ID");
+            return countryId;
+        }
+        return 0;
+    }
+
+    public static String getCountryName(int divisionId, int countryId) throws SQLException {
+        String sql = "SELECT Country FROM countries, first_level_divisions\n" +
+                "WHERE first_level_divisions.Division_ID = ? AND first_level_divisions.Country_ID = ? AND countries.Country_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, divisionId);
+        ps.setInt(2, countryId);
+        ps.setInt(3, countryId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            String countryName = rs.getString("Country");
+            return countryName;
+        }
+        return null;
     }
 
 }

@@ -16,40 +16,52 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField editable="false" layoutX="155.0" layoutY="132.0" />
+      <TextField fx:id="customerId" disable="true" editable="false" layoutX="155.0" layoutY="132.0" promptText="Disabled" />
       <Label layoutX="37.0" layoutY="194.0" text="Name">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField layoutX="155.0" layoutY="192.0" />
-      <Label layoutX="37.0" layoutY="254.0" text="Address">
+      <TextField fx:id="name" layoutX="155.0" layoutY="192.0" />
+      <Label layoutX="37.0" layoutY="374.0" text="Address">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="37.0" layoutY="314.0" text="Postal Code">
+      <Label layoutX="37.0" layoutY="434.0" text="Postal Code">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="37.0" layoutY="374.0" text="Phone Number">
+      <Label layoutX="37.0" layoutY="494.0" text="Phone Number">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Button layoutX="400.0" layoutY="548.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
+      <Button layoutX="400.0" layoutY="548.0" mnemonicParsing="false" onAction="#onSaveUpdateCustomer" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <Button layoutX="300.0" layoutY="548.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
+      <Button layoutX="300.0" layoutY="548.0" mnemonicParsing="false" onAction="#onCancelUpdateCustomer" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <TextField layoutX="155.0" layoutY="252.0" />
-      <TextField layoutX="155.0" layoutY="312.0" />
-      <TextField layoutX="155.0" layoutY="372.0" />
+      <TextField fx:id="address" layoutX="155.0" layoutY="371.0" />
+      <TextField fx:id="postalCode" layoutX="155.0" layoutY="431.0" />
+      <TextField fx:id="phoneNumber" layoutX="155.0" layoutY="491.0" />
+      <Label layoutX="37.0" layoutY="254.0" text="Country">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="37.0" layoutY="314.0" text="State/Province">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="countryComboBox" layoutX="155.0" layoutY="252.0" prefWidth="150.0" />
+      <ComboBox fx:id="stateComboBox" layoutX="155.0" layoutY="312.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Country;
 import model.Division;
+import model.User;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class AddCustomer implements Initializable {
     public TextField address;
     public TextField postalCode;
     public TextField phoneNumber;
-
+    public User currentUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,15 +44,9 @@ public class AddCustomer implements Initializable {
         JDBC.closeConnection();
     }
 
-
-    public String toString(){
-        //ObservableList<Customer> customers = Queries.getAllCustomers();
-        return (getClass().getName());
-        //return (getClass().getName().toString());
-
+    public void setUser(User currentUser) {
+        this.currentUser = currentUser;
     }
-
-
 
     public void onSaveAddCustomer(ActionEvent actionEvent) throws SQLException {
         JDBC.openConnection();
@@ -61,26 +56,24 @@ public class AddCustomer implements Initializable {
         String postal = postalCode.getText();
         String customerPhone = phoneNumber.getText();
         LocalDateTime createDate = LocalDateTime.now();
-        //String createdBy = Queries
+        String createdBy = currentUser.getUsername();
         LocalDateTime lastUpdate = LocalDateTime.now();
-        //String lastUpdateBy = Queries
-        //int divisionId = stateComboBox.getSelectionModel().getSelectedItem().getDivisionId();
+        String lastUpdateBy = currentUser.getUsername();
+        String division = String.valueOf(stateComboBox.getSelectionModel().getSelectedItem());
+        int divisionId = Queries.getDivisionId(division);
 
         DateTimeFormatter createFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
         String formatCreateDateTime = createDate.format(createFormat);
         DateTimeFormatter updateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
         String formatUpdateDateTime = lastUpdate.format(updateFormat);
 
-        System.out.println(formatCreateDateTime);
-        System.out.println(formatUpdateDateTime);
 
-        System.out.println(System.getProperty("user.name"));
-
-
-        //Queries.insertCustomer();
+        Queries.createCustomer(customerName, customerAddress, postal, customerPhone, formatCreateDateTime,
+                createdBy, formatUpdateDateTime, lastUpdateBy, divisionId);
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+
         JDBC.closeConnection();
     }
 
@@ -88,4 +81,5 @@ public class AddCustomer implements Initializable {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
     }
+
 }

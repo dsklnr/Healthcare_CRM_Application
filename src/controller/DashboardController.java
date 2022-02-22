@@ -29,7 +29,7 @@ public class DashboardController implements Initializable {
     public TableColumn startTimeCol;
     public TableColumn endTimeCol;
     public TableView<Appointment> dashboardTable;
-    private User user;
+    private User currentUser;
 
     //ObservableList<User> currentUser = FXCollections.observableArrayList();
     //private ObservableList<Appointment> fewapp = FXCollections.observableArrayList();
@@ -38,7 +38,7 @@ public class DashboardController implements Initializable {
         //Queries.selectAppointment(currentUser.getUserId());
         JDBC.openConnection();
 
-        user = currentUser;
+        this.currentUser = currentUser;
 
         dashboardTable.setItems(Queries.getAllAppointmentsFromId(currentUser.getUserId()));
 
@@ -74,7 +74,7 @@ public class DashboardController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
         DashboardController dashboardUser = loader.getController();
-        dashboardUser.setUser(user);
+        dashboardUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
@@ -86,6 +86,8 @@ public class DashboardController implements Initializable {
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
+        CustomerController customerUser = loader.getController();
+        customerUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Customers");
@@ -96,6 +98,8 @@ public class DashboardController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
+        AllAppointmentsController appointmentsUser = loader.getController();
+        appointmentsUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");

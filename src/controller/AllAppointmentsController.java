@@ -40,7 +40,7 @@ public class AllAppointmentsController implements Initializable {
     public TableColumn userIdCol;
     public TableColumn contactIdCol;
     public TableView allAppointmentsTable;
-    private User user;
+    private User currentUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,9 +67,15 @@ public class AllAppointmentsController implements Initializable {
 
     }
 
+    public void setUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
+        DashboardController dashboardUser = loader.getController();
+        dashboardUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
@@ -80,6 +86,8 @@ public class AllAppointmentsController implements Initializable {
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
+        CustomerController customerUser = loader.getController();
+        customerUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Customers");
@@ -90,6 +98,8 @@ public class AllAppointmentsController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
+        AllAppointmentsController appointmentsUser = loader.getController();
+        appointmentsUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
@@ -139,4 +149,5 @@ public class AllAppointmentsController implements Initializable {
             alert.close();
         }
     }
+
 }
