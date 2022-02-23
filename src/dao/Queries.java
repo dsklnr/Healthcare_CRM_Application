@@ -71,22 +71,36 @@ public abstract class Queries {
         }
         return 0;
     }
-    public static ObservableList<User> getAllUsernames() throws SQLException {
-        ObservableList<User> userList = FXCollections.observableArrayList();
+    public static ObservableList<Contact> getAllContacts() throws SQLException {
+        ObservableList<Contact> contactsList = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM contacts";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()){
-            int userId = rs.getInt("User_ID");
-            String username = rs.getString("User_Name");
-            String password = rs.getString("Password");
+            int contactId = rs.getInt("Contact_ID");
+            String name = rs.getString("Contact_Name");
+            String email = rs.getString("Email");
 
-            userList.add(new User(userId, username, password));
+            contactsList.add(new Contact(contactId, name, email));
         }
-        return userList;
+        return contactsList;
     }
+
+    public static int getContactId(String name) throws SQLException {
+        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int contactId = rs.getInt("Contact_ID");
+            return contactId;
+        }
+        return 0;
+    }
+
 
     public static boolean login(String username, String password) throws SQLException {
         String sql = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
@@ -208,6 +222,30 @@ public abstract class Queries {
         }
 
         return allAppointmentList;
+    }
+
+    public static String insertAppointment(String title, String description, String location, String type,
+                                           String startDateTime, String endDateTime, String createDate,
+                                           String createdBy, String lastUpdate, String lastUpdatedBy,
+                                           int customerId, int userId, int contactId) throws SQLException {
+        String sql = "INSERT INTO appointments VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, title);
+        ps.setString(2, description);
+        ps.setString(3, location);
+        ps.setString(4, type);
+        ps.setString(5, startDateTime);
+        ps.setString(6, endDateTime);
+        ps.setString(7, createDate);
+        ps.setString(8, createdBy);
+        ps.setString(9, lastUpdate);
+        ps.setString(10, lastUpdatedBy);
+        ps.setInt(11, customerId);
+        ps.setInt(12, userId);
+        ps.setInt(13, contactId);
+        String rowsAffected = String.valueOf(ps.executeUpdate());
+        return rowsAffected;
+
     }
 
     public static ObservableList<Customer> getAllCustomers(){

@@ -1,11 +1,11 @@
 package model;
 
-public class Contacts {
+public class Contact {
     private int contactId;
     private String name;
     private String email;
 
-    public Contacts(int contactId, String name, String email) {
+    public Contact(int contactId, String name, String email) {
         this.contactId = contactId;
         this.name = name;
         this.email = email;
@@ -33,5 +33,10 @@ public class Contacts {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 }

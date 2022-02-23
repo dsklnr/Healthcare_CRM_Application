@@ -89,9 +89,16 @@ public class AddCustomer implements Initializable {
         JDBC.closeConnection();
     }
 
-    public void onCancelAddCustomer(ActionEvent actionEvent) {
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.close();
+    public void onCancelAddCustomer(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        Parent root = loader.load();
+        CustomerController customerUser = loader.getController();
+        customerUser.setUser(currentUser);
+        Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage2.close();
+        stage2.setTitle("CRM Customers");
+        stage2.setScene(new Scene(root, 1500, 800));
+        stage2.show();
     }
 
 }

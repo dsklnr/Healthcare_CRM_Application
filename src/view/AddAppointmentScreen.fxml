@@ -16,13 +16,13 @@
                 <Font size="15.0" />
             </font>
         </Label>
-        <TextField fx:id="appointmentId" editable="false" layoutX="165.0" layoutY="132.0" promptText="Disabled" />
+        <TextField fx:id="appointmentId" disable="true" editable="false" layoutX="165.0" layoutY="132.0" prefHeight="25.0" prefWidth="174.0" promptText="Disabled" />
         <Label layoutX="37.0" layoutY="194.0" text="Title">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <TextField fx:id="title" layoutX="165.0" layoutY="192.0" />
+        <TextField fx:id="title" layoutX="165.0" layoutY="192.0" prefHeight="25.0" prefWidth="174.0" />
         <Label layoutX="37.0" layoutY="254.0" text="Location">
             <font>
                 <Font size="15.0" />
@@ -63,24 +63,24 @@
                 <Font size="15.0" />
             </font>
         </Label>
-        <Button fx:id="onSaveAddAppointment" layoutX="400.0" layoutY="840.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
+        <Button layoutX="400.0" layoutY="840.0" mnemonicParsing="false" onAction="#onSaveAddAppointment" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
-        <Button fx:id="onCancelAddAppointment" layoutX="300.0" layoutY="840.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
+        <Button layoutX="300.0" layoutY="840.0" mnemonicParsing="false" onAction="#onCancelAddAppointment" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
-        <TextField fx:id="location" layoutX="165.0" layoutY="252.0" />
-        <TextField fx:id="type" layoutX="165.0" layoutY="372.0" />
-        <TextField fx:id="startDate" layoutX="165.0" layoutY="432.0" />
-        <TextField fx:id="endDate" layoutX="165.0" layoutY="492.0" />
-        <TextField fx:id="customerId" layoutX="165.0" layoutY="552.0" />
-        <TextField fx:id="userId" layoutX="165.0" layoutY="612.0" />
+        <TextField fx:id="location" layoutX="165.0" layoutY="252.0" prefHeight="25.0" prefWidth="174.0" />
+        <TextField fx:id="type" layoutX="165.0" layoutY="372.0" prefHeight="25.0" prefWidth="174.0" />
+        <TextField fx:id="customerId" layoutX="165.0" layoutY="552.0" prefHeight="25.0" prefWidth="174.0" />
+        <TextField fx:id="userId" layoutX="165.0" layoutY="612.0" prefHeight="25.0" prefWidth="174.0" />
       <TextArea fx:id="description" layoutX="165.0" layoutY="685.0" prefHeight="112.0" prefWidth="270.0" />
-      <ComboBox fx:id="contactComboBox" layoutX="165.0" layoutY="312.0" prefWidth="150.0" />
+      <ComboBox fx:id="contactComboBox" layoutX="165.0" layoutY="312.0" prefHeight="25.0" prefWidth="174.0" />
+      <DatePicker fx:id="startDate" layoutX="165.0" layoutY="432.0" />
+      <DatePicker fx:id="endDate" layoutX="163.0" layoutY="492.0" />
     </children>
 
 </AnchorPane>
