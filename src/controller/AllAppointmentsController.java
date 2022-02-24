@@ -2,6 +2,7 @@ package controller;
 
 import dao.JDBC;
 import dao.Queries;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -124,13 +125,21 @@ public class AllAppointmentsController implements Initializable {
     }
 
     public void onUpdateAppointment(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentScreen.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.close();
-        stage.setTitle("Update An Appointment");
-        stage.setScene(new Scene(root, 500, 900));
-        stage.show();
+        Appointment appointment = (Appointment) allAppointmentsTable.getSelectionModel().getSelectedItem();
+
+        if (appointment != null){
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentScreen.fxml"));
+            Parent root = loader.load();
+            UpdateAppointmentScreen updateAppointmentScreen = loader.getController();
+            updateAppointmentScreen.setAppointment(appointment);
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.close();
+            stage.setTitle("Update An Appointment");
+            stage.setScene(new Scene(root, 800, 900));
+            stage.show();
+        }
+
     }
 
     public void onDeleteAppointment(ActionEvent actionEvent) {
