@@ -124,6 +124,8 @@ public class AddAppointmentController implements Initializable {
             String endTimeLocal = endDateFormat.format(zdtEndLocal);
             String endTimeUtc = endDateFormat.format(zdtEndUtc);
 
+            ZonedDateTime estStart = zdtStartLocal.withZoneSameInstant(ZoneOffset.of("EST"));
+
             Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                     startTimeUtc, endTimeUtc, formatCreateDateTime, createdBy, formatUpdateDateTime, lastUpdateBy,
                     Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
