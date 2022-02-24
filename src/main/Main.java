@@ -13,13 +13,11 @@ import java.sql.SQLException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws SQLException, IOException {
-        //Queries.selectAppointment(1);
-        System.out.println(System.getProperty("user.name"));
-
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
         stage.setTitle("User Login");
         stage.setScene(new Scene(root, 400, 600));
         stage.show();
+
     }
 
     public static void main(String[] args){

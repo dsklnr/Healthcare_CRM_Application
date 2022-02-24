@@ -21,6 +21,7 @@ import model.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZoneId;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -118,7 +119,7 @@ public class AllAppointmentsController implements Initializable {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("Schedule An Appointment");
-        stage.setScene(new Scene(root, 500, 900));
+        stage.setScene(new Scene(root, 800, 900));
         stage.show();
     }
 

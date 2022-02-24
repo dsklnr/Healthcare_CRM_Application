@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="900.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointmentController">
+<AnchorPane prefHeight="900.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointmentController">
     <children>
         <Label layoutX="37.0" layoutY="58.0" text="Schedule An Appointment">
             <font>
@@ -63,12 +63,12 @@
                 <Font size="15.0" />
             </font>
         </Label>
-        <Button layoutX="400.0" layoutY="840.0" mnemonicParsing="false" onAction="#onSaveAddAppointment" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
+        <Button layoutX="701.0" layoutY="840.0" mnemonicParsing="false" onAction="#onSaveAddAppointment" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
-        <Button layoutX="300.0" layoutY="840.0" mnemonicParsing="false" onAction="#onCancelAddAppointment" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
+        <Button layoutX="597.0" layoutY="840.0" mnemonicParsing="false" onAction="#onCancelAddAppointment" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
             <font>
                 <Font size="15.0" />
             </font>
@@ -77,10 +77,14 @@
         <TextField fx:id="type" layoutX="165.0" layoutY="372.0" prefHeight="25.0" prefWidth="174.0" />
         <TextField fx:id="customerId" layoutX="165.0" layoutY="552.0" prefHeight="25.0" prefWidth="174.0" />
         <TextField fx:id="userId" layoutX="165.0" layoutY="612.0" prefHeight="25.0" prefWidth="174.0" />
-      <TextArea fx:id="description" layoutX="165.0" layoutY="685.0" prefHeight="112.0" prefWidth="270.0" />
+      <TextArea fx:id="description" layoutX="165.0" layoutY="685.0" prefHeight="112.0" prefWidth="536.0" />
       <ComboBox fx:id="contactComboBox" layoutX="165.0" layoutY="312.0" prefHeight="25.0" prefWidth="174.0" />
       <DatePicker fx:id="startDate" layoutX="165.0" layoutY="432.0" />
       <DatePicker fx:id="endDate" layoutX="163.0" layoutY="492.0" />
+      <ComboBox fx:id="startHourComboBox" layoutX="400.0" layoutY="432.0" prefWidth="150.0" promptText="Select Hour" />
+      <ComboBox fx:id="startMinuteComboBox" layoutX="601.0" layoutY="432.0" prefWidth="150.0" promptText="Select Minute" />
+      <ComboBox fx:id="endHourComboBox" layoutX="400.0" layoutY="492.0" prefWidth="150.0" promptText="Select Hour" />
+      <ComboBox fx:id="endMinuteComboBox" layoutX="601.0" layoutY="492.0" prefWidth="150.0" promptText="Select Minute" />
     </children>
 
 </AnchorPane>
