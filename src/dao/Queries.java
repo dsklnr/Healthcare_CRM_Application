@@ -8,7 +8,9 @@ import model.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 public abstract class Queries {
 
@@ -600,6 +602,36 @@ public abstract class Queries {
             return true;
         }
         return false;
+    }
+
+    public static ObservableList<LocalDateTime> getAllStartTimes() throws SQLException {
+        ObservableList<LocalDateTime> allAppointmentStartTimes = FXCollections.observableArrayList();
+
+        String sql = "SELECT Start FROM appointments";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
+            allAppointmentStartTimes.add(startDateTime);
+        }
+        return allAppointmentStartTimes;
+    }
+
+    public static ObservableList<LocalDateTime> getAllEndTimes() throws SQLException {
+        ObservableList<LocalDateTime> allAppointmentEndTimes = FXCollections.observableArrayList();
+
+        String sql = "SELECT End FROM appointments";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
+            allAppointmentEndTimes.add(endDateTime);
+        }
+        return allAppointmentEndTimes;
     }
 
 }

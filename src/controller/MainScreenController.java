@@ -95,6 +95,8 @@ public class MainScreenController implements Initializable {
 
     //Handle login events
     public void onLogin(ActionEvent actionEvent) throws IOException, SQLException {
+        JDBC.openConnection();
+
         String user = username.getText();
         String pass = password.getText();
 
@@ -165,6 +167,7 @@ public class MainScreenController implements Initializable {
 
             }
         }
+        JDBC.closeConnection();
     }
 
     //Create a new account

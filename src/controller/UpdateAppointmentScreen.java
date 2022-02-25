@@ -208,6 +208,7 @@ public class UpdateAppointmentScreen implements Initializable {
             alert.showAndWait();
         }
 
+        //TODO LocalDateTime.isAfter or LocalDateTime.isBefore()
         if (startHourComboBox.getSelectionModel().getSelectedItem() == "00" ||
                 startHourComboBox.getSelectionModel().getSelectedItem() == "23") {
 
