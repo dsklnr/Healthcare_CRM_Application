@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.Appointment;
 import model.User;
 
@@ -114,6 +115,10 @@ public class UpdateAppointmentScreen implements Initializable {
         ZoneId estZone = ZoneId.of("America/New_York");
         ZonedDateTime estStartTime = utcStartTime.withZoneSameInstant(estZone);
 
+        Callback<DatePicker, DateCell> dayCellFactory = this.getDayCellFactory();
+        startDate.setDayCellFactory(dayCellFactory);
+        endDate.setDayCellFactory(dayCellFactory);
+
         startDate.setValue(appointmentStartDateTime.toLocalDate());
         startHourComboBox.getSelectionModel().select(localStartTime.getHour());
         startMinuteComboBox.getSelectionModel().select(localStartTime.getMinute());
@@ -128,6 +133,28 @@ public class UpdateAppointmentScreen implements Initializable {
     public void setUser(User currentUser) {
         user = currentUser;
     }
+
+    private Callback<DatePicker, DateCell> getDayCellFactory(){
+
+        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+
+            @Override
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell(){
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty){
+                        super.updateItem(item, empty);
+
+                        if (item.getDayOfWeek() == DayOfWeek.SATURDAY || item.getDayOfWeek() == DayOfWeek.SUNDAY){
+                            setDisable(true);
+                        }
+                    }
+                };
+            }
+        };
+        return dayCellFactory;
+    }
+
 
     public void onSaveAddAppointment(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
@@ -186,7 +213,7 @@ public class UpdateAppointmentScreen implements Initializable {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00");
+            alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00 EST Monday - Friday");
             alert.showAndWait();
         }
 

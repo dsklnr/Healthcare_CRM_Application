@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.User;
 
 import java.io.IOException;
@@ -43,13 +44,16 @@ public class AddAppointmentController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
+        Callback<DatePicker, DateCell> dayCellFactory = this.getDayCellFactory();
+        startDate.setDayCellFactory(dayCellFactory);
+        endDate.setDayCellFactory(dayCellFactory);
+
         ObservableList<String> hours = FXCollections.observableArrayList();
         hours.addAll("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13",
                 "14", "15", "16", "17", "18", "19", "20", "21", "22", "23");
 
         ObservableList<String> minutes = FXCollections.observableArrayList();
         minutes.addAll("00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55");
-
 
         contactComboBox.setPromptText("Select Contact");
         startHourComboBox.setItems(hours);
@@ -66,6 +70,27 @@ public class AddAppointmentController implements Initializable {
         }
 
         JDBC.closeConnection();
+    }
+
+    private Callback<DatePicker, DateCell> getDayCellFactory(){
+
+        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+
+            @Override
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell(){
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty){
+                        super.updateItem(item, empty);
+
+                        if (item.getDayOfWeek() == DayOfWeek.SATURDAY || item.getDayOfWeek() == DayOfWeek.SUNDAY){
+                            setDisable(true);
+                        }
+                    }
+                };
+            }
+        };
+        return dayCellFactory;
     }
 
     public void onSaveAddAppointment(ActionEvent actionEvent) throws IOException, SQLException {
