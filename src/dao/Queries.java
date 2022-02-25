@@ -9,6 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -267,8 +271,8 @@ public abstract class Queries {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                String start = rs.getString("Start");
-                String end = rs.getString("End");
+                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
                 String createDate = rs.getString("Create_Date");
                 String contact = rs.getString("Created_By");
                 String lastUpdate = rs.getString("Last_Update");
@@ -277,8 +281,21 @@ public abstract class Queries {
                 int userIdFK = rs.getInt("User_ID");
                 int contactIdFK = rs.getInt("Contact_ID");
 
+                ZoneId utcZone = ZoneId.of("UTC");
+                ZonedDateTime utcStartTime = start.atZone(utcZone);
+                ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
+                ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
+
+                ZonedDateTime utcEndTime = end.atZone(utcZone);
+                ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
+                ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
+
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm MM/dd/yyyy");
+                String startTime = finalLocalStartTime.format(dtf);
+                String endTime = finalLocalEndTime.format(dtf);
+
                 allAppointmentList.add(new Appointment(appointmentId, title, description, location,
-                        type, start, end, createDate, contact, lastUpdate, updateBy,
+                        type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
                         customerIdFK, userIdFK, contactIdFK));
             }
 
