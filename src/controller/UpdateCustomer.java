@@ -104,7 +104,6 @@ public class UpdateCustomer implements Initializable {
         DateTimeFormatter updateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
         String formatUpdateDateTime = lastUpdate.format(updateFormat);
 
-
         Queries.createCustomer(customerName, customerAddress, postal, customerPhone, createDate,
                 createdBy, formatUpdateDateTime, lastUpdateBy, divisionId);
 

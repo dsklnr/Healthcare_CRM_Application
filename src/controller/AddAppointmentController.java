@@ -124,17 +124,15 @@ public class AddAppointmentController implements Initializable {
             String endTimeLocal = endDateFormat.format(zdtEndLocal);
             String endTimeUtc = endDateFormat.format(zdtEndUtc);
 
-            ZonedDateTime estStart = zdtStartLocal.withZoneSameInstant(ZoneOffset.of("EST"));
-
             Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                     startTimeUtc, endTimeUtc, formatCreateDateTime, createdBy, formatUpdateDateTime, lastUpdateBy,
                     Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();
-            stage.setTitle("CRM Customers");
+            stage.setTitle("Appointments");
             stage.setScene(new Scene(root, 1500, 800));
             stage.show();
         }
@@ -149,7 +147,7 @@ public class AddAppointmentController implements Initializable {
         Parent root = loader.load();
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage2.close();
-        stage2.setTitle("CRM Customers");
+        stage2.setTitle("Appointments");
         stage2.setScene(new Scene(root, 1500, 800));
         stage2.show();
     }

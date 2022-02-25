@@ -22,6 +22,7 @@ import model.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -124,7 +125,9 @@ public class AllAppointmentsController implements Initializable {
         stage.show();
     }
 
-    public void onUpdateAppointment(ActionEvent actionEvent) throws IOException {
+    public void onUpdateAppointment(ActionEvent actionEvent) throws IOException, SQLException {
+        JDBC.openConnection();
+
         Appointment appointment = (Appointment) allAppointmentsTable.getSelectionModel().getSelectedItem();
 
         if (appointment != null){
@@ -133,6 +136,7 @@ public class AllAppointmentsController implements Initializable {
             Parent root = loader.load();
             UpdateAppointmentScreen updateAppointmentScreen = loader.getController();
             updateAppointmentScreen.setAppointment(appointment);
+            updateAppointmentScreen.setUser(currentUser);
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();
             stage.setTitle("Update An Appointment");
@@ -140,6 +144,7 @@ public class AllAppointmentsController implements Initializable {
             stage.show();
         }
 
+        JDBC.closeConnection();
     }
 
     public void onDeleteAppointment(ActionEvent actionEvent) {

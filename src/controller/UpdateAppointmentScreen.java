@@ -36,7 +36,7 @@ public class UpdateAppointmentScreen implements Initializable {
     public TextField userId;
     public TextArea description;
     public ComboBox contactComboBox;
-    public User currentUser;
+    public User user;
     public DatePicker startDate;
     public DatePicker endDate;
     public ComboBox startHourComboBox;
@@ -74,7 +74,9 @@ public class UpdateAppointmentScreen implements Initializable {
         JDBC.closeConnection();
     }
 
-    public void setAppointment(Appointment appointment) {
+    public void setAppointment(Appointment appointment) throws SQLException {
+        JDBC.openConnection();
+
         selectedAppointment = appointment;
 
         int id = appointment.getAppointmentId();
@@ -82,6 +84,8 @@ public class UpdateAppointmentScreen implements Initializable {
         String appointmentDescription = appointment.getDescription();
         String appointmentLocation = appointment.getLocation();
         String appointmentType = appointment.getType();
+
+        String createdBy = appointment.getCreatedBy();
         int customerID = appointment.getCustomerId();
         int userID = appointment.getUserId();
 
@@ -92,6 +96,9 @@ public class UpdateAppointmentScreen implements Initializable {
         type.setText(appointmentType);
         customerId.setText(String.valueOf(customerID));
         userId.setText(String.valueOf(userID));
+
+        String contactName = Queries.getContactName(appointment.getContactId(), appointment.getAppointmentId());
+        contactComboBox.getSelectionModel().select(contactName);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime appointmentStartDateTime = LocalDateTime.parse(appointment.getStartDateTime(), dtf);
@@ -106,19 +113,6 @@ public class UpdateAppointmentScreen implements Initializable {
 
         ZoneId estZone = ZoneId.of("America/New_York");
         ZonedDateTime estStartTime = utcStartTime.withZoneSameInstant(estZone);
-        System.out.println(estStartTime);
-
-        if (estStartTime.getHour() == 00 || estStartTime.getHour() == 01 || estStartTime.getHour() == 02 ||
-                estStartTime.getHour() == 03 || estStartTime.getHour() == 04 || estStartTime.getHour() == 05 ||
-                estStartTime.getHour() == 06 || estStartTime.getHour() == 07 || estStartTime.getHour() == 22 ||
-                estStartTime.getHour() == 23){
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00");
-            alert.showAndWait();
-        }
-
 
         startDate.setValue(appointmentStartDateTime.toLocalDate());
         startHourComboBox.getSelectionModel().select(localStartTime.getHour());
@@ -127,20 +121,26 @@ public class UpdateAppointmentScreen implements Initializable {
         endDate.setValue(appointmentEndDateTime.toLocalDate());
         endHourComboBox.getSelectionModel().select(localEndTime.getHour());
         endMinuteComboBox.getSelectionModel().select(localEndTime.getMinute());
+
+        JDBC.closeConnection();
+    }
+
+    public void setUser(User currentUser) {
+        user = currentUser;
     }
 
     public void onSaveAddAppointment(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
+        int appointmentID = Integer.parseInt(appointmentId.getText());
         String appointmentTitle = title.getText();
         String appointmentLocation = location.getText();
         String appointmentType = type.getText();
         LocalDate start = startDate.getValue();
         LocalDate end = endDate.getValue();
         LocalDateTime createDate = LocalDateTime.now();
-        String createdBy = currentUser.getUsername();
+        String createdBy = user.getUsername();
         LocalDateTime lastUpdate = LocalDateTime.now();
-        String lastUpdateBy = currentUser.getUsername();
         String customerID = customerId.getText();
         String userID = userId.getText();
         String appointmentDescription = description.getText();
@@ -151,8 +151,28 @@ public class UpdateAppointmentScreen implements Initializable {
         String endHours = String.valueOf(endHourComboBox.getSelectionModel().getSelectedItem());
         String endMinutes = String.valueOf(endMinuteComboBox.getSelectionModel().getSelectedItem());
 
-        if (appointmentTitle == null || appointmentLocation == null || appointmentType == null || start == null ||
-                end == null || startHours == null || startMinutes == null || endHours == null || endMinutes == null ||
+        String lastUpdateBy = Queries.getUpdateAppointmentContact(appointmentID, contactId, contactId);
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime appointmentStartDateTime = LocalDateTime.parse(selectedAppointment.getStartDateTime(), dtf);
+        LocalDateTime appointmentEndDateTime = LocalDateTime.parse(selectedAppointment.getEndDateTime(), dtf);
+
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZonedDateTime utcStartTime = appointmentStartDateTime.atZone(utcZone);
+        ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
+
+        ZonedDateTime utcEndTime = appointmentEndDateTime.atZone(utcZone);
+        ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
+
+        ZoneId estZone = ZoneId.of("America/New_York");
+        ZonedDateTime estStartTime = utcStartTime.withZoneSameInstant(estZone);
+
+        if (appointmentTitle == null || appointmentLocation == null || appointmentType == null ||
+                contactComboBox.getSelectionModel().getSelectedItem() == null || start == null ||
+                end == null || startHourComboBox.getSelectionModel().getSelectedItem() == null ||
+                startMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
+                endHourComboBox.getSelectionModel().getSelectedItem() == null ||
+                endMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
                 customerId.getText() == null || userId.getText() == null || appointmentDescription == null){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -160,6 +180,17 @@ public class UpdateAppointmentScreen implements Initializable {
             alert.setContentText("One or more value(s) is missing");
             alert.showAndWait();
         }
+
+        if (startHourComboBox.getSelectionModel().getSelectedItem() == "00" ||
+                startHourComboBox.getSelectionModel().getSelectedItem() == "23") {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00");
+            alert.showAndWait();
+        }
+
+
         else {
             //"HH:mm:ss"
             DateTimeFormatter createFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
@@ -171,30 +202,29 @@ public class UpdateAppointmentScreen implements Initializable {
             LocalDateTime startLocalDateTime = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(),
                     Integer.parseInt(startHours), Integer.parseInt(startMinutes));
 
+            DateTimeFormatter endDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
+                    Integer.parseInt(endHours), Integer.parseInt(endMinutes));
+
             ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtStartUtc = zdtStartLocal.withZoneSameInstant(ZoneOffset.UTC);
             String startTimeLocal = startDateFormat.format(zdtStartLocal);
             String startTimeUtc = startDateFormat.format(zdtStartUtc);
-
-            DateTimeFormatter endDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
-                    Integer.parseInt(endHours), Integer.parseInt(endMinutes));
 
             ZonedDateTime zdtEndLocal = ZonedDateTime.of(endLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtEndUtc = zdtEndLocal.withZoneSameInstant(ZoneOffset.UTC);
             String endTimeLocal = endDateFormat.format(zdtEndLocal);
             String endTimeUtc = endDateFormat.format(zdtEndUtc);
 
-            //TODO update appointment query
-            Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
+            Queries.updateAppointment(appointmentID, appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                     startTimeUtc, endTimeUtc, formatCreateDateTime, createdBy, formatUpdateDateTime, lastUpdateBy,
                     Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();
-            stage.setTitle("CRM Customers");
+            stage.setTitle("Appointments");
             stage.setScene(new Scene(root, 1500, 800));
             stage.show();
         }
@@ -207,10 +237,9 @@ public class UpdateAppointmentScreen implements Initializable {
         Parent root = loader.load();
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage2.close();
-        stage2.setTitle("CRM Customers");
+        stage2.setTitle("Appointments");
         stage2.setScene(new Scene(root, 1500, 800));
         stage2.show();
     }
-
 
 }

@@ -19,8 +19,53 @@ public abstract class Queries {
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, username);
         ps.setString(2, password);
+
         String rowsAffected = String.valueOf(ps.executeUpdate());
         return rowsAffected;
+    }
+
+    public static void updateAppointment(int appointmentId, String title, String description, String location, String type,
+                                         String startTime, String endTime, String createDate, String createdBy,
+                                         String updateDateTime, String lastUpdateBy, int customerId, int userId,
+                                         int contactId) throws SQLException {
+
+        String sql = "UPDATE appointments\n" +
+                "SET Appointment_ID = ?, Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ?\n" +
+                "WHERE Appointment_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+        ps.setString(2, title);
+        ps.setString(3, description);
+        ps.setString(4, location);
+        ps.setString(5, type);
+        ps.setString(6, startTime);
+        ps.setString(7, endTime);
+        ps.setString(8, createDate);
+        ps.setString(9, createdBy);
+        ps.setString(10, updateDateTime);
+        ps.setString(11, lastUpdateBy);
+        ps.setInt(12, customerId);
+        ps.setInt(13, userId);
+        ps.setInt(14, contactId);
+        ps.setInt(15, appointmentId);
+        ps.execute();
+
+    }
+
+    public static String getUpdateAppointmentContact(int appointmentId, int contactId, int contactID) throws SQLException {
+        String sql = "SELECT Contact_Name\n" +
+                "FROM appointments, contacts\n" +
+                "WHERE Appointment_ID = ? AND appointments.Contact_ID = ? AND contacts.Contact_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+        ps.setInt(2, contactId);
+        ps.setInt(3, contactID);
+
+        String rowsAffected = String.valueOf(ps.executeQuery());
+        return rowsAffected;
+
     }
 
     //Update a user in the SQL database
@@ -99,6 +144,24 @@ public abstract class Queries {
             return contactId;
         }
         return 0;
+    }
+
+    public static String getContactName(int contactId, int appointmentId) throws SQLException {
+        String sql = "SELECT Contact_Name\n" +
+                "FROM appointments, contacts\n" +
+                "WHERE contacts.Contact_ID = ? AND appointments.Appointment_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, contactId);
+        ps.setInt(2, appointmentId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            String name = rs.getString("Contact_Name");
+            return name;
+        }
+        return null;
     }
 
 
