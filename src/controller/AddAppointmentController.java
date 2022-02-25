@@ -134,7 +134,6 @@ public class AddAppointmentController implements Initializable {
 
             appointmentStartDateTimes = Queries.getAllStartTimes();
             appointmentEndDateTimes = Queries.getAllEndTimes();
-            //System.out.println(appointmentStartDateTimes);
 
             ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
             ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
@@ -194,38 +193,36 @@ public class AddAppointmentController implements Initializable {
                     alert.showAndWait();
                 }
 
-                DateTimeFormatter databaseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
-                String formatCreateDateTime = createDate.format(databaseFormat);
-                String formatUpdateDateTime = lastUpdate.format(databaseFormat);
+                else {
+                    DateTimeFormatter databaseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
+                    String formatCreateDateTime = createDate.format(databaseFormat);
+                    String formatUpdateDateTime = lastUpdate.format(databaseFormat);
 
-                ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
-                ZonedDateTime zdtStartUtc = zdtStartLocal.withZoneSameInstant(ZoneOffset.UTC);
-                String startTimeLocal = databaseFormat.format(zdtStartLocal);
-                String startTimeUtc = databaseFormat.format(zdtStartUtc);
+                    ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
+                    ZonedDateTime zdtStartUtc = zdtStartLocal.withZoneSameInstant(ZoneOffset.UTC);
+                    String startTimeLocal = databaseFormat.format(zdtStartLocal);
+                    String startTimeUtc = databaseFormat.format(zdtStartUtc);
 
-                ZonedDateTime zdtEndLocal = ZonedDateTime.of(endLocalDateTime, ZoneId.systemDefault());
-                ZonedDateTime zdtEndUtc = zdtEndLocal.withZoneSameInstant(ZoneOffset.UTC);
-                String endTimeLocal = databaseFormat.format(zdtEndLocal);
-                String endTimeUtc = databaseFormat.format(zdtEndUtc);
+                    ZonedDateTime zdtEndLocal = ZonedDateTime.of(endLocalDateTime, ZoneId.systemDefault());
+                    ZonedDateTime zdtEndUtc = zdtEndLocal.withZoneSameInstant(ZoneOffset.UTC);
+                    String endTimeUtc = databaseFormat.format(zdtEndUtc);
 
-                JDBC.openConnection();
+                    JDBC.openConnection();
 
-                Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
-                        startTimeUtc, endTimeUtc, formatCreateDateTime, createdBy, formatUpdateDateTime, lastUpdateBy,
-                        Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
+                    Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
+                            startTimeUtc, endTimeUtc, formatCreateDateTime, createdBy, formatUpdateDateTime, lastUpdateBy,
+                            Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
 
-                JDBC.closeConnection();
+                    JDBC.closeConnection();
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                stage.close();
-                stage.setTitle("Appointments");
-                stage.setScene(new Scene(root, 1500, 800));
-                stage.show();
-
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = new Stage();
+                    stage.setTitle("Appointments");
+                    stage.setScene(new Scene(root, 1500, 800));
+                    stage.show();
+                }
             }
-
         }
 
 

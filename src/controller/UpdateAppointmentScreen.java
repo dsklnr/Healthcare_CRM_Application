@@ -108,9 +108,11 @@ public class UpdateAppointmentScreen implements Initializable {
         ZoneId utcZone = ZoneId.of("UTC");
         ZonedDateTime utcStartTime = appointmentStartDateTime.atZone(utcZone);
         ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
+        ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
 
         ZonedDateTime utcEndTime = appointmentEndDateTime.atZone(utcZone);
         ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
+        ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
 
         ZoneId estZone = ZoneId.of("America/New_York");
         ZonedDateTime estStartTime = utcStartTime.withZoneSameInstant(estZone);
@@ -120,12 +122,12 @@ public class UpdateAppointmentScreen implements Initializable {
         endDate.setDayCellFactory(dayCellFactory);
 
         startDate.setValue(appointmentStartDateTime.toLocalDate());
-        startHourComboBox.getSelectionModel().select(localStartTime.getHour());
-        startMinuteComboBox.getSelectionModel().select(localStartTime.getMinute());
+        startHourComboBox.getSelectionModel().select(finalLocalStartTime.getHour());
+        startMinuteComboBox.getSelectionModel().select(finalLocalStartTime.getMinute());
 
         endDate.setValue(appointmentEndDateTime.toLocalDate());
-        endHourComboBox.getSelectionModel().select(localEndTime.getHour());
-        endMinuteComboBox.getSelectionModel().select(localEndTime.getMinute());
+        endHourComboBox.getSelectionModel().select(finalLocalEndTime.getHour());
+        endMinuteComboBox.getSelectionModel().select(finalLocalEndTime.getMinute());
 
         JDBC.closeConnection();
     }
