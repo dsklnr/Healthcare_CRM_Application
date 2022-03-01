@@ -113,24 +113,35 @@ public class MainScreenController implements Initializable {
                 bw.write("Username: " + user + " " + formatDateTime1 + " " + country + " SUCCESSFUL LOGIN \n");
                 bw.close();
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                Queries.immediateAppointment(Queries.selectUser(user, pass));
+
+                if (!Queries.immediateAppointment(Queries.selectUser(user, pass))) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Upcoming Appointments");
+                    alert.setContentText("No immediate upcoming appointments.");
+                    alert.showAndWait();
+
+                }
+
+                User currentUser = new User(Queries.selectUser(user, pass), user, pass);
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
+                Parent root = loader.load();
+
+                DashboardController dashboardController = loader.getController();
+                dashboardController.setUser(currentUser);
+                System.out.println(currentUser.getUserId());
+
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.close();
+                stage.setTitle("CRM Dashboard");
+                stage.setScene(new Scene(root, 1500, 800));
+                stage.show();
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
 
-            User currentUser = new User(Queries.selectUser(user, pass), user, pass);
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
-            Parent root = loader.load();
-
-            DashboardController dashboardUser = loader.getController();
-            dashboardUser.setUser(currentUser);
-
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.close();
-            stage.setTitle("CRM Dashboard");
-            stage.setScene(new Scene(root, 1500, 800));
-            stage.show();
-            JDBC.closeConnection();
         }
 
         else if (!Queries.login(user, pass)){

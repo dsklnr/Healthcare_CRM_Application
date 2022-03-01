@@ -290,7 +290,7 @@ public abstract class Queries {
                 ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
                 ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
 
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm MM/dd/yyyy");
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
                 String startTime = finalLocalStartTime.format(dtf);
                 String endTime = finalLocalEndTime.format(dtf);
 
@@ -393,6 +393,14 @@ public abstract class Queries {
             int rowsAffected = ps.executeUpdate();
             return rowsAffected;
 
+    }
+
+    public static int deleteAppointment(int appointmentId) throws SQLException {
+        String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected;
     }
 
     public static ArrayList<String> getAllCountryNames(){
@@ -649,6 +657,67 @@ public abstract class Queries {
             allAppointmentEndTimes.add(endDateTime);
         }
         return allAppointmentEndTimes;
+    }
+
+    public static String getUpdateStartTime(int appointmentId) throws SQLException {
+        String sql = "Select Start from appointments WHERE Appointment_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            String startDateTime = rs.getString("Start");
+            return startDateTime;
+        }
+        return null;
+    }
+
+    public static String getUpdateEndTime(int appointmentId) throws SQLException {
+        String sql = "Select End from appointments WHERE Appointment_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            String endDateTime = rs.getString("End");
+            return endDateTime;
+        }
+        return null;
+    }
+
+    public static boolean checkDeleteCustomer(int customerId) throws SQLException {
+        String sql = "SELECT * FROM customers, appointments WHERE customers.Customer_ID = ? " +
+                "AND appointments.Customer_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, customerId);
+        ps.setInt(2, customerId);
+
+        ResultSet rs = ps.executeQuery();
+
+        ObservableList<Customer> customers = FXCollections.observableArrayList();
+
+        while (rs.next()){
+            int id = rs.getInt("Customer_ID");
+            String name = rs.getString("Customer_Name");
+            String address = rs.getString("Address");
+            String postal = rs.getString("Postal_Code");
+            String phone = rs.getString("Phone");
+            String createDate = rs.getString("Create_Date");
+            String createdBy = rs.getString("Created_By");
+            String lastUpdate = rs.getString("Last_Update");
+            String lastUpdatedBy = rs.getString("Last_Updated_By");
+            int division = rs.getInt("Division_ID");
+
+            Customer customer = new Customer(id, name, address, postal, phone,createDate, createdBy, lastUpdate, lastUpdatedBy, division);
+            customers.addAll(customer);
+            return false;
+        }
+        return true;
     }
 
 }

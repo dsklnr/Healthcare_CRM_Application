@@ -29,7 +29,7 @@
             <TableColumn fx:id="contactIdCol" prefWidth="67.0" text="Contact ID" />
         </columns>
       </TableView>
-      <TextField layoutX="1215.0" layoutY="145.0" prefHeight="25.0" prefWidth="200.0" promptText="Search Appointments" />
+      <TextField fx:id="searchAppointments" layoutX="1215.0" layoutY="145.0" onAction="#onSearchAppointments" prefHeight="25.0" prefWidth="200.0" promptText="Search Appointment ID" />
        <Label layoutX="916.0" layoutY="35.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand;" text="Home">
            <font>
                <Font size="15.0" />

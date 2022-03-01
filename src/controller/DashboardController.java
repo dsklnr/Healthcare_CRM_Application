@@ -2,6 +2,7 @@ package controller;
 
 import dao.JDBC;
 import dao.Queries;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -35,15 +36,29 @@ public class DashboardController implements Initializable {
     public RadioButton monthButton;
     public RadioButton weekButton;
     public ToggleGroup toggle;
-    private User user;
-    public int userId;
+    public User user;
 
     //ObservableList<User> currentUser = FXCollections.observableArrayList();
     //private ObservableList<Appointment> fewapp = FXCollections.observableArrayList();
 
     public void setUser(User currentUser) {
+        JDBC.openConnection();
+
         user = currentUser;
-        userId = currentUser.getUserId();
+        System.out.println(user.getUserId());
+
+        ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
+
+        try {
+            upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getUserId()));
+            dashboardTable.setItems(upcomingAppointment);
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+
+        JDBC.closeConnection();
 
     }
 
@@ -61,22 +76,9 @@ public class DashboardController implements Initializable {
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
         endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
 
-        try {
-            dashboardTable.setItems(Queries.getNextMonthAppointments(userId));
-            Queries.immediateAppointment(userId);
 
-            if (!Queries.immediateAppointment(userId)){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Upcoming Appointments");
-                alert.setContentText("No immediate upcoming appointments.");
-                alert.showAndWait();
-            }
+        //dashboardTable.setItems(Queries.getNextMonthAppointments(user.getUserId()));
 
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
 
         JDBC.closeConnection();
 
@@ -132,21 +134,30 @@ public class DashboardController implements Initializable {
 
          */
     }
+
+
     public void onMonthButton(ActionEvent actionEvent) {
         JDBC.openConnection();
 
         monthButton.setSelected(true);
 
-        try {
-            dashboardTable.setItems(Queries.getNextMonthAppointments(user.getUserId()));
+        dashboardTable.setItems(null);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
+
+        try {
+            upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getUserId()));
+            dashboardTable.setItems(upcomingAppointment);
+
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
 
         JDBC.closeConnection();
 
     }
+
+
 
     public void onWeekButton(ActionEvent actionEvent) {
         JDBC.openConnection();
@@ -155,6 +166,7 @@ public class DashboardController implements Initializable {
 
         try {
             dashboardTable.setItems(Queries.getNextWeekAppointments(user.getUserId()));
+            System.out.println(user.getUserId());
 
         }catch (Exception ex){
             ex.printStackTrace();
@@ -162,4 +174,5 @@ public class DashboardController implements Initializable {
 
         JDBC.closeConnection();
     }
+
 }

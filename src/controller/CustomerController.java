@@ -2,16 +2,15 @@ package controller;
 
 import dao.JDBC;
 import dao.Queries;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -37,6 +36,7 @@ public class CustomerController implements Initializable {
     public TableColumn divisionIdCol;
     public TableView customersTable;
     public User currentUser;
+    public TextField searchCustomers;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -141,16 +141,23 @@ public class CustomerController implements Initializable {
         Customer customer = (Customer) customersTable.getSelectionModel().getSelectedItem();
 
         if (customer != null){
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Customer");
             alert.setContentText("Are you sure you want to delete this customer?");
             Optional<ButtonType> action = alert.showAndWait();
 
-            if (action.get().equals(ButtonType.OK)){
+            if (action.get().equals(ButtonType.OK) && Queries.checkDeleteCustomer(customer.getCustomerId())) {
                 Queries.deleteCustomer(customer.getCustomerId());
+                alert.close();
             }
-            else {
-                return;
+
+            if (action.get().equals(ButtonType.OK) && !Queries.checkDeleteCustomer(customer.getCustomerId())){
+                alert.close();
+                Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                alert2.setTitle("Error");
+                alert2.setContentText("Must delete appointments associated with customers before deleting customers");
+                alert2.showAndWait();
             }
 
             customersTable.setItems(Queries.getAllCustomers());
@@ -160,4 +167,24 @@ public class CustomerController implements Initializable {
         JDBC.closeConnection();
     }
 
+    public void onSearchCustomers(ActionEvent actionEvent) {
+        JDBC.openConnection();
+
+        String search = searchCustomers.getText();
+
+        ObservableList<Customer> allCustomers = Queries.getAllCustomers();
+        ObservableList<Customer> customerSearch = FXCollections.observableArrayList();
+
+        for (Customer c : allCustomers){
+            if (c.getName().contains(search)){
+                customerSearch.addAll(c);
+            }
+
+        }
+
+
+        customersTable.setItems(customerSearch);
+
+        JDBC.closeConnection();;
+    }
 }

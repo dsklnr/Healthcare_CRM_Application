@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
@@ -102,8 +103,11 @@ public class UpdateAppointmentScreen implements Initializable {
         contactComboBox.getSelectionModel().select(contactName);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime appointmentStartDateTime = LocalDateTime.parse(appointment.getStartDateTime(), dtf);
-        LocalDateTime appointmentEndDateTime = LocalDateTime.parse(appointment.getEndDateTime(), dtf);
+
+        LocalDateTime appointmentStartDateTime =
+                LocalDateTime.parse(Objects.requireNonNull(Queries.getUpdateStartTime(id)), dtf);
+        LocalDateTime appointmentEndDateTime =
+                LocalDateTime.parse(Objects.requireNonNull(Queries.getUpdateEndTime(id)), dtf);
 
         ZoneId utcZone = ZoneId.of("UTC");
         ZonedDateTime utcStartTime = appointmentStartDateTime.atZone(utcZone);
@@ -180,11 +184,13 @@ public class UpdateAppointmentScreen implements Initializable {
         String endHours = String.valueOf(endHourComboBox.getSelectionModel().getSelectedItem());
         String endMinutes = String.valueOf(endMinuteComboBox.getSelectionModel().getSelectedItem());
 
-        String lastUpdateBy = Queries.getUpdateAppointmentContact(appointmentID, contactId, contactId);
+        String lastUpdateBy = user.getUsername();
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime appointmentStartDateTime = LocalDateTime.parse(selectedAppointment.getStartDateTime(), dtf);
-        LocalDateTime appointmentEndDateTime = LocalDateTime.parse(selectedAppointment.getEndDateTime(), dtf);
+
+        LocalDateTime appointmentStartDateTime =
+                LocalDateTime.parse(Objects.requireNonNull(Queries.getUpdateStartTime(appointmentID)), dtf);
+        LocalDateTime appointmentEndDateTime = LocalDateTime.parse(Queries.getUpdateEndTime(appointmentID), dtf);
 
         ZoneId utcZone = ZoneId.of("UTC");
         ZonedDateTime utcStartTime = appointmentStartDateTime.atZone(utcZone);
@@ -211,7 +217,7 @@ public class UpdateAppointmentScreen implements Initializable {
         }
 
         //TODO LocalDateTime.isAfter or LocalDateTime.isBefore()
-        if (startHourComboBox.getSelectionModel().getSelectedItem() == "00" ||
+        else if (startHourComboBox.getSelectionModel().getSelectedItem() == "00" ||
                 startHourComboBox.getSelectionModel().getSelectedItem() == "23") {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
