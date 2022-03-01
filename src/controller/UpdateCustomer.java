@@ -90,6 +90,7 @@ public class UpdateCustomer implements Initializable {
     public void onSaveUpdateCustomer(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
+        int id = Integer.parseInt(customerId.getText());
         String customerName = name.getText();
         String customerAddress = address.getText();
         String postal = postalCode.getText();
@@ -104,18 +105,20 @@ public class UpdateCustomer implements Initializable {
         DateTimeFormatter updateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
         String formatUpdateDateTime = lastUpdate.format(updateFormat);
 
-        Queries.createCustomer(customerName, customerAddress, postal, customerPhone, createDate,
-                createdBy, formatUpdateDateTime, lastUpdateBy, divisionId);
+        Queries.updateCustomer(customerName, customerAddress, postal, customerPhone, createDate,
+                createdBy, formatUpdateDateTime, lastUpdateBy, divisionId, id);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
+
         CustomerController customerUser = loader.getController();
         customerUser.setUser(currentUser);
-        Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage2.close();
-        stage2.setTitle("CRM Customers");
-        stage2.setScene(new Scene(root, 1500, 800));
-        stage2.show();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
+        stage.setTitle("CRM Customers");
+        stage.setScene(new Scene(root, 1500, 800));
+        stage.show();
 
         JDBC.closeConnection();
     }

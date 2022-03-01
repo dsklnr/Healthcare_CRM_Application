@@ -14,7 +14,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 public abstract class Queries {
 
@@ -99,7 +98,7 @@ public abstract class Queries {
         ps.setString(1, username);
         ResultSet rs = ps.getGeneratedKeys();
         //ResultSet rs = ps.executeQuery();
-        while (rs.next()){
+        while (rs.next()) {
             int userId = rs.getInt("User_ID");
             String password = rs.getString("Password");
             User current = new User(userId, username, password);
@@ -116,12 +115,13 @@ public abstract class Queries {
         ResultSet rs = ps.executeQuery();
         ObservableList<User> currentUser = FXCollections.observableArrayList();
 
-        while (rs.next()){
+        while (rs.next()) {
             int userId = rs.getInt("User_ID");
             return userId;
         }
         return 0;
     }
+
     public static ObservableList<Contact> getAllContacts() throws SQLException {
         ObservableList<Contact> contactsList = FXCollections.observableArrayList();
 
@@ -129,7 +129,7 @@ public abstract class Queries {
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             int contactId = rs.getInt("Contact_ID");
             String name = rs.getString("Contact_Name");
             String email = rs.getString("Email");
@@ -145,7 +145,7 @@ public abstract class Queries {
         ps.setString(1, name);
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             int contactId = rs.getInt("Contact_ID");
             return contactId;
         }
@@ -163,7 +163,7 @@ public abstract class Queries {
 
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             String name = rs.getString("Contact_Name");
             return name;
         }
@@ -179,7 +179,7 @@ public abstract class Queries {
         ResultSet rs = ps.executeQuery();
         ObservableList<User> userList = FXCollections.observableArrayList();
 
-        while (rs.next()){
+        while (rs.next()) {
             int userId = rs.getInt("User_ID");
             User user = new User(userId, username, password);
             userList.add(user);
@@ -196,7 +196,7 @@ public abstract class Queries {
         ResultSet rs = ps.executeQuery();
         ObservableList<Appointment> appointment = FXCollections.observableArrayList();
 
-        while (rs.next()){
+        while (rs.next()) {
             int appointmentId = rs.getInt("Appointment_ID");
             String title = rs.getString("Title");
             String description = rs.getString("Description");
@@ -208,25 +208,25 @@ public abstract class Queries {
             int customerIdFK = rs.getInt("Customer_ID");
             int userIdFK = rs.getInt("User_ID");
             //System.out.print(appointmentId + " | " + title + ", " + description
-                    //+ ", " + location + ", " + type + ", " + start + ", "
-                    //+ end + ", " + customerIdFK + ", " + userIdFK + "\n");
+            //+ ", " + location + ", " + type + ", " + start + ", "
+            //+ end + ", " + customerIdFK + ", " + userIdFK + "\n");
             //appointment.add(new Appointment(appointmentId, title, description, location, contact, type, start, end, customerIdFK, userIdFK));
         }
     }
 
-    public static ObservableList<Appointment> getAllAppointmentsFromId(int userId){
+    public static ObservableList<Appointment> getAllAppointmentsFromId(int userId) {
         ObservableList<Appointment> aList = FXCollections.observableArrayList();
 
-        try{
+        try {
             String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
-                            "FROM appointments, users, customers, contacts\n" +
-                            "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID AND users.User_ID = ?";
+                    "FROM appointments, users, customers, contacts\n" +
+                    "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID AND users.User_ID = ?";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 int appointmentId = rs.getInt("Appointment_ID");
                 String title = rs.getString("Title");
                 String description = rs.getString("Description");
@@ -247,25 +247,25 @@ public abstract class Queries {
                         customerIdFK, userIdFK, contactIdFK));
             }
 
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
         return aList;
     }
 
-    public static ObservableList<Appointment> getAllAppointments(){
+    public static ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
 
-        try{
+        try {
             String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
-                            "FROM appointments, users, customers, contacts\n" +
-                            "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID";
+                    "FROM appointments, users, customers, contacts\n" +
+                    "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 int appointmentId = rs.getInt("Appointment_ID");
                 String title = rs.getString("Title");
                 String description = rs.getString("Description");
@@ -299,7 +299,7 @@ public abstract class Queries {
                         customerIdFK, userIdFK, contactIdFK));
             }
 
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -330,18 +330,18 @@ public abstract class Queries {
 
     }
 
-    public static ObservableList<Customer> getAllCustomers(){
+    public static ObservableList<Customer> getAllCustomers() {
         ObservableList<Customer> allCustomerList = FXCollections.observableArrayList();
 
-        try{
+        try {
             String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, customers.Create_Date, customers.Created_By, customers.Last_Update, customers.Last_Updated_by, first_level_divisions.Division_ID\n" +
-                            "FROM customers, first_level_divisions\n" +
-                            "WHERE customers.Division_ID = first_level_divisions.Division_ID";
+                    "FROM customers, first_level_divisions\n" +
+                    "WHERE customers.Division_ID = first_level_divisions.Division_ID";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 int customerId = rs.getInt("Customer_ID");
                 String name = rs.getString("Customer_Name");
                 String address = rs.getString("Address");
@@ -357,7 +357,7 @@ public abstract class Queries {
                         createdBy, lastUpdate, lastUpdatedBy, divisionId));
             }
 
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -366,7 +366,7 @@ public abstract class Queries {
 
     public static void createCustomer(String name, String address, String postalCode, String phoneNumber,
                                       String createDate, String createdBy, String lastUpdate, String lastUpdateBy,
-                                      int divisionId){
+                                      int divisionId) {
         try {
             String sql = "INSERT INTO customers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -381,17 +381,17 @@ public abstract class Queries {
             ps.setInt(9, divisionId);
             ps.execute();
 
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
     public static int deleteCustomer(int customerId) throws SQLException {
-            String sql = "DELETE FROM customers WHERE Customer_ID = ?";
-            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            ps.setInt(1, customerId);
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected;
+        String sql = "DELETE FROM customers WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, customerId);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected;
 
     }
 
@@ -403,7 +403,7 @@ public abstract class Queries {
         return rowsAffected;
     }
 
-    public static ArrayList<String> getAllCountryNames(){
+    public static ArrayList<String> getAllCountryNames() {
         ArrayList<String> allCountriesList = new ArrayList<>();
 
         try {
@@ -412,18 +412,18 @@ public abstract class Queries {
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 String country = rs.getString("Country");
                 allCountriesList.add(country);
             }
 
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return allCountriesList;
     }
 
-    public static ObservableList<Country> getAllCountries(){
+    public static ObservableList<Country> getAllCountries() {
         ObservableList<Country> countryList = FXCollections.observableArrayList();
 
         try {
@@ -432,20 +432,20 @@ public abstract class Queries {
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 int countryId = rs.getInt("Country_ID");
                 String countryName = rs.getString("Country");
                 Country c = new Country(countryId, countryName);
                 countryList.add(c);
             }
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return countryList;
     }
 
-    public static ObservableList<Division> getAllDivisions(){
+    public static ObservableList<Division> getAllDivisions() {
         ObservableList<Division> divisionList = FXCollections.observableArrayList();
 
         try {
@@ -454,7 +454,7 @@ public abstract class Queries {
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 int divisionId = rs.getInt("Division_ID");
                 String division = rs.getString("Division");
                 String createDate = rs.getString("Create_Date");
@@ -466,7 +466,7 @@ public abstract class Queries {
                 divisionList.add(d);
             }
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return divisionList;
@@ -478,8 +478,8 @@ public abstract class Queries {
         ps.setString(1, division);
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
-            int divisionId=  rs.getInt("Division_ID");
+        while (rs.next()) {
+            int divisionId = rs.getInt("Division_ID");
             return divisionId;
         }
         return 0;
@@ -506,7 +506,7 @@ public abstract class Queries {
         ps.setInt(1, divisionId);
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             int countryId = rs.getInt("Country_ID");
             return countryId;
         }
@@ -522,7 +522,7 @@ public abstract class Queries {
         ps.setInt(3, countryId);
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             String countryName = rs.getString("Country");
             return countryName;
         }
@@ -537,7 +537,7 @@ public abstract class Queries {
         ps.setInt(1, userId);
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             int appointmentId = rs.getInt("Appointment_ID");
             String title = rs.getString("Title");
             String description = rs.getString("Description");
@@ -568,7 +568,7 @@ public abstract class Queries {
         ps.setInt(1, userId);
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             int appointmentId = rs.getInt("Appointment_ID");
             String title = rs.getString("Title");
             String description = rs.getString("Description");
@@ -599,7 +599,7 @@ public abstract class Queries {
         ps.setInt(1, userId);
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             int appointmentId = rs.getInt("Appointment_ID");
             String title = rs.getString("Title");
             String description = rs.getString("Description");
@@ -637,7 +637,7 @@ public abstract class Queries {
 
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
             allAppointmentStartTimes.add(startDateTime);
         }
@@ -652,7 +652,7 @@ public abstract class Queries {
 
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
             allAppointmentEndTimes.add(endDateTime);
         }
@@ -667,7 +667,7 @@ public abstract class Queries {
 
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             String startDateTime = rs.getString("Start");
             return startDateTime;
         }
@@ -682,7 +682,7 @@ public abstract class Queries {
 
         ResultSet rs = ps.executeQuery();
 
-        while (rs.next()){
+        while (rs.next()) {
             String endDateTime = rs.getString("End");
             return endDateTime;
         }
@@ -701,7 +701,7 @@ public abstract class Queries {
 
         ObservableList<Customer> customers = FXCollections.observableArrayList();
 
-        while (rs.next()){
+        while (rs.next()) {
             int id = rs.getInt("Customer_ID");
             String name = rs.getString("Customer_Name");
             String address = rs.getString("Address");
@@ -713,11 +713,37 @@ public abstract class Queries {
             String lastUpdatedBy = rs.getString("Last_Updated_By");
             int division = rs.getInt("Division_ID");
 
-            Customer customer = new Customer(id, name, address, postal, phone,createDate, createdBy, lastUpdate, lastUpdatedBy, division);
+            Customer customer = new Customer(id, name, address, postal, phone, createDate, createdBy, lastUpdate, lastUpdatedBy, division);
             customers.addAll(customer);
             return false;
         }
         return true;
     }
+
+    public static String updateCustomer(String customerName, String customerAddress, String postal, String customerPhone,
+                                        String createDate, String createdBy, String formatUpdateDateTime,
+                                        String lastUpdateBy, int divisionId, int customerId) throws SQLException {
+
+        String sql = "UPDATE customers\n" +
+                "SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Create_Date = ?, Created_By = ?, " +
+                "Last_Update = ?, Last_Updated_By = ?, Division_ID = ?\n" +
+                "WHERE Customer_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, customerName);
+        ps.setString(2, customerAddress);
+        ps.setString(3, postal);
+        ps.setString(4, customerPhone);
+        ps.setString(5, createDate);
+        ps.setString(6, createdBy);
+        ps.setString(7, formatUpdateDateTime);
+        ps.setString(8, lastUpdateBy);
+        ps.setInt(9, divisionId);
+        ps.setInt(10, customerId);
+
+        String rowsAffected = String.valueOf(ps.executeUpdate());
+        return rowsAffected;
+    }
+
 
 }

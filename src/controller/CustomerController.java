@@ -124,7 +124,8 @@ public class CustomerController implements Initializable {
                 selectedCustomer.setCustomer(customer);
                 UpdateCustomer customerUser = loader.getController();
                 customerUser.setUser(currentUser);
-                Stage stage = new Stage();
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.close();
                 stage.setTitle("Add A Customer");
                 stage.setScene(new Scene(root, 500, 600));
                 stage.show();
