@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsController">
+  <content>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="2400.0" prefWidth="1500.0">
+         <children>
+            <Label layoutX="73.0" layoutY="30.0" text="Reports">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font></Label>
+             <Label layoutX="916.0" layoutY="35.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand;" text="Home">
+                 <font>
+                     <Font size="15.0" />
+                 </font></Label>
+             <Label layoutX="1002.0" layoutY="35.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand;" text="Customers">
+                 <font>
+                     <Font size="15.0" />
+                 </font></Label>
+             <Label layoutX="1106.0" layoutY="35.0" onMouseClicked="#onScheduleClick" style="-fx-cursor: hand;" text="Schedule Appointment">
+                 <font>
+                     <Font size="15.0" />
+                 </font></Label>
+             <Label layoutX="1285.0" layoutY="35.0" onMouseClicked="#onReportClick" style="-fx-cursor: hand;" text="Generate Report">
+                 <font>
+                     <Font size="15.0" />
+                 </font></Label>
+             <Label layoutX="73.0" layoutY="147.0" text="Total Customer Appointments" underline="true">
+                 <font>
+                     <Font size="15.0" />
+                 </font>
+             </Label>
+             <TableView fx:id="appointmentTypeTable" layoutX="771.0" layoutY="178.0" prefHeight="514.0" prefWidth="637.0">
+                 <columns>
+                     <TableColumn fx:id="countryCol" prefWidth="236.0" text="Country" />
+                     <TableColumn fx:id="stateCol" prefWidth="172.0" text="State/Province" />
+                     <TableColumn fx:id="numberOfCustomersCol" prefWidth="228.0" text="Number of Customers" />
+                 </columns>
+             </TableView>
+             <TableView fx:id="divisionTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="637.0">
+                 <columns>
+                     <TableColumn fx:id="appointmentTypeCol" prefWidth="236.0" text="Appointment Type" />
+                     <TableColumn fx:id="monthCol" prefWidth="172.0" text="Month" />
+                     <TableColumn fx:id="totalAppointmentsCol" prefWidth="228.0" text="Total Number of Appointment Type" />
+                 </columns>
+             </TableView>
+            <Label layoutX="771.0" layoutY="147.0" text="Number of Customers Per Division" underline="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+  </content>
+</ScrollPane>

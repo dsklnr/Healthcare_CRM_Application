@@ -117,22 +117,20 @@ public class DashboardController implements Initializable {
         appointmentsUser.setUser(user);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Dashboard");
+        stage.setTitle("CRM Appointments");
         stage.setScene(new Scene(root, 1500, 800));
         stage.show();
     }
 
     public void onReportClick(MouseEvent mouseEvent) throws IOException {
-        /*
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReportsScreen.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Dashboard");
+        stage.setTitle("CRM Reports");
         stage.setScene(new Scene(root, 1500, 800));
         stage.show();
 
-         */
     }
 
 
