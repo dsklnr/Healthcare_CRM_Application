@@ -77,8 +77,10 @@ public class AddCustomer implements Initializable {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
+
         CustomerController customerUser = loader.getController();
         customerUser.setUser(currentUser);
+
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage2.close();
         stage2.setTitle("CRM Customers");
@@ -92,8 +94,10 @@ public class AddCustomer implements Initializable {
     public void onCancelAddCustomer(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
+
         CustomerController customerUser = loader.getController();
         customerUser.setUser(currentUser);
+
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage2.close();
         stage2.setTitle("CRM Customers");

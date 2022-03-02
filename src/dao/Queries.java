@@ -362,7 +362,7 @@ public abstract class Queries {
                 ZonedDateTime localUpdateDate = utcUpdateDate.withZoneSameInstant(ZoneOffset.systemDefault());
                 ZonedDateTime finalLocalUpdateDate = localUpdateDate.minusHours(1);
 
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss ");
                 String finalCreateDate = finalLocalStartDate.format(dtf);
                 String finalUpdateDate = finalLocalUpdateDate.format(dtf);
 

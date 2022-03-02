@@ -22,8 +22,13 @@ import model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ResourceBundle;
 
 public class UpdateCustomer implements Initializable {
@@ -36,7 +41,7 @@ public class UpdateCustomer implements Initializable {
     public TextField postalCode;
     public TextField phoneNumber;
     public Customer selectedCustomer;
-    public String createDate;
+    public LocalDateTime createDate;
     public String createdBy;
 
     @Override
@@ -63,7 +68,7 @@ public class UpdateCustomer implements Initializable {
         String address = customer.getAddress();
         String postal = customer.getPostalCode();
         String phone = customer.getPhoneNumber();
-        createDate = customer.getCreateDate();
+        //String createdDate = customer.getCreateDate();
         createdBy = customer.getCreatedBy();
 
         int divisionId = customer.getDivisionId();
@@ -96,17 +101,23 @@ public class UpdateCustomer implements Initializable {
         String postal = postalCode.getText();
         String customerPhone = phoneNumber.getText();
 
-        //String createdBy = currentUser.getUsername();
+        String createdBy = currentUser.getUsername();
+        String create = selectedCustomer.getCreateDate();
         LocalDateTime lastUpdate = LocalDateTime.now();
         String lastUpdateBy = currentUser.getUsername();
         String division = String.valueOf(stateComboBox.getSelectionModel().getSelectedItem());
         int divisionId = Queries.getDivisionId(division);
 
-        DateTimeFormatter updateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
-        String formatUpdateDateTime = lastUpdate.format(updateFormat);
+        ZoneId systemZone = ZoneId.systemDefault();
+        ZonedDateTime localUpdateTime = lastUpdate.atZone(systemZone);
+        ZonedDateTime utcUpdateTime = localUpdateTime.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime finalUtcUpdateTime = utcUpdateTime.plusHours(1);
 
-        Queries.updateCustomer(customerName, customerAddress, postal, customerPhone, createDate,
-                createdBy, formatUpdateDateTime, lastUpdateBy, divisionId, id);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String updateTime = finalUtcUpdateTime.format(dtf);
+
+        Queries.updateCustomer(customerName, customerAddress, postal, customerPhone, create,
+                createdBy, updateTime, lastUpdateBy, divisionId, id);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
@@ -123,8 +134,17 @@ public class UpdateCustomer implements Initializable {
         JDBC.closeConnection();
     }
 
-    public void onCancelUpdateCustomer(ActionEvent actionEvent) {
+    public void onCancelUpdateCustomer(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        Parent root = loader.load();
+
+        CustomerController customerUser = loader.getController();
+        customerUser.setUser(currentUser);
+
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+        stage.setTitle("CRM Customers");
+        stage.setScene(new Scene(root, 1500, 800));
+        stage.show();
     }
 }
