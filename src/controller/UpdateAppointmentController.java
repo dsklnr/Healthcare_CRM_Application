@@ -19,12 +19,11 @@ import model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.*;
-import java.time.chrono.ChronoZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static controller.DashboardController.user;
 
 public class UpdateAppointmentController implements Initializable {
     public TextField appointmentId;
@@ -35,7 +34,7 @@ public class UpdateAppointmentController implements Initializable {
     public TextField userId;
     public TextArea description;
     public ComboBox contactComboBox;
-    public User user;
+    //public User user;
     public DatePicker startDate;
     public DatePicker endDate;
     public ComboBox startHourComboBox;
@@ -180,32 +179,22 @@ public class UpdateAppointmentController implements Initializable {
         String startMinutes = String.valueOf(startMinuteComboBox.getSelectionModel().getSelectedItem());
         String endHours = String.valueOf(endHourComboBox.getSelectionModel().getSelectedItem());
         String endMinutes = String.valueOf(endMinuteComboBox.getSelectionModel().getSelectedItem());
-
         String lastUpdateBy = user.getUsername();
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startLocalDateTime = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(),
+                Integer.parseInt(startHours), Integer.parseInt(startMinutes));
 
-        LocalDateTime appointmentStartDateTime =
-                LocalDateTime.parse(Objects.requireNonNull(Queries.getUpdateStartTime(appointmentID)), dtf);
-
-        LocalDateTime appointmentEndDateTime = LocalDateTime.parse(Queries.getUpdateEndTime(appointmentID), dtf);
-
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZonedDateTime utcStartTime = appointmentStartDateTime.atZone(utcZone);
-        ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
-
-        ZonedDateTime utcEndTime = appointmentEndDateTime.atZone(utcZone);
-        ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
-
-        ZoneId estZone = ZoneId.of("America/New_York");
-        ZonedDateTime estStartTime = utcStartTime.withZoneSameInstant(estZone);
+        LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
+                Integer.parseInt(endHours), Integer.parseInt(endMinutes));
 
         ZoneId systemZone = ZoneId.systemDefault();
-        ZonedDateTime localStartZdt = appointmentStartDateTime.atZone(systemZone);
+        ZonedDateTime localStartZdt = startLocalDateTime.atZone(systemZone);
         ZonedDateTime estCreateTime = localStartZdt.withZoneSameInstant(ZoneId.of("America/New_York"));
         ZonedDateTime finalEstCreateTime = estCreateTime.plusHours(1);
 
-        //LocalTime businessStartHour = LocalTime.ofInstant(Instant.parse("08:00:00"), ZoneId.of("America/New_York"));
+        LocalTime estST = LocalTime.of(finalEstCreateTime.getHour(), finalEstCreateTime.getMinute());
+        LocalTime businessOpenHour =  LocalTime.of(8, 00);
+        LocalTime businessCloseHour = LocalTime.of(22, 00);
 
         if (appointmentTitle.equals("")|| appointmentLocation.equals("") || appointmentType.equals("") ||
                 contactComboBox.getSelectionModel().getSelectedItem() == null || start == null ||
@@ -227,29 +216,33 @@ public class UpdateAppointmentController implements Initializable {
 
         //TODO LocalDateTime.isAfter or LocalDateTime.isBefore()
         //if (finalEstCreateTime.getHour() ==  00|| finalEstCreateTime.getHour() == 01) {
-        if (finalEstCreateTime.getHour() == 00|| finalEstCreateTime.getHour() == 01) {
+        if (estST.isBefore(businessOpenHour) || estST.isAfter(businessCloseHour)) {
+
+            System.out.println(estST);
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00 EST Monday - Friday");
-            alert.showAndWait();
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get() == ButtonType.OK) {
+                return;
+            }
         }
 
 
         else {
-            LocalDateTime startLocalDateTime = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(),
-                    Integer.parseInt(startHours), Integer.parseInt(startMinutes));
-
-            LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
-                    Integer.parseInt(endHours), Integer.parseInt(endMinutes));
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
             ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtStartUtc = zdtStartLocal.withZoneSameInstant(ZoneOffset.UTC);
-            String startTimeUtc = zdtStartUtc.format(dtf);
+            ZonedDateTime finalZdtStartUtc = zdtStartUtc.plusHours(1);
+            String startTimeUtc = finalZdtStartUtc.format(dtf);
 
             ZonedDateTime zdtEndLocal = ZonedDateTime.of(endLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtEndUtc = zdtEndLocal.withZoneSameInstant(ZoneOffset.UTC);
-            String endTimeUtc = zdtEndUtc.format(dtf);
+            ZonedDateTime finalZdtEndUtc = zdtEndUtc.plusHours(1);
+            String endTimeUtc = finalZdtEndUtc.format(dtf);
 
             ZonedDateTime localUpdateTime = lastUpdate.atZone(systemZone);
             ZonedDateTime utcUpdateTime = localUpdateTime.withZoneSameInstant(ZoneOffset.UTC);
@@ -268,6 +261,10 @@ public class UpdateAppointmentController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+            AllAppointmentsController appointmentsUser = loader.getController();
+            appointmentsUser.setUser(user);
+
             stage.close();
             stage.setTitle("Appointments");
             stage.setScene(new Scene(root, 1500, 800));
@@ -280,6 +277,10 @@ public class UpdateAppointmentController implements Initializable {
     public void onCancelAddAppointment(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
+
+        AllAppointmentsController appointmentsUser = loader.getController();
+        appointmentsUser.setUser(user);
+
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage2.close();
         stage2.setTitle("Appointments");

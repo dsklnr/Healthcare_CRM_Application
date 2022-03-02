@@ -36,7 +36,7 @@ public class DashboardController implements Initializable {
     public RadioButton monthButton;
     public RadioButton weekButton;
     public ToggleGroup toggle;
-    public User user;
+    static User user;
 
     //ObservableList<User> currentUser = FXCollections.observableArrayList();
     //private ObservableList<Appointment> fewapp = FXCollections.observableArrayList();
