@@ -5,16 +5,14 @@ import dao.ReportQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
+import model.Appointment;
+import model.Division;
 
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -32,18 +30,31 @@ public class ReportsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
-        ObservableList<String> appointment = FXCollections.observableArrayList();
+        ObservableList<Appointment> appointment = FXCollections.observableArrayList();
+        ObservableList<Division> division = FXCollections.observableArrayList();
 
         try {
             appointment = ReportQueries.getTotalCustomerAppointments();
+            division = ReportQueries.getNumberOfCustomersByState();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        appointmentTypeCol.setCellValueFactory(new PropertyValueFactory<>(appointment.toString()));
+        appointmentTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        monthCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
+        totalAppointmentsCol.setCellValueFactory(new PropertyValueFactory<>("CreateDate"));
 
         divisionTable.setItems(appointment);
+
+        countryCol.setCellValueFactory(new PropertyValueFactory<>("division"));
+        stateCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        numberOfCustomersCol.setCellValueFactory(new PropertyValueFactory<>("countryId"));
+
+        appointmentTypeTable.setItems(division);
+
+
 
 
         JDBC.closeConnection();
