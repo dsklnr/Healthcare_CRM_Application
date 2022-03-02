@@ -16,20 +16,17 @@ import javafx.util.Callback;
 import model.Appointment;
 import model.User;
 
-import javax.swing.text.DateFormatter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.chrono.ChronoZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.TimeZone;
+import java.util.*;
 
-public class UpdateAppointmentScreen implements Initializable {
+public class UpdateAppointmentController implements Initializable {
     public TextField appointmentId;
     public TextField title;
     public TextField location;
@@ -190,6 +187,7 @@ public class UpdateAppointmentScreen implements Initializable {
 
         LocalDateTime appointmentStartDateTime =
                 LocalDateTime.parse(Objects.requireNonNull(Queries.getUpdateStartTime(appointmentID)), dtf);
+
         LocalDateTime appointmentEndDateTime = LocalDateTime.parse(Queries.getUpdateEndTime(appointmentID), dtf);
 
         ZoneId utcZone = ZoneId.of("UTC");
@@ -202,23 +200,34 @@ public class UpdateAppointmentScreen implements Initializable {
         ZoneId estZone = ZoneId.of("America/New_York");
         ZonedDateTime estStartTime = utcStartTime.withZoneSameInstant(estZone);
 
-        if (appointmentTitle == null || appointmentLocation == null || appointmentType == null ||
+        ZoneId systemZone = ZoneId.systemDefault();
+        ZonedDateTime localStartZdt = appointmentStartDateTime.atZone(systemZone);
+        ZonedDateTime estCreateTime = localStartZdt.withZoneSameInstant(ZoneId.of("America/New_York"));
+        ZonedDateTime finalEstCreateTime = estCreateTime.plusHours(1);
+
+        //LocalTime businessStartHour = LocalTime.ofInstant(Instant.parse("08:00:00"), ZoneId.of("America/New_York"));
+
+        if (appointmentTitle.equals("")|| appointmentLocation.equals("") || appointmentType.equals("") ||
                 contactComboBox.getSelectionModel().getSelectedItem() == null || start == null ||
                 end == null || startHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 startMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
                 endHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 endMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
-                customerId.getText() == null || userId.getText() == null || appointmentDescription == null){
+                customerId.getText().equals("") || userId.getText().equals("") || appointmentDescription.equals("")){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setContentText("One or more value(s) is missing");
-            alert.showAndWait();
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get() == ButtonType.OK) {
+                return;
+            }
         }
 
         //TODO LocalDateTime.isAfter or LocalDateTime.isBefore()
-        else if (startHourComboBox.getSelectionModel().getSelectedItem() == "00" ||
-                startHourComboBox.getSelectionModel().getSelectedItem() == "23") {
+        //if (finalEstCreateTime.getHour() ==  00|| finalEstCreateTime.getHour() == 01) {
+        if (finalEstCreateTime.getHour() == 00|| finalEstCreateTime.getHour() == 01) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -228,32 +237,32 @@ public class UpdateAppointmentScreen implements Initializable {
 
 
         else {
-            //"HH:mm:ss"
-            DateTimeFormatter createFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
-            String formatCreateDateTime = createDate.format(createFormat);
-            DateTimeFormatter updateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
-            String formatUpdateDateTime = lastUpdate.format(updateFormat);
-
-            DateTimeFormatter startDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime startLocalDateTime = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(),
                     Integer.parseInt(startHours), Integer.parseInt(startMinutes));
 
-            DateTimeFormatter endDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
                     Integer.parseInt(endHours), Integer.parseInt(endMinutes));
 
             ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtStartUtc = zdtStartLocal.withZoneSameInstant(ZoneOffset.UTC);
-            String startTimeLocal = startDateFormat.format(zdtStartLocal);
-            String startTimeUtc = startDateFormat.format(zdtStartUtc);
+            String startTimeUtc = zdtStartUtc.format(dtf);
 
             ZonedDateTime zdtEndLocal = ZonedDateTime.of(endLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtEndUtc = zdtEndLocal.withZoneSameInstant(ZoneOffset.UTC);
-            String endTimeLocal = endDateFormat.format(zdtEndLocal);
-            String endTimeUtc = endDateFormat.format(zdtEndUtc);
+            String endTimeUtc = zdtEndUtc.format(dtf);
+
+            ZonedDateTime localUpdateTime = lastUpdate.atZone(systemZone);
+            ZonedDateTime utcUpdateTime = localUpdateTime.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime finalUtcUpdateTime = utcUpdateTime.plusHours(1);
+            String updateTime = finalUtcUpdateTime.format(dtf);
+
+            ZonedDateTime localCreateTime = createDate.atZone(systemZone);
+            ZonedDateTime utcCreateTime = localCreateTime.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime finalUtcCreateTime = utcCreateTime.plusHours(1);
+            String createTime = finalUtcCreateTime.format(dtf);
 
             Queries.updateAppointment(appointmentID, appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
-                    startTimeUtc, endTimeUtc, formatCreateDateTime, createdBy, formatUpdateDateTime, lastUpdateBy,
+                    startTimeUtc, endTimeUtc, createTime, createdBy, updateTime, lastUpdateBy,
                     Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));

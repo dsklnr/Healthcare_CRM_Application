@@ -9,14 +9,14 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import model.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
+import java.time.*;
+import java.time.chrono.ChronoZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -48,6 +48,28 @@ public class Main extends Application {
         }
 
        */
+
+        /*
+        LocalDateTime createDate = LocalDateTime.now();
+
+        ZoneId systemZone = ZoneId.systemDefault();
+        ZonedDateTime localStartZdt = createDate.atZone(systemZone);
+        ZonedDateTime estCreateTime = localStartZdt.withZoneSameInstant(ZoneId.of("America/New_York"));
+        ZonedDateTime finalEstCreateTime = estCreateTime.plusHours(1);
+
+        //LocalTime businessStartHour = LocalTime.ofInstant(Instant.parse("08:00:00"), ZoneId.of("America/New_York"));
+
+        if (finalEstCreateTime.toLocalTime().isBefore(LocalTime.parse("08:00:00")) ||
+                finalEstCreateTime.toLocalTime().isAfter(LocalTime.parse("22:00:00"))) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00 EST Monday - Friday");
+            alert.showAndWait();
+        }
+
+         */
+
         JDBC.openConnection();
 
 

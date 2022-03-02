@@ -130,7 +130,6 @@ public class MainScreenController implements Initializable {
 
                 DashboardController dashboardController = loader.getController();
                 dashboardController.setUser(currentUser);
-                System.out.println(currentUser.getUserId());
 
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.close();

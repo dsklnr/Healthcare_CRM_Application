@@ -290,7 +290,7 @@ public abstract class Queries {
                 ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
                 ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
 
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String startTime = finalLocalStartTime.format(dtf);
                 String endTime = finalLocalEndTime.format(dtf);
 

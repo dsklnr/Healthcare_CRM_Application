@@ -20,8 +20,6 @@ import model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -133,7 +131,7 @@ public class AllAppointmentsController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentScreen.fxml"));
             Parent root = loader.load();
-            UpdateAppointmentScreen updateAppointmentScreen = loader.getController();
+            UpdateAppointmentController updateAppointmentScreen = loader.getController();
             updateAppointmentScreen.setAppointment(appointment);
             updateAppointmentScreen.setUser(currentUser);
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

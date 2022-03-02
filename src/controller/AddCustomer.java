@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -66,14 +69,22 @@ public class AddCustomer implements Initializable {
         String division = String.valueOf(stateComboBox.getSelectionModel().getSelectedItem());
         int divisionId = Queries.getDivisionId(division);
 
-        DateTimeFormatter createFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
-        String formatCreateDateTime = createDate.format(createFormat);
-        DateTimeFormatter updateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
-        String formatUpdateDateTime = lastUpdate.format(updateFormat);
+        ZoneId systemZone = ZoneId.systemDefault();
+        ZonedDateTime localCreateTime = createDate.atZone(systemZone);
+        ZonedDateTime utcCreateTime = localCreateTime.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime finalUtcCreateTime = utcCreateTime.plusHours(1);
+
+        ZonedDateTime localUpdateTime = lastUpdate.atZone(systemZone);
+        ZonedDateTime utcUpdateTime = localUpdateTime.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime finalUtcUpdateTime = utcUpdateTime.plusHours(1);
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String createTime = finalUtcCreateTime.format(dtf);
+        String updateTime = finalUtcUpdateTime.format(dtf);
 
 
-        Queries.createCustomer(customerName, customerAddress, postal, customerPhone, formatCreateDateTime,
-                createdBy, formatUpdateDateTime, lastUpdateBy, divisionId);
+        Queries.createCustomer(customerName, customerAddress, postal, customerPhone, createTime,
+                createdBy, updateTime, lastUpdateBy, divisionId);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
