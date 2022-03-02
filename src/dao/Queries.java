@@ -347,14 +347,27 @@ public abstract class Queries {
                 String address = rs.getString("Address");
                 String postalCode = rs.getString("Postal_Code");
                 String phone = rs.getString("Phone");
-                String createDate = rs.getString("Create_Date");
+                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
                 String createdBy = rs.getString("Created_By");
-                String lastUpdate = rs.getString("Last_Update");
+                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
                 String lastUpdatedBy = rs.getString("Last_Updated_by");
                 int divisionId = rs.getInt("Division_ID");
 
-                allCustomerList.add(new Customer(customerId, name, address, postalCode, phone, createDate,
-                        createdBy, lastUpdate, lastUpdatedBy, divisionId));
+                ZoneId utcZone = ZoneId.of("UTC");
+                ZonedDateTime utcCreateDate = createDate.atZone(utcZone);
+                ZonedDateTime localCreateDate = utcCreateDate.withZoneSameInstant(ZoneOffset.systemDefault());
+                ZonedDateTime finalLocalStartDate = localCreateDate.minusHours(1);
+
+                ZonedDateTime utcUpdateDate = lastUpdate.atZone(utcZone);
+                ZonedDateTime localUpdateDate = utcUpdateDate.withZoneSameInstant(ZoneOffset.systemDefault());
+                ZonedDateTime finalLocalUpdateDate = localUpdateDate.minusHours(1);
+
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
+                String finalCreateDate = finalLocalStartDate.format(dtf);
+                String finalUpdateDate = finalLocalUpdateDate.format(dtf);
+
+                allCustomerList.add(new Customer(customerId, name, address, postalCode, phone, finalCreateDate,
+                        createdBy, finalUpdateDate, lastUpdatedBy, divisionId));
             }
 
         } catch (SQLException ex) {
@@ -543,8 +556,8 @@ public abstract class Queries {
             String description = rs.getString("Description");
             String location = rs.getString("Location");
             String type = rs.getString("Type");
-            String start = rs.getString("Start");
-            String end = rs.getString("End");
+            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
             String createDate = rs.getString("Create_Date");
             String contact = rs.getString("Created_By");
             String lastUpdate = rs.getString("Last_Update");
@@ -553,8 +566,21 @@ public abstract class Queries {
             int userIdFK = rs.getInt("User_ID");
             int contactIdFK = rs.getInt("Contact_ID");
 
+            ZoneId utcZone = ZoneId.of("UTC");
+            ZonedDateTime utcStartTime = start.atZone(utcZone);
+            ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
+            ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
+
+            ZonedDateTime utcEndTime = end.atZone(utcZone);
+            ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
+            ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
+            String startTime = finalLocalStartTime.format(dtf);
+            String endTime = finalLocalEndTime.format(dtf);
+
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
-                    type, start, end, createDate, contact, lastUpdate, updateBy,
+                    type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
                     customerIdFK, userIdFK, contactIdFK));
         }
         return appointmentsList;

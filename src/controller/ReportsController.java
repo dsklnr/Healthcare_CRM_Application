@@ -4,14 +4,21 @@ import dao.JDBC;
 import dao.ReportQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import model.Appointment;
 import model.Division;
+import model.User;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -33,6 +40,7 @@ public class ReportsController implements Initializable {
     public TableColumn descriptionCol;
     public TableColumn startCol;
     public TableColumn endCol;
+    public User currentUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -76,15 +84,56 @@ public class ReportsController implements Initializable {
         JDBC.closeConnection();
     }
 
-    public void onHomeClick(MouseEvent mouseEvent) {
+    public void setUser(User user) {
+        currentUser = user;
     }
 
-    public void onCustomersClick(MouseEvent mouseEvent) {
+    public void onHomeClick(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
+        Parent root = loader.load();
+        DashboardController dashboardController = loader.getController();
+        dashboardController.setUser(currentUser);
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        stage.close();
+        stage.setTitle("CRM Dashboard");
+        stage.setScene(new Scene(root, 1500, 800));
+        stage.show();
     }
 
-    public void onScheduleClick(MouseEvent mouseEvent) {
+    public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        Parent root = loader.load();
+        CustomerController customerController = loader.getController();
+        customerController.setUser(currentUser);
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        stage.close();
+        stage.setTitle("CRM Customers");
+        stage.setScene(new Scene(root, 1500, 800));
+        stage.show();
     }
 
-    public void onReportClick(MouseEvent mouseEvent) {
+    public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
+        Parent root = loader.load();
+        AllAppointmentsController appointmentsController = loader.getController();
+        appointmentsController.setUser(currentUser);
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        stage.close();
+        stage.setTitle("CRM Appointments");
+        stage.setScene(new Scene(root, 1500, 800));
+        stage.show();
     }
+
+    public void onReportClick(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReportsScreen.fxml"));
+        Parent root = loader.load();
+        ReportsController reportsController = loader.getController();
+        reportsController.setUser(currentUser);
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        stage.close();
+        stage.setTitle("CRM Reports");
+        stage.setScene(new Scene(root, 1500, 800));
+        stage.show();
+    }
+
 }

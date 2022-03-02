@@ -88,21 +88,20 @@ public class DashboardController implements Initializable {
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
-        DashboardController dashboardUser = loader.getController();
-        dashboardUser.setUser(user);
+        DashboardController dashboardController = loader.getController();
+        dashboardController.setUser(user);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
         stage.setScene(new Scene(root, 1500, 800));
         stage.show();
-
     }
 
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
-        CustomerController customerUser = loader.getController();
-        customerUser.setUser(user);
+        CustomerController customerController = loader.getController();
+        customerController.setUser(user);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Customers");
@@ -125,6 +124,8 @@ public class DashboardController implements Initializable {
     public void onReportClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReportsScreen.fxml"));
         Parent root = loader.load();
+        ReportsController reportsController = loader.getController();
+        reportsController.setUser(user);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Reports");

@@ -9,13 +9,18 @@ import model.Division;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public abstract class ReportQueries {
 
     public static ObservableList<Appointment> getTotalCustomerAppointments() throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
-        String sql = "SELECT Type, EXTRACT(MONTH FROM Start) AS Month, COUNT(Type) AS Count_Type\n" +
+        String sql = "SELECT Type, MONTHNAME(Start) AS Month, COUNT(Type) AS Count_Type\n" +
                 "FROM appointments\n" +
                 "GROUP by Start";
 
@@ -77,11 +82,24 @@ public abstract class ReportQueries {
             String title = rs.getString("Title");
             String type = rs.getString("Type");
             String description = rs.getString("Description");
-            String start = rs.getString("Start");
-            String end = rs.getString("End");
+            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
             int customerId = rs.getInt("Customer_ID");
 
-            allAppointments.add(new Appointment(appointmentId, title, description, "", type, start, end,
+            ZoneId utcZone = ZoneId.of("UTC");
+            ZonedDateTime utcStartTime = start.atZone(utcZone);
+            ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
+            ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
+
+            ZonedDateTime utcEndTime = end.atZone(utcZone);
+            ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
+            ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
+            String startTime = finalLocalStartTime.format(dtf);
+            String endTime = finalLocalEndTime.format(dtf);
+
+            allAppointments.add(new Appointment(appointmentId, title, description, "", type, startTime, endTime,
                     "", "", "", "", customerId, 1, 1));
 
         }
