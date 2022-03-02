@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public abstract class ReportQueries {
 
     public static ObservableList<Appointment> getTotalCustomerAppointments() throws SQLException {
-        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
         String sql = "SELECT Type, EXTRACT(MONTH FROM Start) AS Month, COUNT(Type) AS Count_Type\n" +
                 "FROM appointments\n" +
@@ -27,12 +27,12 @@ public abstract class ReportQueries {
             String month = rs.getString("Month");
             String number = rs.getString("Count_Type");
 
-            appointments.add(new Appointment(1, "", "", "",
+            allAppointments.add(new Appointment(1, "", "", "",
                     type, month, "", number, "", "", "",
                     1, 1, 1));
         }
 
-        return appointments;
+        return allAppointments;
 
     }
 
@@ -60,5 +60,32 @@ public abstract class ReportQueries {
 
 
         return allCustomers;
+    }
+
+    public static ObservableList<Appointment> getContactSchedule() throws SQLException {
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+
+        String sql = "SELECT Customer_ID, Appointment_ID, Title, Type, Description, Start, End\n" +
+                "FROM appointments\n" +
+                "ORDER BY Customer_ID";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int appointmentId = rs.getInt("Appointment_ID");
+            String title = rs.getString("Title");
+            String type = rs.getString("Type");
+            String description = rs.getString("Description");
+            String start = rs.getString("Start");
+            String end = rs.getString("End");
+            int customerId = rs.getInt("Customer_ID");
+
+            allAppointments.add(new Appointment(appointmentId, title, description, "", type, start, end,
+                    "", "", "", "", customerId, 1, 1));
+
+        }
+
+        return allAppointments;
     }
 }

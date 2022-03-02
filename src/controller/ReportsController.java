@@ -25,18 +25,27 @@ public class ReportsController implements Initializable {
     public TableColumn appointmentTypeCol;
     public TableColumn monthCol;
     public TableColumn totalAppointmentsCol;
+    public TableView contactScheduleTable;
+    public TableColumn customerIdCol;
+    public TableColumn appointmentIdCol;
+    public TableColumn titleCol;
+    public TableColumn typeCol;
+    public TableColumn descriptionCol;
+    public TableColumn startCol;
+    public TableColumn endCol;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
-        ObservableList<Appointment> appointment = FXCollections.observableArrayList();
-        ObservableList<Division> division = FXCollections.observableArrayList();
+        ObservableList<Appointment> totalAppointments = FXCollections.observableArrayList();
+        ObservableList<Division> customersByState = FXCollections.observableArrayList();
+        ObservableList<Appointment> contactSchedule = FXCollections.observableArrayList();
 
         try {
-            appointment = ReportQueries.getTotalCustomerAppointments();
-            division = ReportQueries.getNumberOfCustomersByState();
-
+            totalAppointments = ReportQueries.getTotalCustomerAppointments();
+            customersByState = ReportQueries.getNumberOfCustomersByState();
+            contactSchedule = ReportQueries.getContactSchedule();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,16 +55,23 @@ public class ReportsController implements Initializable {
         monthCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
         totalAppointmentsCol.setCellValueFactory(new PropertyValueFactory<>("CreateDate"));
 
-        divisionTable.setItems(appointment);
+        divisionTable.setItems(totalAppointments);
 
         countryCol.setCellValueFactory(new PropertyValueFactory<>("division"));
         stateCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
         numberOfCustomersCol.setCellValueFactory(new PropertyValueFactory<>("countryId"));
 
-        appointmentTypeTable.setItems(division);
+        appointmentTypeTable.setItems(customersByState);
 
+        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        startCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
+        endCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
 
-
+        contactScheduleTable.setItems(contactSchedule);
 
         JDBC.closeConnection();
     }
