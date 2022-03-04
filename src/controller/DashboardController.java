@@ -2,6 +2,8 @@ package controller;
 
 import dao.JDBC;
 import dao.Queries;
+import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -25,21 +27,18 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 
 public class DashboardController implements Initializable {
-    public TableColumn appointmentIdCol;
-    public TableColumn typeCol;
-    public TableColumn titleCol;
-    public TableColumn descriptionCol;
-    public TableColumn locationCol;
-    public TableColumn startTimeCol;
-    public TableColumn endTimeCol;
+    public TableColumn<Appointment, Integer> appointmentIdCol;
+    public TableColumn<Appointment, String> typeCol;
+    public TableColumn<Appointment, String> titleCol;
+    public TableColumn<Appointment, String> descriptionCol;
+    public TableColumn<Appointment, String>  locationCol;
+    public TableColumn<Appointment, String>  startTimeCol;
+    public TableColumn<Appointment, String>  endTimeCol;
     public TableView<Appointment> dashboardTable;
     public RadioButton monthButton;
     public RadioButton weekButton;
     public ToggleGroup toggle;
     static User user;
-
-    //ObservableList<User> currentUser = FXCollections.observableArrayList();
-    //private ObservableList<Appointment> fewapp = FXCollections.observableArrayList();
 
     public void setUser(User currentUser) {
         JDBC.openConnection();
@@ -67,28 +66,45 @@ public class DashboardController implements Initializable {
 
         monthButton.setSelected(true);
 
-        appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
-        endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
+        appointmentIdCol.setCellValueFactory(cellData -> {
+            return new ReadOnlyObjectWrapper<>(cellData.getValue().getAppointmentId());
+        });
 
+        typeCol.setCellValueFactory(cellData ->{
+            return new ReadOnlyObjectWrapper<>(cellData.getValue().getType());
+        });
 
-        //dashboardTable.setItems(Queries.getNextMonthAppointments(user.getUserId()));
+        titleCol.setCellValueFactory(cellData ->{
+            return new ReadOnlyObjectWrapper<>(cellData.getValue().getTitle());
+        });
 
+        descriptionCol.setCellValueFactory(cellData ->{
+            return new ReadOnlyObjectWrapper<>(cellData.getValue().getDescription());
+        });
+
+        locationCol.setCellValueFactory(cellData ->{
+            return new ReadOnlyObjectWrapper<>(cellData.getValue().getLocation());
+        });
+
+        startTimeCol.setCellValueFactory(cellData ->{
+            return new ReadOnlyObjectWrapper<>(cellData.getValue().getStartDateTime());
+        });
+
+        endTimeCol.setCellValueFactory(cellData ->{
+            return new ReadOnlyObjectWrapper<>(cellData.getValue().getEndDateTime());
+        });
 
         JDBC.closeConnection();
 
-        //currentUser.get(1);
     }
 
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
+
         DashboardController dashboardController = loader.getController();
         dashboardController.setUser(user);
+
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");

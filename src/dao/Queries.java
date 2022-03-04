@@ -35,7 +35,9 @@ public abstract class Queries {
                                          int contactId) throws SQLException {
 
         String sql = "UPDATE appointments\n" +
-                "SET Appointment_ID = ?, Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ?\n" +
+                "SET Appointment_ID = ?, Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
+                "Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?," +
+                " Contact_ID = ?\n" +
                 "WHERE Appointment_ID = ?";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -76,6 +78,7 @@ public abstract class Queries {
     //Update a user in the SQL database
     public static int updateUser(int userId, String username, String password) throws SQLException {
         String sql = "UPDATE users SET User_Name = ? WHERE User_ID = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, username);
         ps.setInt(2, userId);
@@ -85,6 +88,7 @@ public abstract class Queries {
 
     public static int deleteUser(int userId) throws SQLException {
         String sql = "DELETE FROM users WHERE User_ID = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, userId);
         int rowsAffected = ps.executeUpdate();
@@ -93,7 +97,9 @@ public abstract class Queries {
 
     public static User selectCurrentUser(String username) throws SQLException {
         ObservableList<User> currentUser = FXCollections.observableArrayList();
+
         String sql = "SELECT * FROM users WHERE User_Name = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, username);
         ResultSet rs = ps.getGeneratedKeys();
@@ -109,6 +115,7 @@ public abstract class Queries {
 
     public static int selectUser(String username, String password) throws SQLException {
         String sql = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, username);
         ps.setString(2, password);
@@ -126,6 +133,7 @@ public abstract class Queries {
         ObservableList<Contact> contactsList = FXCollections.observableArrayList();
 
         String sql = "SELECT * FROM contacts";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
@@ -141,6 +149,7 @@ public abstract class Queries {
 
     public static int getContactId(String name) throws SQLException {
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, name);
         ResultSet rs = ps.executeQuery();
@@ -173,6 +182,7 @@ public abstract class Queries {
 
     public static boolean login(String username, String password) throws SQLException {
         String sql = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, username);
         ps.setString(2, password);
@@ -189,38 +199,16 @@ public abstract class Queries {
 
     }
 
-    public static void selectAppointment(int userId) throws SQLException {
-        String sql = "SELECT * FROM appointments WHERE User_ID = ?";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, userId);
-        ResultSet rs = ps.executeQuery();
-        ObservableList<Appointment> appointment = FXCollections.observableArrayList();
-
-        while (rs.next()) {
-            int appointmentId = rs.getInt("Appointment_ID");
-            String title = rs.getString("Title");
-            String description = rs.getString("Description");
-            String location = rs.getString("Location");
-            String contact = rs.getString("Created_By");
-            String type = rs.getString("Type");
-            String start = rs.getString("Start");
-            String end = rs.getString("End");
-            int customerIdFK = rs.getInt("Customer_ID");
-            int userIdFK = rs.getInt("User_ID");
-            //System.out.print(appointmentId + " | " + title + ", " + description
-            //+ ", " + location + ", " + type + ", " + start + ", "
-            //+ end + ", " + customerIdFK + ", " + userIdFK + "\n");
-            //appointment.add(new Appointment(appointmentId, title, description, location, contact, type, start, end, customerIdFK, userIdFK));
-        }
-    }
-
     public static ObservableList<Appointment> getAllAppointmentsFromId(int userId) {
         ObservableList<Appointment> aList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
+            String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
+                    "appointments.Create_Date, appointments.Created_By, appointments.Last_Update, " +
+                    "appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
                     "FROM appointments, users, customers, contacts\n" +
-                    "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID AND users.User_ID = ?";
+                    "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = " +
+                    "appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID AND users.User_ID = ?";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, userId);
@@ -314,7 +302,9 @@ public abstract class Queries {
                                            String startDateTime, String endDateTime, String createDate,
                                            String createdBy, String lastUpdate, String lastUpdatedBy,
                                            int customerId, int userId, int contactId) throws SQLException {
+
         String sql = "INSERT INTO appointments VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, title);
         ps.setString(2, description);
@@ -338,7 +328,9 @@ public abstract class Queries {
         ObservableList<Customer> allCustomerList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, customers.Create_Date, customers.Created_By, customers.Last_Update, customers.Last_Updated_by, first_level_divisions.Division_ID\n" +
+            String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, customers.Create_Date, " +
+                    "customers.Created_By, customers.Last_Update, customers.Last_Updated_by, " +
+                    "first_level_divisions.Division_ID\n" +
                     "FROM customers, first_level_divisions\n" +
                     "WHERE customers.Division_ID = first_level_divisions.Division_ID";
 
@@ -386,6 +378,7 @@ public abstract class Queries {
                                       int divisionId) {
         try {
             String sql = "INSERT INTO customers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setString(1, name);
             ps.setString(2, address);
@@ -405,6 +398,7 @@ public abstract class Queries {
 
     public static int deleteCustomer(int customerId) throws SQLException {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, customerId);
         int rowsAffected = ps.executeUpdate();
@@ -414,6 +408,7 @@ public abstract class Queries {
 
     public static int deleteAppointment(int appointmentId) throws SQLException {
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, appointmentId);
         int rowsAffected = ps.executeUpdate();
@@ -479,6 +474,7 @@ public abstract class Queries {
                 String lastUpdate = rs.getString("Last_Update");
                 String lastUpdateBy = rs.getString("Last_Updated_By");
                 int countryId = rs.getInt("Country_ID");
+
                 Division d = new Division(divisionId, division, createDate, createdBy, lastUpdate, lastUpdateBy, countryId);
                 divisionList.add(d);
             }
@@ -491,6 +487,7 @@ public abstract class Queries {
 
     public static int getDivisionId(String division) throws SQLException {
         String sql = "SELECT Division_ID FROM first_level_divisions WHERE Division = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, division);
         ResultSet rs = ps.executeQuery();
@@ -505,6 +502,7 @@ public abstract class Queries {
 
     public static String getDivisionName(int divisionId) throws SQLException {
         String sql = "SELECT Division FROM first_level_divisions WHERE Division_ID = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, divisionId);
         ResultSet rs = ps.executeQuery();
@@ -519,6 +517,7 @@ public abstract class Queries {
 
     public static int getCountryId(int divisionId) throws SQLException {
         String sql = "SELECT Country_ID FROM first_level_divisions WHERE Division_ID = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, divisionId);
         ResultSet rs = ps.executeQuery();
@@ -532,7 +531,9 @@ public abstract class Queries {
 
     public static String getCountryName(int divisionId, int countryId) throws SQLException {
         String sql = "SELECT Country FROM countries, first_level_divisions\n" +
-                "WHERE first_level_divisions.Division_ID = ? AND first_level_divisions.Country_ID = ? AND countries.Country_ID = ?";
+                "WHERE first_level_divisions.Division_ID = ? AND first_level_divisions.Country_ID = ? AND " +
+                "countries.Country_ID = ?";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, divisionId);
         ps.setInt(2, countryId);
@@ -549,7 +550,9 @@ public abstract class Queries {
     public static ObservableList<Appointment> getNextMonthAppointments(int userId) throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN CURDATE() AND CURDATE() + INTERVAL 1 MONTH";
+        String sql = "SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN CURDATE() AND CURDATE() + " +
+                "INTERVAL 1 MONTH";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, userId);
         ResultSet rs = ps.executeQuery();
@@ -593,7 +596,9 @@ public abstract class Queries {
     public static ObservableList<Appointment> getNextWeekAppointments(int userId) throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY";
+        String sql = "SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN CURDATE() AND CURDATE() + " +
+                "INTERVAL 7 DAY";
+
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, userId);
         ResultSet rs = ps.executeQuery();
@@ -604,8 +609,8 @@ public abstract class Queries {
             String description = rs.getString("Description");
             String location = rs.getString("Location");
             String type = rs.getString("Type");
-            String start = rs.getString("Start");
-            String end = rs.getString("End");
+            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
             String createDate = rs.getString("Create_Date");
             String contact = rs.getString("Created_By");
             String lastUpdate = rs.getString("Last_Update");
@@ -614,8 +619,21 @@ public abstract class Queries {
             int userIdFK = rs.getInt("User_ID");
             int contactIdFK = rs.getInt("Contact_ID");
 
+            ZoneId utcZone = ZoneId.of("UTC");
+            ZonedDateTime utcStartTime = start.atZone(utcZone);
+            ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
+            ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
+
+            ZonedDateTime utcEndTime = end.atZone(utcZone);
+            ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
+            ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
+            String startTime = finalLocalStartTime.format(dtf);
+            String endTime = finalLocalEndTime.format(dtf);
+
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
-                    type, start, end, createDate, contact, lastUpdate, updateBy,
+                    type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
                     customerIdFK, userIdFK, contactIdFK));
         }
         return appointmentsList;
@@ -669,7 +687,6 @@ public abstract class Queries {
 
         while (rs.next()) {
             LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
-            startDateTime.atZone(ZoneOffset.systemDefault());
             allAppointmentStartTimes.add(startDateTime);
         }
         return allAppointmentStartTimes;
