@@ -122,91 +122,64 @@ public class AddAppointmentController implements Initializable {
         String endHours = String.valueOf(endHourComboBox.getSelectionModel().getSelectedItem());
         String endMinutes = String.valueOf(endMinuteComboBox.getSelectionModel().getSelectedItem());
 
-        if (appointmentTitle == null || appointmentLocation == null || appointmentType == null ||
-                contactComboBox.getSelectionModel().getSelectedItem() == null ||
-                startHourComboBox.getSelectionModel().getSelectedItem() == null ||
+        LocalDateTime startLocalDateTime = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(),
+                Integer.parseInt(startHours), Integer.parseInt(startMinutes));
+
+        LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
+                Integer.parseInt(endHours), Integer.parseInt(endMinutes));
+
+        ZoneId systemZone = ZoneId.systemDefault();
+        ZonedDateTime localStartZdt = startLocalDateTime.atZone(systemZone);
+        ZonedDateTime estCreateTime = localStartZdt.withZoneSameInstant(ZoneId.of("America/New_York"));
+        ZonedDateTime finalEstCreateTime = estCreateTime.plusHours(1);
+
+        LocalTime estST = LocalTime.of(finalEstCreateTime.getHour(), finalEstCreateTime.getMinute());
+        LocalTime businessOpenHour =  LocalTime.of(8, 00);
+        LocalTime businessCloseHour = LocalTime.of(22, 00);
+
+        if (appointmentTitle.equals("")|| appointmentLocation.equals("") || appointmentType.equals("") ||
+                contactComboBox.getSelectionModel().getSelectedItem() == null || start == null ||
+                end == null || startHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 startMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
                 endHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 endMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
-                customerId.getText() == null || userId.getText() == null || appointmentDescription == null){
+                customerId.getText().equals("") || userId.getText().equals("") || appointmentDescription.equals("")){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setContentText("One or more value(s) is missing");
-            alert.showAndWait();
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get() == ButtonType.OK) {
+                return;
+            }
+        }
+
+        if (estST.isBefore(businessOpenHour) || estST.isAfter(businessCloseHour)) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00 EST Monday - Friday");
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get() == ButtonType.OK) {
+                return;
+            }
+        }
+
+        if (startLocalDateTime.isAfter(endLocalDateTime)){
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("The start date and time must be before the end date and time");
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get() == ButtonType.OK) {
+                return;
+            }
         }
 
         else {
-            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllStartTimes();
-            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllEndTimes();
-
-            ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
-            ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
-
-            for (LocalDateTime s : appointmentStartDateTimes) {
-                int startYear = s.getYear();
-                Month startMonth = s.getMonth();
-                int startDay = s.getDayOfMonth();
-                int startHour = s.getHour();
-                int startMinute = s.getMinute();
-
-                LocalDateTime startLDT = LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
-                startTimes.addAll(startLDT);
-            }
-
-            for (LocalDateTime e : appointmentEndDateTimes) {
-                int endYear = e.getYear();
-                Month endMonth = e.getMonth();
-                int endDay = e.getDayOfMonth();
-                int endHour = e.getHour();
-                int endMinute = e.getMinute();
-
-                LocalDateTime endLDT = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute);
-                endTimes.addAll(endLDT);
-            }
-
-            LocalDateTime startLocalDateTime = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(),
-                    Integer.parseInt(startHours), Integer.parseInt(startMinutes));
-
-            LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
-                    Integer.parseInt(endHours), Integer.parseInt(endMinutes));
-
-            DateTimeFormatter dateTF = DateTimeFormatter.ofPattern("HH:mm MM/dd/yyyy");
-
-            for (int i = 0; i < startTimes.size(); i++) {
-                LocalDateTime currentStart = startTimes.get(i);
-                LocalDateTime currentEnd = endTimes.get(i);
-
-                LocalDateTime myDT = LocalDateTime.of(startLocalDateTime.getYear(), startLocalDateTime.getMonth(),
-                        startLocalDateTime.getDayOfMonth(), startLocalDateTime.getHour(), startLocalDateTime.getMinute());
-
-                if (myDT.isAfter(currentStart) && myDT.isBefore(currentEnd)) {
-
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Overlapping Appointment");
-                    alert.setContentText("Your date and time overlaps another appointment starting at " +
-                            currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
-                    Optional<ButtonType> action = alert.showAndWait();
-
-                    if (action.get() == ButtonType.OK) {
-                        return;
-                    }
-
-                    else if (myDT.equals(currentStart) || myDT.equals(currentEnd)) {
-
-                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                        alert2.setTitle("Overlapping Appointment");
-                        alert2.setContentText("Your date and time overlaps another appointment starting at " +
-                                currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
-                        Optional<ButtonType> action2 = alert2.showAndWait();
-
-                        if (action2.get() == ButtonType.OK) {
-                            return;
-                        }
-                    }
-                }
-            }
-
             DateTimeFormatter databaseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
             ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
@@ -219,7 +192,6 @@ public class AddAppointmentController implements Initializable {
             ZonedDateTime finalZdtEndUtc = zdtEndUtc.plusHours(1);
             String endTimeUtc = databaseFormat.format(finalZdtEndUtc);
 
-            ZoneId systemZone = ZoneId.systemDefault();
             ZonedDateTime localCreateTime = createDate.atZone(systemZone);
             ZonedDateTime utcCreateTime = localCreateTime.withZoneSameInstant(ZoneOffset.UTC);
             ZonedDateTime finalUtcCreateTime = utcCreateTime.minusHours(1);

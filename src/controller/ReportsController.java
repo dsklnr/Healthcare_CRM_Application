@@ -91,8 +91,10 @@ public class ReportsController implements Initializable {
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
+
         DashboardController dashboardController = loader.getController();
         dashboardController.setUser(currentUser);
+
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Dashboard");
@@ -103,8 +105,10 @@ public class ReportsController implements Initializable {
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
         Parent root = loader.load();
+
         CustomerController customerController = loader.getController();
         customerController.setUser(currentUser);
+
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Customers");
@@ -115,8 +119,10 @@ public class ReportsController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
+
         AllAppointmentsController appointmentsController = loader.getController();
         appointmentsController.setUser(currentUser);
+
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Appointments");
@@ -127,8 +133,10 @@ public class ReportsController implements Initializable {
     public void onReportClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReportsScreen.fxml"));
         Parent root = loader.load();
+
         ReportsController reportsController = loader.getController();
         reportsController.setUser(currentUser);
+
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("CRM Reports");

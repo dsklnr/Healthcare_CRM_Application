@@ -239,10 +239,6 @@ public class UpdateAppointmentController implements Initializable {
             ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllStartTimes();
             ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllEndTimes();
 
-            //appointmentStartDateTimes = Queries.getAllStartTimes();
-            //appointmentEndDateTimes = Queries.getAllEndTimes();
-            //System.out.println(appointmentStartDateTimes);
-
             ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
             ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
 
@@ -262,7 +258,6 @@ public class UpdateAppointmentController implements Initializable {
                 ZonedDateTime finalZdt = Zdt.withZoneSameInstant(system).minusHours(1);
 
                 startTimes.addAll(LocalDateTime.from(finalZdt));
-                //System.out.println(finalZdt.format(dtf));
             }
 
             for (LocalDateTime y : appointmentEndDateTimes){
@@ -281,7 +276,6 @@ public class UpdateAppointmentController implements Initializable {
                 ZonedDateTime finalZdt = Zdt.withZoneSameInstant(system).minusHours(1);
 
                 endTimes.addAll(LocalDateTime.from(finalZdt));
-                //System.out.println(finalZdt.format(dtf));
             }
 
             DateTimeFormatter dateTF = DateTimeFormatter.ofPattern("HH:mm MM/dd/yyyy");
@@ -318,29 +312,21 @@ public class UpdateAppointmentController implements Initializable {
                 }
             }
 
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter databaseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
             ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtStartUtc = zdtStartLocal.withZoneSameInstant(ZoneOffset.UTC);
             ZonedDateTime finalZdtStartUtc = zdtStartUtc.plusHours(1);
-            String startTimeUtc = finalZdtStartUtc.format(dtf);
+            String startTimeUtc = finalZdtStartUtc.format(databaseFormat);
 
             ZonedDateTime zdtEndLocal = ZonedDateTime.of(endLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtEndUtc = zdtEndLocal.withZoneSameInstant(ZoneOffset.UTC);
             ZonedDateTime finalZdtEndUtc = zdtEndUtc.plusHours(1);
-            String endTimeUtc = finalZdtEndUtc.format(dtf);
+            String endTimeUtc = finalZdtEndUtc.format(databaseFormat);
 
             ZonedDateTime localUpdateTime = lastUpdate.atZone(systemZone);
             ZonedDateTime utcUpdateTime = localUpdateTime.withZoneSameInstant(ZoneOffset.UTC);
-            String updateTime = utcUpdateTime.format(dtf);
-
-            /*
-            ZonedDateTime localCreateTime = createDate.atZone(systemZone);
-            ZonedDateTime utcCreateTime = localCreateTime.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime finalUtcCreateTime = utcCreateTime;
-            String createTime = utcCreateTime.format(dtf);
-
-             */
+            String updateTime = utcUpdateTime.format(databaseFormat);
 
             Queries.updateAppointment(appointmentID, appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                     startTimeUtc, endTimeUtc, createDate, createdBy, updateTime, lastUpdateBy,
