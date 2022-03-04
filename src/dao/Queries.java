@@ -258,9 +258,13 @@ public abstract class Queries {
         ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, appointments.Create_Date, appointments.Created_By, appointments.Last_Update, appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
+            String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
+                    "appointments.Create_Date, appointments.Created_By, appointments.Last_Update, " +
+                    "appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
                     "FROM appointments, users, customers, contacts\n" +
-                    "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID";
+                    "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID " +
+                    "AND contacts.Contact_ID = appointments.Contact_ID\n" +
+                    "ORDER BY Start";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -665,6 +669,7 @@ public abstract class Queries {
 
         while (rs.next()) {
             LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
+            startDateTime.atZone(ZoneOffset.systemDefault());
             allAppointmentStartTimes.add(startDateTime);
         }
         return allAppointmentStartTimes;

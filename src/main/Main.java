@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import model.User;
 
@@ -19,6 +20,7 @@ import java.time.*;
 import java.time.chrono.ChronoZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 public class Main extends Application {
     @Override
@@ -71,58 +73,6 @@ public class Main extends Application {
          */
 
         JDBC.openConnection();
-
-
-        ObservableList<LocalDateTime> appointmentStartDateTimes = FXCollections.observableArrayList();
-        ObservableList<LocalDateTime> appointmentEndDateTimes = FXCollections.observableArrayList();
-
-        appointmentStartDateTimes = Queries.getAllStartTimes();
-        appointmentEndDateTimes = Queries.getAllEndTimes();
-        //System.out.println(appointmentStartDateTimes);
-
-        ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
-        ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
-
-        for (LocalDateTime x : appointmentStartDateTimes) {
-            int startYear = x.getYear();
-            Month startMonth = x.getMonth();
-            int startDay = x.getDayOfMonth();
-            int startHour = x.getHour();
-            int startMinute = x.getMinute();
-
-            LocalDateTime startLDT = LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
-            startTimes.addAll(startLDT);
-        }
-
-        for (LocalDateTime y : appointmentEndDateTimes){
-            int endYear = y.getYear();
-            Month endMonth = y.getMonth();
-            int endDay = y.getDayOfMonth();
-            int endHour = y.getHour();
-            int endMinute = y.getMinute();
-
-            LocalDateTime endLDT = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute);
-            endTimes.addAll(endLDT);
-        }
-
-        DateTimeFormatter dateTF = DateTimeFormatter.ofPattern("HH:mm MM/dd/yyyy");
-
-        for (int i = 0; i < startTimes.size(); i++){
-            LocalDateTime currentStart = startTimes.get(i);
-            LocalDateTime currentEnd = endTimes.get(i);
-            LocalDateTime myDT = LocalDateTime.of(2020, 05, 28, 12, 00);
-
-            if (myDT.isAfter(currentStart) && myDT.isBefore(currentEnd)){
-                System.out.println("Your date and time overlaps another appointment starting at " +
-                        currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
-            }
-
-            if (myDT.equals(currentStart) || myDT.equals(currentEnd)){
-                System.out.println("Your date and time overlaps another appointment starting at " +
-                        currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
-            }
-
-        }
 
         /*
         LocalDateTime startDT = LocalDateTime.of(2022, 02, 25, 10, 00);

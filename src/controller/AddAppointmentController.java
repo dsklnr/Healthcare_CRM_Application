@@ -35,13 +35,13 @@ public class AddAppointmentController implements Initializable {
     public TextField userId;
     public TextArea description;
     public ComboBox contactComboBox;
-    public User currentUser;
     public DatePicker startDate;
     public DatePicker endDate;
     public ComboBox startHourComboBox;
     public ComboBox startMinuteComboBox;
     public ComboBox endHourComboBox;
     public ComboBox endMinuteComboBox;
+    public User user;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -96,6 +96,10 @@ public class AddAppointmentController implements Initializable {
         return dayCellFactory;
     }
 
+    public void setUser (User currentUser){
+        user = currentUser;
+    }
+
     public void onSaveAddAppointment(ActionEvent actionEvent) throws IOException, SQLException {
         JDBC.openConnection();
 
@@ -105,9 +109,9 @@ public class AddAppointmentController implements Initializable {
         LocalDate start = startDate.getValue();
         LocalDate end = endDate.getValue();
         LocalDateTime createDate = LocalDateTime.now();
-        String createdBy = currentUser.getUsername();
+        String createdBy = user.getUsername();
         LocalDateTime lastUpdate = LocalDateTime.now();
-        String lastUpdateBy = currentUser.getUsername();
+        String lastUpdateBy = user.getUsername();
         String customerID = customerId.getText();
         String userID = userId.getText();
         String appointmentDescription = description.getText();
@@ -117,77 +121,6 @@ public class AddAppointmentController implements Initializable {
         String startMinutes = String.valueOf(startMinuteComboBox.getSelectionModel().getSelectedItem());
         String endHours = String.valueOf(endHourComboBox.getSelectionModel().getSelectedItem());
         String endMinutes = String.valueOf(endMinuteComboBox.getSelectionModel().getSelectedItem());
-
-        ObservableList<LocalDateTime> appointmentStartDateTimes = FXCollections.observableArrayList();
-        ObservableList<LocalDateTime> appointmentEndDateTimes = FXCollections.observableArrayList();
-
-        appointmentStartDateTimes = Queries.getAllStartTimes();
-        appointmentEndDateTimes = Queries.getAllEndTimes();
-
-        ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
-        ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
-
-        for (LocalDateTime s : appointmentStartDateTimes) {
-            int startYear = s.getYear();
-            Month startMonth = s.getMonth();
-            int startDay = s.getDayOfMonth();
-            int startHour = s.getHour();
-            int startMinute = s.getMinute();
-
-            LocalDateTime startLDT = LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
-            startTimes.addAll(startLDT);
-        }
-
-        for (LocalDateTime e : appointmentEndDateTimes) {
-            int endYear = e.getYear();
-            Month endMonth = e.getMonth();
-            int endDay = e.getDayOfMonth();
-            int endHour = e.getHour();
-            int endMinute = e.getMinute();
-
-            LocalDateTime endLDT = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute);
-            endTimes.addAll(endLDT);
-        }
-
-        LocalDateTime startLocalDateTime = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(),
-                Integer.parseInt(startHours), Integer.parseInt(startMinutes));
-
-        LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
-                Integer.parseInt(endHours), Integer.parseInt(endMinutes));
-
-        DateTimeFormatter dateTF = DateTimeFormatter.ofPattern("HH:mm MM/dd/yyyy");
-
-        for (int i = 0; i < startTimes.size(); i++) {
-            LocalDateTime currentStart = startTimes.get(i);
-            LocalDateTime currentEnd = endTimes.get(i);
-
-            LocalDateTime myDT = LocalDateTime.of(startLocalDateTime.getYear(), startLocalDateTime.getMonth(),
-                    startLocalDateTime.getDayOfMonth(), startLocalDateTime.getHour(), startLocalDateTime.getMinute());
-
-            if (myDT.isAfter(currentStart) && myDT.isBefore(currentEnd)) {
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Overlapping Appointment");
-                alert.setContentText("Your date and time overlaps another appointment starting at " +
-                        currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
-                Optional<ButtonType> action = alert.showAndWait();
-
-                if (action.get() == ButtonType.OK) {
-                    return;
-                } else if (myDT.equals(currentStart) || myDT.equals(currentEnd)) {
-
-                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                    alert2.setTitle("Overlapping Appointment");
-                    alert2.setContentText("Your date and time overlaps another appointment starting at " +
-                            currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
-                    Optional<ButtonType> action2 = alert2.showAndWait();
-
-                    if (action2.get() == ButtonType.OK) {
-                        return;
-                    }
-                }
-            }
-        }
 
         if (appointmentTitle == null || appointmentLocation == null || appointmentType == null ||
                 contactComboBox.getSelectionModel().getSelectedItem() == null ||
@@ -204,29 +137,113 @@ public class AddAppointmentController implements Initializable {
         }
 
         else {
-            DateTimeFormatter databaseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd " + "HH:mm:ss");
-            String formatCreateDateTime = createDate.format(databaseFormat);
-            String formatUpdateDateTime = lastUpdate.format(databaseFormat);
+            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllStartTimes();
+            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllEndTimes();
+
+            ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
+            ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
+
+            for (LocalDateTime s : appointmentStartDateTimes) {
+                int startYear = s.getYear();
+                Month startMonth = s.getMonth();
+                int startDay = s.getDayOfMonth();
+                int startHour = s.getHour();
+                int startMinute = s.getMinute();
+
+                LocalDateTime startLDT = LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
+                startTimes.addAll(startLDT);
+            }
+
+            for (LocalDateTime e : appointmentEndDateTimes) {
+                int endYear = e.getYear();
+                Month endMonth = e.getMonth();
+                int endDay = e.getDayOfMonth();
+                int endHour = e.getHour();
+                int endMinute = e.getMinute();
+
+                LocalDateTime endLDT = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute);
+                endTimes.addAll(endLDT);
+            }
+
+            LocalDateTime startLocalDateTime = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(),
+                    Integer.parseInt(startHours), Integer.parseInt(startMinutes));
+
+            LocalDateTime endLocalDateTime = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(),
+                    Integer.parseInt(endHours), Integer.parseInt(endMinutes));
+
+            DateTimeFormatter dateTF = DateTimeFormatter.ofPattern("HH:mm MM/dd/yyyy");
+
+            for (int i = 0; i < startTimes.size(); i++) {
+                LocalDateTime currentStart = startTimes.get(i);
+                LocalDateTime currentEnd = endTimes.get(i);
+
+                LocalDateTime myDT = LocalDateTime.of(startLocalDateTime.getYear(), startLocalDateTime.getMonth(),
+                        startLocalDateTime.getDayOfMonth(), startLocalDateTime.getHour(), startLocalDateTime.getMinute());
+
+                if (myDT.isAfter(currentStart) && myDT.isBefore(currentEnd)) {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Overlapping Appointment");
+                    alert.setContentText("Your date and time overlaps another appointment starting at " +
+                            currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
+                    Optional<ButtonType> action = alert.showAndWait();
+
+                    if (action.get() == ButtonType.OK) {
+                        return;
+                    }
+
+                    else if (myDT.equals(currentStart) || myDT.equals(currentEnd)) {
+
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Overlapping Appointment");
+                        alert2.setContentText("Your date and time overlaps another appointment starting at " +
+                                currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
+                        Optional<ButtonType> action2 = alert2.showAndWait();
+
+                        if (action2.get() == ButtonType.OK) {
+                            return;
+                        }
+                    }
+                }
+            }
+
+            DateTimeFormatter databaseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
             ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtStartUtc = zdtStartLocal.withZoneSameInstant(ZoneOffset.UTC);
-            String startTimeLocal = databaseFormat.format(zdtStartLocal);
-            String startTimeUtc = databaseFormat.format(zdtStartUtc);
+            ZonedDateTime finalZdtStartUtc = zdtStartUtc.plusHours(1);
+            String startTimeUtc = databaseFormat.format(finalZdtStartUtc);
 
             ZonedDateTime zdtEndLocal = ZonedDateTime.of(endLocalDateTime, ZoneId.systemDefault());
             ZonedDateTime zdtEndUtc = zdtEndLocal.withZoneSameInstant(ZoneOffset.UTC);
-            String endTimeUtc = databaseFormat.format(zdtEndUtc);
+            ZonedDateTime finalZdtEndUtc = zdtEndUtc.plusHours(1);
+            String endTimeUtc = databaseFormat.format(finalZdtEndUtc);
+
+            ZoneId systemZone = ZoneId.systemDefault();
+            ZonedDateTime localCreateTime = createDate.atZone(systemZone);
+            ZonedDateTime utcCreateTime = localCreateTime.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime finalUtcCreateTime = utcCreateTime.minusHours(1);
+            String createTime = finalUtcCreateTime.format(databaseFormat);
+
+            ZonedDateTime localUpdateTime = lastUpdate.atZone(systemZone);
+            ZonedDateTime utcUpdateTime = localUpdateTime.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime finalUtcUpdateTime = utcUpdateTime.plusHours(1);
+            String updateTime = finalUtcUpdateTime.format(databaseFormat);
 
             JDBC.openConnection();
 
             Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
-                    startTimeUtc, endTimeUtc, formatCreateDateTime, createdBy, formatUpdateDateTime, lastUpdateBy,
+                    startTimeUtc, endTimeUtc, createTime, createdBy, updateTime, lastUpdateBy,
                     Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
 
             JDBC.closeConnection();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();
+
+            AllAppointmentsController appointmentsUser = loader.getController();
+            appointmentsUser.setUser(user);
+
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Appointments");
             stage.setScene(new Scene(root, 1500, 800));
@@ -239,15 +256,14 @@ public class AddAppointmentController implements Initializable {
         public void onCancelAddAppointment (ActionEvent actionEvent) throws IOException {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();
+
+            AllAppointmentsController appointmentsUser = loader.getController();
+            appointmentsUser.setUser(user);
+
             Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage2.close();
             stage2.setTitle("Appointments");
             stage2.setScene(new Scene(root, 1500, 800));
             stage2.show();
         }
-
-        public void setUser (User currentUser){
-            this.currentUser = currentUser;
-        }
-
 }

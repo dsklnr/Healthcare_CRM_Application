@@ -113,8 +113,10 @@ public class AllAppointmentsController implements Initializable {
     public void onScheduleAppointment(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddAppointmentScreen.fxml"));
         Parent root = loader.load();
+
         AddAppointmentController appointmentsUser = loader.getController();
         appointmentsUser.setUser(currentUser);
+
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
         stage.setTitle("Schedule An Appointment");
@@ -131,9 +133,11 @@ public class AllAppointmentsController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentScreen.fxml"));
             Parent root = loader.load();
+
             UpdateAppointmentController updateAppointmentScreen = loader.getController();
             updateAppointmentScreen.setAppointment(appointment);
             updateAppointmentScreen.setUser(currentUser);
+
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();
             stage.setTitle("Update An Appointment");
