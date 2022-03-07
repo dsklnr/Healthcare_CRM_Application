@@ -58,7 +58,10 @@ public class DashboardController implements Initializable {
 
     }
 
-    /** Initialize the dashboard controller. **/
+    /** Initialize the dashboard controller.
+     *
+     * lambdas are used to populate cells based on appointment values.
+     * **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();

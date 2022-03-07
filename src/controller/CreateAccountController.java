@@ -27,7 +27,10 @@ public class CreateAccountController implements Initializable {
         JDBC.openConnection();
     }
 
-    /** Insert a new user into the database. **/
+    /** Insert a new user into the database.
+     *
+     * A lambda is used to encrypt user passwords before they are inserted into the database.
+     * **/
     public void onCreateAccount(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 

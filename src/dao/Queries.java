@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/** Creating the queries class **/
 public abstract class Queries {
 
     /** Insert a new user into the database.
