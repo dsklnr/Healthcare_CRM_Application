@@ -26,7 +26,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-public class AddCustomer implements Initializable {
+/** Creating the add customer controller. **/
+public class AddCustomerController implements Initializable {
     public ComboBox<Country> countryComboBox;
     public ComboBox<Division> stateComboBox;
     public TextField name;
@@ -35,6 +36,7 @@ public class AddCustomer implements Initializable {
     public TextField phoneNumber;
     public User currentUser;
 
+    /** Initialize the add customer controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -51,10 +53,12 @@ public class AddCustomer implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Set the user object to the currently logged-in user. **/
     public void setUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
+    /** Insert a new customer into the database. **/
     public void onSaveAddCustomer(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
@@ -86,10 +90,10 @@ public class AddCustomer implements Initializable {
         Queries.createCustomer(customerName, customerAddress, postal, customerPhone, createTime,
                 createdBy, updateTime, lastUpdateBy, divisionId);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
         Parent root = loader.load();
 
-        CustomerController customerUser = loader.getController();
+        AllCustomersController customerUser = loader.getController();
         customerUser.setUser(currentUser);
 
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -102,11 +106,12 @@ public class AddCustomer implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Upon clicking cancel, return to the all customers screen. **/
     public void onCancelAddCustomer(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
         Parent root = loader.load();
 
-        CustomerController customerUser = loader.getController();
+        AllCustomersController customerUser = loader.getController();
         customerUser.setUser(currentUser);
 
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

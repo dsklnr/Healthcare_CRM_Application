@@ -23,7 +23,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-
+/** Creating the update appointment controller. **/
 public class UpdateAppointmentController implements Initializable {
     public TextField appointmentId;
     public TextField title;
@@ -42,6 +42,7 @@ public class UpdateAppointmentController implements Initializable {
     public ComboBox endMinuteComboBox;
     public Appointment selectedAppointment;
 
+    /** Initialize the update appointment controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -71,6 +72,7 @@ public class UpdateAppointmentController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Populate the form with the selected appointment's information. **/
     public void setAppointment(Appointment appointment) throws SQLException {
         JDBC.openConnection();
 
@@ -128,10 +130,13 @@ public class UpdateAppointmentController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Set the user object to the currently logged-in user. **/
     public void setUser(User currentUser) {
         user = currentUser;
     }
 
+    /** Remove Saturday & Sunday from the date picker.
+     * @return Returns a date picker where Saturday and Sunday are disabled. **/
     private Callback<DatePicker, DateCell> getDayCellFactory(){
 
         final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
@@ -153,7 +158,7 @@ public class UpdateAppointmentController implements Initializable {
         return dayCellFactory;
     }
 
-
+    /** Update the appointment in the MySQL database. **/
     public void onSaveAddAppointment(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
@@ -348,6 +353,7 @@ public class UpdateAppointmentController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Upon selecting cancel, return to the all appointments screen. **/
     public void onCancelAddAppointment(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();

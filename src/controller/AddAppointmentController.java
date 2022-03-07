@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-
+/** Creating the add appointment controller. **/
 public class AddAppointmentController implements Initializable {
     public TextField appointmentId;
     public TextField title;
@@ -43,6 +43,8 @@ public class AddAppointmentController implements Initializable {
     public ComboBox endMinuteComboBox;
     public User user;
 
+
+    /** Initialize the add appointment controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -75,6 +77,8 @@ public class AddAppointmentController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Remove Saturday & Sunday from the date picker.
+     * @return Returns a date picker where Saturday and Sunday are disabled. **/
     private Callback<DatePicker, DateCell> getDayCellFactory(){
 
         final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
@@ -96,10 +100,12 @@ public class AddAppointmentController implements Initializable {
         return dayCellFactory;
     }
 
+    /** Set the user object to the currently logged-in user. **/
     public void setUser (User currentUser){
         user = currentUser;
     }
 
+    /** Insert the new appointment into the MySQL database. **/
     public void onSaveAddAppointment(ActionEvent actionEvent) throws IOException, SQLException {
         JDBC.openConnection();
 
@@ -225,17 +231,18 @@ public class AddAppointmentController implements Initializable {
         JDBC.closeConnection();
     }
 
-        public void onCancelAddAppointment (ActionEvent actionEvent) throws IOException {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
-            Parent root = loader.load();
+    /** Upon selecting cancel, return to the all appointments screen. **/
+    public void onCancelAddAppointment (ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
+        Parent root = loader.load();
 
-            AllAppointmentsController appointmentsUser = loader.getController();
-            appointmentsUser.setUser(user);
+        AllAppointmentsController appointmentsUser = loader.getController();
+        appointmentsUser.setUser(user);
 
-            Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage2.close();
-            stage2.setTitle("Appointments");
-            stage2.setScene(new Scene(root, 1500, 800));
-            stage2.show();
-        }
+        Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage2.close();
+        stage2.setTitle("Appointments");
+        stage2.setScene(new Scene(root, 1500, 800));
+        stage2.show();
+    }
 }

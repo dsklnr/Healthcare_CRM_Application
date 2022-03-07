@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/** Creating the main/login screen controller. **/
 public class MainScreenController implements Initializable {
     public AnchorPane anchorPane;
     public TextField username;
@@ -37,7 +38,7 @@ public class MainScreenController implements Initializable {
     public Label time;
     public Label locationLabel;
 
-    //Initialize the main screen
+    /** Initialize the dashboard controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -93,7 +94,7 @@ public class MainScreenController implements Initializable {
         }
     }
 
-    //Handle login events
+    /** Upon selecting login, validate user credentials and the computers default language. **/
     public void onLogin(ActionEvent actionEvent) throws IOException, SQLException {
         JDBC.openConnection();
 
@@ -180,7 +181,7 @@ public class MainScreenController implements Initializable {
         JDBC.closeConnection();
     }
 
-    //Create a new account
+    /** Upon selecting create account, display the create account screen. **/
     public void onCreateAccount(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CreateAccount.fxml"));
         Parent root = loader.load();
@@ -191,7 +192,7 @@ public class MainScreenController implements Initializable {
         JDBC.closeConnection();
     }
 
-    //Recover lost password
+    /** Upon selecting forgot password, display the forgot password screen. **/
     public void onForgotPassword(MouseEvent mouseEvent) {
 
     }

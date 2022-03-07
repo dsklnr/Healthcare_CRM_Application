@@ -17,7 +17,11 @@ import java.util.ArrayList;
 
 public abstract class Queries {
 
-    //Create a new user in the SQL database
+    /** Insert a new user into the database.
+     * @param username The user's username.
+     * @param password The user's password.
+     * @return Returns a new user.
+     * **/
     public static String insertUser(String username, String password) throws SQLException {
         String sql = "INSERT INTO users (User_Name, Password)" +
                 "VALUES(?, ?)";
@@ -29,6 +33,23 @@ public abstract class Queries {
         return rowsAffected;
     }
 
+    /** Update an appointment in the database.
+     *
+     * @param appointmentId The appointment ID.
+     * @param title The appointment title.
+     * @param description The appointment description.
+     * @param location The appointment location.
+     * @param type The appointment type.
+     * @param startTime The appointment start date & time.
+     * @param endTime The appointment end date & time.
+     * @param createDate The appointment create date.
+     * @param createdBy The appointment created by field.
+     * @param updateDateTime The appointment update date & time.
+     * @param lastUpdateBy The appointment last updated by field.
+     * @param customerId The appointment customer ID.
+     * @param userId The appointment user ID.
+     * @param contactId The appointment contact ID.
+     */
     public static void updateAppointment(int appointmentId, String title, String description, String location, String type,
                                          String startTime, String endTime, String createDate, String createdBy,
                                          String updateDateTime, String lastUpdateBy, int customerId, int userId,
@@ -60,59 +81,12 @@ public abstract class Queries {
 
     }
 
-    public static String getUpdateAppointmentContact(int appointmentId, int contactId, int contactID) throws SQLException {
-        String sql = "SELECT Contact_Name\n" +
-                "FROM appointments, contacts\n" +
-                "WHERE Appointment_ID = ? AND appointments.Contact_ID = ? AND contacts.Contact_ID = ?";
-
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, appointmentId);
-        ps.setInt(2, contactId);
-        ps.setInt(3, contactID);
-
-        String rowsAffected = String.valueOf(ps.executeQuery());
-        return rowsAffected;
-
-    }
-
-    //Update a user in the SQL database
-    public static int updateUser(int userId, String username, String password) throws SQLException {
-        String sql = "UPDATE users SET User_Name = ? WHERE User_ID = ?";
-
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setString(1, username);
-        ps.setInt(2, userId);
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected;
-    }
-
-    public static int deleteUser(int userId) throws SQLException {
-        String sql = "DELETE FROM users WHERE User_ID = ?";
-
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, userId);
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected;
-    }
-
-    public static User selectCurrentUser(String username) throws SQLException {
-        ObservableList<User> currentUser = FXCollections.observableArrayList();
-
-        String sql = "SELECT * FROM users WHERE User_Name = ?";
-
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setString(1, username);
-        ResultSet rs = ps.getGeneratedKeys();
-        //ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            int userId = rs.getInt("User_ID");
-            String password = rs.getString("Password");
-            User current = new User(userId, username, password);
-            return current;
-        }
-        return null;
-    }
-
+    /** Select the user's user ID.
+     *
+     * @param username The user's username.
+     * @param password The user's password.
+     * @return Returns the user's user ID.
+     */
     public static int selectUser(String username, String password) throws SQLException {
         String sql = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
 
@@ -129,6 +103,10 @@ public abstract class Queries {
         return 0;
     }
 
+    /** Get all contacts.
+     *
+     * @return Returns all contacts.
+     */
     public static ObservableList<Contact> getAllContacts() throws SQLException {
         ObservableList<Contact> contactsList = FXCollections.observableArrayList();
 
@@ -147,6 +125,11 @@ public abstract class Queries {
         return contactsList;
     }
 
+    /** Get the contact ID.
+     *
+     * @param name The contact's name.
+     * @return Returns the contact's ID.
+     */
     public static int getContactId(String name) throws SQLException {
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
 
@@ -161,6 +144,12 @@ public abstract class Queries {
         return 0;
     }
 
+    /** Get the contact's name.
+     *
+     * @param contactId The contact ID.
+     * @param appointmentId The contact's appointment ID.
+     * @return Returns the contact's name.
+     */
     public static String getContactName(int contactId, int appointmentId) throws SQLException {
         String sql = "SELECT Contact_Name\n" +
                 "FROM appointments, contacts\n" +
@@ -179,7 +168,12 @@ public abstract class Queries {
         return null;
     }
 
-
+    /** Validates a user login.
+     *
+     * @param username The user's username.
+     * @param password The user's password.
+     * @return Returns true if the user's username and password match the credentials in the database.
+     */
     public static boolean login(String username, String password) throws SQLException {
         String sql = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
 
@@ -199,49 +193,10 @@ public abstract class Queries {
 
     }
 
-    public static ObservableList<Appointment> getAllAppointmentsFromId(int userId) {
-        ObservableList<Appointment> aList = FXCollections.observableArrayList();
-
-        try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
-                    "appointments.Create_Date, appointments.Created_By, appointments.Last_Update, " +
-                    "appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
-                    "FROM appointments, users, customers, contacts\n" +
-                    "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = " +
-                    "appointments.User_ID AND contacts.Contact_ID = appointments.Contact_ID AND users.User_ID = ?";
-
-            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int appointmentId = rs.getInt("Appointment_ID");
-                String title = rs.getString("Title");
-                String description = rs.getString("Description");
-                String location = rs.getString("Location");
-                String type = rs.getString("Type");
-                String start = rs.getString("Start");
-                String end = rs.getString("End");
-                String createDate = rs.getString("Create_Date");
-                String contact = rs.getString("Created_By");
-                String lastUpdate = rs.getString("Last_Update");
-                String updateBy = rs.getString("Last_Updated_By");
-                int customerIdFK = rs.getInt("Customer_ID");
-                int userIdFK = rs.getInt("User_ID");
-                int contactIdFK = rs.getInt("Contact_ID");
-
-                aList.add(new Appointment(appointmentId, title, description, location,
-                        type, start, end, createDate, contact, lastUpdate, updateBy,
-                        customerIdFK, userIdFK, contactIdFK));
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return aList;
-    }
-
+    /** Get all appointments.
+     *
+     * @return Returns all appointments.
+     */
     public static ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
 
@@ -298,6 +253,23 @@ public abstract class Queries {
         return allAppointmentList;
     }
 
+    /** Insert an appointment into the database.
+     *
+     * @param title The appointment title.
+     * @param description The appointment description.
+     * @param location The appointment location.
+     * @param type The appointment type.
+     * @param startDateTime The appointment start date & time.
+     * @param endDateTime The appointment end date & time.
+     * @param createDate The appointment create date & time.
+     * @param createdBy The appointment created by field.
+     * @param lastUpdate The appointment last update date & time.
+     * @param lastUpdatedBy The appointment last updated by field.
+     * @param customerId The appointment customer ID.
+     * @param userId The appointment user ID.
+     * @param contactId The appointment contact ID.
+     * @return Returns a new appointment.
+     */
     public static String insertAppointment(String title, String description, String location, String type,
                                            String startDateTime, String endDateTime, String createDate,
                                            String createdBy, String lastUpdate, String lastUpdatedBy,
@@ -324,6 +296,10 @@ public abstract class Queries {
 
     }
 
+    /** Get all customers.
+     *
+     * @return Returns all customers.
+     */
     public static ObservableList<Customer> getAllCustomers() {
         ObservableList<Customer> allCustomerList = FXCollections.observableArrayList();
 
@@ -373,6 +349,18 @@ public abstract class Queries {
         return allCustomerList;
     }
 
+    /** Insert a customer into the database.
+     *
+     * @param name The customer name.
+     * @param address The customer address.
+     * @param postalCode The customer postal code.
+     * @param phoneNumber The customer phone number.
+     * @param createDate The customer create date & time.
+     * @param createdBy The customer created by field.
+     * @param lastUpdate The customer last update date & time.
+     * @param lastUpdateBy The customer last updated by field.
+     * @param divisionId The customer division ID.
+     */
     public static void createCustomer(String name, String address, String postalCode, String phoneNumber,
                                       String createDate, String createdBy, String lastUpdate, String lastUpdateBy,
                                       int divisionId) {
@@ -396,6 +384,11 @@ public abstract class Queries {
         }
     }
 
+    /** Delete a customer.
+     *
+     * @param customerId The customer ID.
+     * @return Deletes a customer.
+     */
     public static int deleteCustomer(int customerId) throws SQLException {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
 
@@ -406,6 +399,11 @@ public abstract class Queries {
 
     }
 
+    /** Delete an appointment.
+     *
+     * @param appointmentId The appointment ID.
+     * @return Deletes an appointment.
+     */
     public static int deleteAppointment(int appointmentId) throws SQLException {
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
 
@@ -415,26 +413,10 @@ public abstract class Queries {
         return rowsAffected;
     }
 
-    public static ArrayList<String> getAllCountryNames() {
-        ArrayList<String> allCountriesList = new ArrayList<>();
-
-        try {
-            String sql = "SELECT Country FROM countries";
-
-            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String country = rs.getString("Country");
-                allCountriesList.add(country);
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return allCountriesList;
-    }
-
+    /** Get all countries.
+     *
+     * @return Returns all countries.
+     */
     public static ObservableList<Country> getAllCountries() {
         ObservableList<Country> countryList = FXCollections.observableArrayList();
 
@@ -457,6 +439,10 @@ public abstract class Queries {
         return countryList;
     }
 
+    /** Get all divisions.
+     *
+     * @return Returns all divisions.
+     */
     public static ObservableList<Division> getAllDivisions() {
         ObservableList<Division> divisionList = FXCollections.observableArrayList();
 
@@ -485,6 +471,11 @@ public abstract class Queries {
         return divisionList;
     }
 
+    /** Get the division ID.
+     *
+     * @param division The division name.
+     * @return Returns the division ID.
+     */
     public static int getDivisionId(String division) throws SQLException {
         String sql = "SELECT Division_ID FROM first_level_divisions WHERE Division = ?";
 
@@ -500,6 +491,11 @@ public abstract class Queries {
 
     }
 
+    /** Get the division name.
+     *
+     * @param divisionId The division ID.
+     * @return Returns the division ID.
+     */
     public static String getDivisionName(int divisionId) throws SQLException {
         String sql = "SELECT Division FROM first_level_divisions WHERE Division_ID = ?";
 
@@ -515,6 +511,11 @@ public abstract class Queries {
 
     }
 
+    /** Get the country ID.
+     *
+     * @param divisionId The division ID.
+     * @return Returns the country ID.
+     */
     public static int getCountryId(int divisionId) throws SQLException {
         String sql = "SELECT Country_ID FROM first_level_divisions WHERE Division_ID = ?";
 
@@ -529,6 +530,12 @@ public abstract class Queries {
         return 0;
     }
 
+    /** Get the country name.
+     *
+     * @param divisionId The division ID.
+     * @param countryId The country ID.
+     * @return Returns the country name.
+     */
     public static String getCountryName(int divisionId, int countryId) throws SQLException {
         String sql = "SELECT Country FROM countries, first_level_divisions\n" +
                 "WHERE first_level_divisions.Division_ID = ? AND first_level_divisions.Country_ID = ? AND " +
@@ -547,6 +554,11 @@ public abstract class Queries {
         return null;
     }
 
+    /** Get the upcoming month's appointments.
+     *
+     * @param userId The user ID.
+     * @return Returns the users upcoming month of appointments.
+     */
     public static ObservableList<Appointment> getNextMonthAppointments(int userId) throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
@@ -593,6 +605,11 @@ public abstract class Queries {
         return appointmentsList;
     }
 
+    /** Get the upcoming week's appointments.
+     *
+     * @param userId The user ID.
+     * @return Returns the users upcoming week of appointments.
+     */
     public static ObservableList<Appointment> getNextWeekAppointments(int userId) throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
@@ -639,6 +656,11 @@ public abstract class Queries {
         return appointmentsList;
     }
 
+    /** Check for an appointment within the next 15 minutes.
+     *
+     * @param userId The user ID.
+     * @return Returns true if the user has an appointment within the next 15 minutes.
+     */
     public static boolean immediateAppointment(int userId) throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
@@ -677,6 +699,10 @@ public abstract class Queries {
         return false;
     }
 
+    /** Get all start dates & times.
+     *
+     * @return Returns all start dates and times.
+     */
     public static ObservableList<LocalDateTime> getAllStartTimes() throws SQLException {
         ObservableList<LocalDateTime> allAppointmentStartTimes = FXCollections.observableArrayList();
 
@@ -692,6 +718,10 @@ public abstract class Queries {
         return allAppointmentStartTimes;
     }
 
+    /** Get all end dates & times.
+     *
+     * @return Returns all end dates & times.
+     */
     public static ObservableList<LocalDateTime> getAllEndTimes() throws SQLException {
         ObservableList<LocalDateTime> allAppointmentEndTimes = FXCollections.observableArrayList();
 
@@ -707,6 +737,11 @@ public abstract class Queries {
         return allAppointmentEndTimes;
     }
 
+    /** Get the start date and time for an appointment.
+     *
+     * @param appointmentId The appointment ID.
+     * @return Returns the start date & time for an appointment.
+     */
     public static String getUpdateStartTime(int appointmentId) throws SQLException {
         String sql = "Select Start from appointments WHERE Appointment_ID = ?";
 
@@ -722,6 +757,11 @@ public abstract class Queries {
         return null;
     }
 
+    /** Get the end date & time for an appointment.
+     *
+     * @param appointmentId The appointment ID.
+     * @return Returns the end date & time for an appointment.
+     */
     public static String getUpdateEndTime(int appointmentId) throws SQLException {
         String sql = "Select End from appointments WHERE Appointment_ID = ?";
 
@@ -737,6 +777,11 @@ public abstract class Queries {
         return null;
     }
 
+    /** Check if a customer has an appointment.
+     *
+     * @param customerId The customer ID.
+     * @return Returns true if the customer has an appointment.
+     */
     public static boolean checkDeleteCustomer(int customerId) throws SQLException {
         String sql = "SELECT * FROM customers, appointments WHERE customers.Customer_ID = ? " +
                 "AND appointments.Customer_ID = ?";
@@ -768,6 +813,20 @@ public abstract class Queries {
         return true;
     }
 
+    /** Update the customer in the database.
+     *
+     * @param customerName The customer name.
+     * @param customerAddress The customer address.
+     * @param postal The customer postal code.
+     * @param customerPhone The customer phone number.
+     * @param createDate The customer create date & time.
+     * @param createdBy The customer created by field.
+     * @param formatUpdateDateTime The customer update date & time.
+     * @param lastUpdateBy The customer last update by field.
+     * @param divisionId The customer division ID.
+     * @param customerId The customer ID.
+     * @return Updates the customer in the database.
+     */
     public static String updateCustomer(String customerName, String customerAddress, String postal, String customerPhone,
                                         String createDate, String createdBy, String formatUpdateDateTime,
                                         String lastUpdateBy, int divisionId, int customerId) throws SQLException {

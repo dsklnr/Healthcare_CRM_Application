@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** Creating the all appointments controller. **/
 public class AllAppointmentsController implements Initializable {
     public TableColumn appointmentIdCol;
     public TableColumn titleCol;
@@ -42,6 +43,7 @@ public class AllAppointmentsController implements Initializable {
     public TextField searchAppointments;
     private User currentUser;
 
+    /** Initialize the all appointments controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -67,10 +69,12 @@ public class AllAppointmentsController implements Initializable {
 
     }
 
+    /** Set the user object to the currently logged-in user. **/
     public void setUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
+    /** Upon clicking home, go to the dashboard screen. **/
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
@@ -83,10 +87,11 @@ public class AllAppointmentsController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking customers, go to the all customers screen. **/
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
         Parent root = loader.load();
-        CustomerController customerUser = loader.getController();
+        AllCustomersController customerUser = loader.getController();
         customerUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
@@ -95,6 +100,7 @@ public class AllAppointmentsController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking schedule appointment, go to the all appointments screen. **/
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
@@ -107,9 +113,20 @@ public class AllAppointmentsController implements Initializable {
         stage.show();
     }
 
-    public void onReportClick(MouseEvent mouseEvent) {
+    /** Upon clicking generate reports, go to the reports screen. **/
+    public void onReportClick(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReportsScreen.fxml"));
+        Parent root = loader.load();
+        ReportsController reportsController = loader.getController();
+        reportsController.setUser(currentUser);
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        stage.close();
+        stage.setTitle("CRM Reports");
+        stage.setScene(new Scene(root, 1500, 800));
+        stage.show();
     }
 
+    /** Upon clicking the schedule button, go to the add appointment screen. **/
     public void onScheduleAppointment(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddAppointmentScreen.fxml"));
         Parent root = loader.load();
@@ -124,6 +141,8 @@ public class AllAppointmentsController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking the update button, go to the update appointment screen and populate the form based on the
+     * appointment selected. **/
     public void onUpdateAppointment(ActionEvent actionEvent) throws IOException, SQLException {
         JDBC.openConnection();
 
@@ -148,6 +167,7 @@ public class AllAppointmentsController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Upon clicking the delete button, delete the selected appointment. **/
     public void onDeleteAppointment(ActionEvent actionEvent) throws SQLException {
         JDBC.openConnection();
 
@@ -170,6 +190,7 @@ public class AllAppointmentsController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Upon typing in the search bar, display the searched appointment ID. **/
     public void onSearchAppointments(ActionEvent actionEvent) {
         JDBC.openConnection();
 

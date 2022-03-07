@@ -15,8 +15,12 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/** Creating the report queries class **/
 public abstract class ReportQueries {
 
+    /** Get all the customer appointments.
+     * @return Returns all customer appointments.
+     */
     public static ObservableList<Appointment> getTotalCustomerAppointments() throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
@@ -41,6 +45,10 @@ public abstract class ReportQueries {
 
     }
 
+    /** Get the number of customers by state.
+     *
+     * @return Returns the number of customers by state.
+     */
     public static ObservableList<Division> getNumberOfCustomersByState() throws SQLException {
         ObservableList<Division> allCustomers = FXCollections.observableArrayList();
 
@@ -67,6 +75,10 @@ public abstract class ReportQueries {
         return allCustomers;
     }
 
+    /** Get a schedule for all contacts.
+     *
+     * @return Returns a schedule for all contacts.
+     */
     public static ObservableList<Appointment> getContactSchedule() throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 

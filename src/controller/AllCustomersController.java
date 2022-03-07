@@ -23,7 +23,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class CustomerController implements Initializable {
+/** Creating the all customers controller. **/
+public class AllCustomersController implements Initializable {
     public TableColumn customerIdCol;
     public TableColumn nameCol;
     public TableColumn addressCol;
@@ -38,6 +39,7 @@ public class CustomerController implements Initializable {
     public User currentUser;
     public TextField searchCustomers;
 
+    /** Initialize the all customers controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -58,10 +60,12 @@ public class CustomerController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Set the user object to the currently logged-in user. **/
     public void setUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
+    /** Upon clicking home, go to the dashboard screen. **/
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
@@ -74,10 +78,11 @@ public class CustomerController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking customers, go to the all customers screen. **/
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
         Parent root = loader.load();
-        CustomerController customerUser = loader.getController();
+        AllCustomersController customerUser = loader.getController();
         customerUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
@@ -86,6 +91,7 @@ public class CustomerController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking schedule appointment, go to the all appointments screen. **/
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
@@ -98,13 +104,24 @@ public class CustomerController implements Initializable {
         stage.show();
     }
 
-    public void onReportClick(MouseEvent mouseEvent) {
+    /** Upon clicking generate reports, go to the reports screen. **/
+    public void onReportClick(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReportsScreen.fxml"));
+        Parent root = loader.load();
+        ReportsController reportsController = loader.getController();
+        reportsController.setUser(currentUser);
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        stage.close();
+        stage.setTitle("CRM Reports");
+        stage.setScene(new Scene(root, 1500, 800));
+        stage.show();
     }
 
+    /** Upon clicking the add button, go to the add customer screen. **/
     public void onAddCustomer(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddCustomerScreen.fxml"));
         Parent root = loader.load();
-        AddCustomer customerUser = loader.getController();
+        AddCustomerController customerUser = loader.getController();
         customerUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
@@ -113,6 +130,8 @@ public class CustomerController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking the update button, go to the add appointment screen and populate the form based on the customer
+     * selected. **/
     public void onUpdateCustomer(ActionEvent actionEvent) throws IOException {
         Customer customer = (Customer) customersTable.getSelectionModel().getSelectedItem();
 
@@ -136,6 +155,7 @@ public class CustomerController implements Initializable {
         }
     }
 
+    /** Upon clicking the delete button, delete the selected customer if they do not have any appointment(s). **/
     public void onDeleteCustomer(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
@@ -168,6 +188,7 @@ public class CustomerController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Upon typing in the search bar, display the searched customer name. **/
     public void onSearchCustomers(ActionEvent actionEvent) {
         JDBC.openConnection();
 

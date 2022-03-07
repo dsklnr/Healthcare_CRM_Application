@@ -10,8 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Country;
@@ -22,15 +20,14 @@ import model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ResourceBundle;
 
+/** Creating the update customer controller. **/
 public class UpdateCustomer implements Initializable {
     public User currentUser;
     public ComboBox countryComboBox;
@@ -44,6 +41,7 @@ public class UpdateCustomer implements Initializable {
     public LocalDateTime createDate;
     public String createdBy;
 
+    /** Initialize the update customer controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -58,6 +56,7 @@ public class UpdateCustomer implements Initializable {
 
     }
 
+    /** Populate the form with the selected customer's information. **/
     public void setCustomer(Customer customer) throws SQLException {
         JDBC.openConnection();
 
@@ -88,10 +87,12 @@ public class UpdateCustomer implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Set the user object to the currently logged-in user. **/
     public void setUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
+    /** Update the customer in the MySQL database. **/
     public void onSaveUpdateCustomer(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
@@ -119,10 +120,10 @@ public class UpdateCustomer implements Initializable {
         Queries.updateCustomer(customerName, customerAddress, postal, customerPhone, create,
                 createdBy, updateTime, lastUpdateBy, divisionId, id);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
         Parent root = loader.load();
 
-        CustomerController customerUser = loader.getController();
+        AllCustomersController customerUser = loader.getController();
         customerUser.setUser(currentUser);
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -134,11 +135,12 @@ public class UpdateCustomer implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Upon selecting cancel, return to the all customers screen. **/
     public void onCancelUpdateCustomer(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
         Parent root = loader.load();
 
-        CustomerController customerUser = loader.getController();
+        AllCustomersController customerUser = loader.getController();
         customerUser.setUser(currentUser);
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

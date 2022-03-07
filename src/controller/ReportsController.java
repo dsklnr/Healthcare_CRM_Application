@@ -23,6 +23,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/** Creating the reports screen controller. **/
 public class ReportsController implements Initializable {
     public TableView appointmentTypeTable;
     public TableColumn countryCol;
@@ -42,6 +43,7 @@ public class ReportsController implements Initializable {
     public TableColumn endCol;
     public User currentUser;
 
+    /** Initialize the reports controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -84,10 +86,12 @@ public class ReportsController implements Initializable {
         JDBC.closeConnection();
     }
 
+    /** Set the user object to the currently logged-in user. **/
     public void setUser(User user) {
         currentUser = user;
     }
 
+    /** Upon clicking home, go to the dashboard screen. **/
     public void onHomeClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
@@ -102,11 +106,12 @@ public class ReportsController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking customers, go to the all customers screen. **/
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
         Parent root = loader.load();
 
-        CustomerController customerController = loader.getController();
+        AllCustomersController customerController = loader.getController();
         customerController.setUser(currentUser);
 
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -116,6 +121,7 @@ public class ReportsController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking schedule appointment, go to the all appointments screen. **/
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
@@ -130,6 +136,7 @@ public class ReportsController implements Initializable {
         stage.show();
     }
 
+    /** Upon clicking generate reports, go to the reports screen. **/
     public void onReportClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReportsScreen.fxml"));
         Parent root = loader.load();

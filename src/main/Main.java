@@ -22,84 +22,20 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+/** Creating the main class. **/
+
 public class Main extends Application {
+
+    /** Set the scene for the main screen. **/
     @Override
     public void start(Stage stage) throws SQLException, IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
         stage.setTitle("User Login");
         stage.setScene(new Scene(root, 400, 600));
         stage.show();
-
-        /*
-        LocalTime startTime = LocalTime.of(10,32);
-        LocalTime endTime = LocalTime.of(10, 45);
-        LocalTime currentTime = LocalTime.now();
-        long timeDifference = ChronoUnit.MINUTES.between(startTime, currentTime);
-
-        //System.out.println((timeDifference + -1) * -1);
-
-        long interval = ((timeDifference + -1) * -1);
-        //long interval = timeDifference;
-
-        if (interval > 0 && interval <= 10){
-            System.out.println("You have an event in approximately " + interval + " minute(s)");
-        }
-
-        else if (interval <= 1){
-            System.out.println("Event started " + interval * -1 + " minute(s) ago");
-        }
-
-       */
-
-        /*
-        LocalDateTime createDate = LocalDateTime.now();
-
-        ZoneId systemZone = ZoneId.systemDefault();
-        ZonedDateTime localStartZdt = createDate.atZone(systemZone);
-        ZonedDateTime estCreateTime = localStartZdt.withZoneSameInstant(ZoneId.of("America/New_York"));
-        ZonedDateTime finalEstCreateTime = estCreateTime.plusHours(1);
-
-        //LocalTime businessStartHour = LocalTime.ofInstant(Instant.parse("08:00:00"), ZoneId.of("America/New_York"));
-
-        if (finalEstCreateTime.toLocalTime().isBefore(LocalTime.parse("08:00:00")) ||
-                finalEstCreateTime.toLocalTime().isAfter(LocalTime.parse("22:00:00"))) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00 EST Monday - Friday");
-            alert.showAndWait();
-        }
-
-         */
-
-        JDBC.openConnection();
-
-        /*
-        LocalDateTime startDT = LocalDateTime.of(2022, 02, 25, 10, 00);
-        LocalDateTime endDT = LocalDateTime.of(2022, 02, 25, 10, 30);
-        LocalDateTime myDT = LocalDateTime.of(2022, 02, 25, 10, 10);
-
-        if (myDT.isAfter(startDT) && myDT.isBefore(endDT)){
-            System.out.println(myDT + " Your date time overlaps " + startDT + " and " + endDT);
-        }
-
-        else if (myDT.equals(startDT) || myDT.equals(endDT)){
-            System.out.println("Your date time matches " + startDT + " or " + endDT);
-        }
-
-        else {
-            System.out.println("Your date time does not overlap");
-        }
-
-         */
-
-
-
-
-
-        JDBC.closeConnection();
     }
 
+    /** The main method. This method is empty. **/
     public static void main(String[] args){
         launch(args);
     }
