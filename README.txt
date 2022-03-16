@@ -2,8 +2,9 @@ Software II Project
 
 Benjamin Ogle
 bogle20@wgu.edu
-Version 1
-3/6/2022
+Student ID: #005580556
+Version 2
+3/10/2022
 
 Intellij Version: Community 2021.3.2
 JDK Version: Java SE 17.0.2

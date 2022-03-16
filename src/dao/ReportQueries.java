@@ -24,9 +24,9 @@ public abstract class ReportQueries {
     public static ObservableList<Appointment> getTotalCustomerAppointments() throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
-        String sql = "SELECT Type, MONTHNAME(Start) AS Month, COUNT(Type) AS Count_Type\n" +
+        String sql = "SELECT distinct Type, MONTHNAME(Start) AS Month, COUNT(Type) AS Count_Type\n" +
                 "FROM appointments\n" +
-                "GROUP by Start";
+                "GROUP by Type";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -82,14 +82,17 @@ public abstract class ReportQueries {
     public static ObservableList<Appointment> getContactSchedule() throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
-        String sql = "SELECT Customer_ID, Appointment_ID, Title, Type, Description, Start, End\n" +
-                "FROM appointments\n" +
-                "ORDER BY Customer_ID";
+        String sql = "SELECT contacts.Contact_Name, appointments.Customer_ID, Appointment_ID, Title, Type, " +
+                "Description, Start, End\n" +
+        "FROM appointments, contacts\n" +
+        "WHERE appointments.Contact_ID = contacts.Contact_ID\n" +
+        "ORDER BY Contact_Name";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()){
+            String contact = rs.getString("Contact_Name");
             int appointmentId = rs.getInt("Appointment_ID");
             String title = rs.getString("Title");
             String type = rs.getString("Type");
@@ -98,21 +101,12 @@ public abstract class ReportQueries {
             LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
             int customerId = rs.getInt("Customer_ID");
 
-            ZoneId utcZone = ZoneId.of("UTC");
-            ZonedDateTime utcStartTime = start.atZone(utcZone);
-            ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
-            ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String s = start.format(dtf);
+            String e = end.format(dtf);
 
-            ZonedDateTime utcEndTime = end.atZone(utcZone);
-            ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
-            ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
-            String startTime = finalLocalStartTime.format(dtf);
-            String endTime = finalLocalEndTime.format(dtf);
-
-            allAppointments.add(new Appointment(appointmentId, title, description, "", type, startTime, endTime,
-                    "", "", "", "", customerId, 1, 1));
+            allAppointments.add(new Appointment(appointmentId, title, description, "", type, s, e,
+                    "", contact, "", "", customerId, 1, 1));
 
         }
 

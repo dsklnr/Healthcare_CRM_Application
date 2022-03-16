@@ -59,13 +59,14 @@
             </Label>
              <TableView fx:id="contactScheduleTable" layoutX="73.0" layoutY="783.0" prefHeight="514.0" prefWidth="1333.0">
                  <columns>
+                     <TableColumn fx:id="contactCol" prefWidth="90.0" text="Contact" />
                      <TableColumn fx:id="customerIdCol" prefWidth="90.0" text="Customer ID" />
                      <TableColumn fx:id="appointmentIdCol" prefWidth="114.0" text="Appointment ID" />
                      <TableColumn fx:id="titleCol" prefWidth="178.0" text="Title" />
                      <TableColumn fx:id="typeCol" prefWidth="173.0" text="Type" />
-                     <TableColumn fx:id="descriptionCol" prefWidth="343.0" text="Description" />
-                     <TableColumn fx:id="startCol" prefWidth="227.0" text="Start" />
-                     <TableColumn fx:id="endCol" prefWidth="207.0" text="End" />
+                     <TableColumn fx:id="descriptionCol" prefWidth="166.0" text="Description" />
+                     <TableColumn fx:id="startCol" minWidth="8.0" prefWidth="225.0" text="Start" />
+                     <TableColumn fx:id="endCol" prefWidth="242.0" text="End" />
                  </columns>
              </TableView>
          </children>

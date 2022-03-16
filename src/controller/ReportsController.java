@@ -42,6 +42,7 @@ public class ReportsController implements Initializable {
     public TableColumn startCol;
     public TableColumn endCol;
     public User currentUser;
+    public TableColumn contactCol;
 
     /** Initialize the reports controller. **/
     @Override
@@ -73,6 +74,7 @@ public class ReportsController implements Initializable {
 
         appointmentTypeTable.setItems(customersByState);
 
+        contactCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));

@@ -74,8 +74,8 @@ public class MainScreenController implements Initializable {
         AnchorPane.setRightAnchor(locationLabel, 0.0);
         locationLabel.setAlignment(Pos.CENTER);
 
-        String country = Locale.getDefault(Locale.Category.FORMAT).getCountry();
-        locationLabel.setText(country);
+        ZoneId system = ZoneId.systemDefault();
+        locationLabel.setText(String.valueOf(system));
 
         if (Locale.getDefault().getLanguage().equals("fr")) {
             try {
@@ -106,12 +106,14 @@ public class MainScreenController implements Initializable {
         String formatDateTime1 = ldt.format(format);
 
         String country = Locale.getDefault(Locale.Category.FORMAT).getCountry();
+        String zone = String.valueOf(ZoneId.systemDefault());
 
         if (Queries.login(user, pass)) {
 
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter("login_activity.txt", true));
-                bw.write("Username: " + user + " " + formatDateTime1 + " " + country + " SUCCESSFUL LOGIN \n");
+                bw.write("Username: " + user + " | " + formatDateTime1 + " " + country + " " + zone + " | " +
+                        "SUCCESSFUL LOGIN \n");
                 bw.close();
 
                 Queries.immediateAppointment(Queries.selectUser(user, pass));
@@ -148,7 +150,8 @@ public class MainScreenController implements Initializable {
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 try {
                     BufferedWriter bw = new BufferedWriter(new FileWriter("login_activity.txt", true));
-                    bw.write("Username: " + user + " " + formatDateTime1 + " " + country + " UNSUCCESSFUL LOGIN \n");
+                    bw.write("Username: " + user + " | " + formatDateTime1 + " " + country + " " + zone + " | " +
+                            "UNSUCCESSFUL LOGIN\n");
                     bw.close();
 
                 } catch (IOException e) {
@@ -164,7 +167,8 @@ public class MainScreenController implements Initializable {
             else{
                 try {
                     BufferedWriter bw = new BufferedWriter(new FileWriter("login_activity.txt", true));
-                    bw.write("Username: " + user + " " + formatDateTime1 + " " + country + " UNSUCCESSFUL LOGIN \n");
+                    bw.write("Username: " + user + " | " + formatDateTime1 + " " + country + " " + zone + " | " +
+                            "UNSUCCESSFUL LOGIN\n");
                     bw.close();
 
                 } catch (IOException e) {

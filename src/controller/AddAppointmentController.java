@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /** Creating the add appointment controller. **/
-public class AddAppointmentController implements Initializable {
+public class  AddAppointmentController implements Initializable {
     public TextField appointmentId;
     public TextField title;
     public TextField location;
@@ -137,9 +137,8 @@ public class AddAppointmentController implements Initializable {
         ZoneId systemZone = ZoneId.systemDefault();
         ZonedDateTime localStartZdt = startLocalDateTime.atZone(systemZone);
         ZonedDateTime estCreateTime = localStartZdt.withZoneSameInstant(ZoneId.of("America/New_York"));
-        ZonedDateTime finalEstCreateTime = estCreateTime.plusHours(1);
 
-        LocalTime estST = LocalTime.of(finalEstCreateTime.getHour(), finalEstCreateTime.getMinute());
+        LocalTime estST = LocalTime.of(estCreateTime.getHour(), estCreateTime.getMinute());
         LocalTime businessOpenHour =  LocalTime.of(8, 00);
         LocalTime businessCloseHour = LocalTime.of(22, 00);
 
@@ -185,33 +184,134 @@ public class AddAppointmentController implements Initializable {
             }
         }
 
+        if (startLocalDateTime.equals(endLocalDateTime)){
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("The start time cannot be the same as the end time");
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get() == ButtonType.OK){
+                return;
+            }
+        }
+
         else {
+            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllStartTimes(userID);
+            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllEndTimes(userID);
+
+            ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
+            ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            //ZonedDateTime localStart = startLocalDateTime.atZone(ZoneId.of("UTC"));
+            //ZonedDateTime utcStart = localStart.withZoneSameInstant(ZoneId.systemDefault());
+            //LocalDateTime addStart = utcStart.toLocalDateTime();
+
+            for (LocalDateTime x : appointmentStartDateTimes) {
+                int startYear = x.getYear();
+                Month startMonth = x.getMonth();
+                int startDay = x.getDayOfMonth();
+                int startHour = x.getHour();
+                int startMinute = x.getMinute();
+
+                ZoneId utc = ZoneId.of("UTC");
+
+                LocalDateTime ldt = LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
+                ZonedDateTime zdt = ldt.atZone(utc);
+                ZonedDateTime Zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
+
+                //startTimes.addAll(LocalDateTime.from(Zdt));
+                startTimes.addAll(ldt);
+            }
+
+            for (LocalDateTime y : appointmentEndDateTimes){
+                int endYear = y.getYear();
+                Month endMonth = y.getMonth();
+                int endDay = y.getDayOfMonth();
+                int endHour = y.getHour();
+                int endMinute = y.getMinute();
+
+                ZoneId utc = ZoneId.of("UTC");
+
+                LocalDateTime ldt = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute);
+                ZonedDateTime zdt = ldt.atZone(utc);
+                ZonedDateTime Zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
+
+                //endTimes.addAll(LocalDateTime.from(Zdt));
+                endTimes.addAll(ldt);
+            }
+
+            DateTimeFormatter dateTF = DateTimeFormatter.ofPattern("HH:mm MM/dd/yyyy");
+
+            for (int i = 0; i < startTimes.size(); i++) {
+                LocalDateTime currentStart = startTimes.get(i);
+                LocalDateTime currentEnd = endTimes.get(i);
+                //LocalDateTime myDT = LocalDateTime.of(2020, 05, 29, 5, 00);
+
+                if (startLocalDateTime.isAfter(currentStart) && startLocalDateTime.isBefore(currentEnd)) {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("ERROR");
+                    alert.setContentText("Your date and time overlaps another appointment starting at " +
+                            currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
+                    Optional<ButtonType> action = alert.showAndWait();
+
+                    if (action.get() == ButtonType.OK) {
+                        return;
+                    }
+                }
+
+                if (startLocalDateTime.equals(currentStart) || startLocalDateTime.equals(currentEnd)) {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("ERROR");
+                    alert.setContentText("Your date and time overlaps another appointment starting at " +
+                            currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
+                    Optional<ButtonType> action = alert.showAndWait();
+
+                    if (action.get() == ButtonType.OK) {
+                        return;
+                    }
+                }
+
+                if (startLocalDateTime.isBefore(currentEnd) && endLocalDateTime.isAfter(currentStart)) {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("ERROR");
+                    alert.setContentText("Your date and time overlaps another appointment starting at " +
+                            currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
+                    Optional<ButtonType> action = alert.showAndWait();
+
+                    if (action.get() == ButtonType.OK) {
+                        return;
+                    }
+                }
+            }
+
+
             DateTimeFormatter databaseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-            ZonedDateTime zdtStartLocal = ZonedDateTime.of(startLocalDateTime, ZoneId.systemDefault());
-            ZonedDateTime zdtStartUtc = zdtStartLocal.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime finalZdtStartUtc = zdtStartUtc.plusHours(1);
-            String startTimeUtc = databaseFormat.format(finalZdtStartUtc);
+            ZonedDateTime utcStartTime = localStartZdt.withZoneSameInstant(ZoneId.of("UTC"));
+            String finalStartTime = utcStartTime.format(databaseFormat);
 
-            ZonedDateTime zdtEndLocal = ZonedDateTime.of(endLocalDateTime, ZoneId.systemDefault());
-            ZonedDateTime zdtEndUtc = zdtEndLocal.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime finalZdtEndUtc = zdtEndUtc.plusHours(1);
-            String endTimeUtc = databaseFormat.format(finalZdtEndUtc);
+            ZonedDateTime localEndZdt = endLocalDateTime.atZone(systemZone);
+            ZonedDateTime utcEndTime = localEndZdt.withZoneSameInstant(ZoneId.of("UTC"));
+            String finalEndTime = utcEndTime.format(databaseFormat);
 
             ZonedDateTime localCreateTime = createDate.atZone(systemZone);
-            ZonedDateTime utcCreateTime = localCreateTime.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime finalUtcCreateTime = utcCreateTime.minusHours(1);
-            String createTime = finalUtcCreateTime.format(databaseFormat);
+            ZonedDateTime utcCreateTime = localCreateTime.withZoneSameInstant(ZoneId.of("UTC"));
+            String finalCreateTime = utcCreateTime.format(databaseFormat);
 
             ZonedDateTime localUpdateTime = lastUpdate.atZone(systemZone);
-            ZonedDateTime utcUpdateTime = localUpdateTime.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime finalUtcUpdateTime = utcUpdateTime.plusHours(1);
-            String updateTime = finalUtcUpdateTime.format(databaseFormat);
+            ZonedDateTime utcUpdateTime = localUpdateTime.withZoneSameInstant(ZoneId.of("UTC"));
+            String finalUpdateTime = utcUpdateTime.format(databaseFormat);
 
             JDBC.openConnection();
 
             Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
-                    startTimeUtc, endTimeUtc, createTime, createdBy, updateTime, lastUpdateBy,
+                   finalStartTime, finalEndTime, finalCreateTime, createdBy, finalUpdateTime, lastUpdateBy,
                     Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
 
             JDBC.closeConnection();

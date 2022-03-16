@@ -177,7 +177,8 @@ public class AllAppointmentsController implements Initializable {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Delete Appointment");
-            alert.setContentText("Are you sure you want to delete this appointment?");
+            alert.setContentText("Are you sure you want to delete appointment ID: " + appointment.getAppointmentId() +
+                    ", appointment type: " + appointment.getType() + "?");
             Optional <ButtonType> action = alert.showAndWait();
 
             if (action.get() == ButtonType.OK){

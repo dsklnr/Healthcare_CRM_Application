@@ -35,27 +35,51 @@ public class AddCustomerController implements Initializable {
     public TextField postalCode;
     public TextField phoneNumber;
     public User currentUser;
+    public int countryId;
 
     /** Initialize the add customer controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
-        ObservableList<Country> allCountries = Queries.getAllCountries();
-        ObservableList<Division> allDivisions = Queries.getAllDivisions();
+            ObservableList<Country> allCountries = Queries.getAllCountries();
+            countryComboBox.setItems(allCountries);
+            countryComboBox.getSelectionModel().clearSelection();
+            countryComboBox.setPromptText("Select A Country");
+            stateComboBox.setPromptText("Select State or Province");
 
-        countryComboBox.setItems(allCountries);
-        countryComboBox.setPromptText("Select A Country");
-        stateComboBox.setItems(allDivisions);
-        stateComboBox.setPromptText("Select State or Province");
-        
-        
         JDBC.closeConnection();
     }
 
     /** Set the user object to the currently logged-in user. **/
     public void setUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    /** Set the items in the state combo box. **/
+    public void onAssignCountry(ActionEvent actionEvent) throws SQLException {
+        JDBC.openConnection();
+
+        countryId = countryComboBox.getSelectionModel().getSelectedItem().getCountryId();
+
+        ObservableList<Division> usDivisions = Queries.getAllUsStates();
+        ObservableList<Division> ukCountries = Queries.getAllUkCountries();
+        ObservableList<Division> canadianProvinces = Queries.getAllCanadianProvinces();
+
+        if (countryId == 1){
+            stateComboBox.setItems(usDivisions);
+        }
+
+        if (countryId == 2){
+            stateComboBox.setItems(ukCountries);
+        }
+
+        if (countryId == 3){
+            stateComboBox.setItems(canadianProvinces);
+        }
+
+        JDBC.closeConnection();
+
     }
 
     /** Insert a new customer into the database. **/
@@ -120,5 +144,4 @@ public class AddCustomerController implements Initializable {
         stage2.setScene(new Scene(root, 1500, 800));
         stage2.show();
     }
-
 }

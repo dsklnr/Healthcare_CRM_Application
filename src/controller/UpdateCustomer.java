@@ -40,6 +40,7 @@ public class UpdateCustomer implements Initializable {
     public Customer selectedCustomer;
     public LocalDateTime createDate;
     public String createdBy;
+    public int countryId;
 
     /** Initialize the update customer controller. **/
     @Override
@@ -47,13 +48,38 @@ public class UpdateCustomer implements Initializable {
         JDBC.openConnection();
 
         ObservableList<Country> allCountries = Queries.getAllCountries();
-        ObservableList<Division> allDivisions = Queries.getAllDivisions();
-
         countryComboBox.setItems(allCountries);
-        stateComboBox.setItems(allDivisions);
 
         JDBC.closeConnection();
 
+    }
+
+    /** Set the items in the state combo box. **/
+    public void onAssignCountry(ActionEvent actionEvent) throws SQLException {
+        JDBC.openConnection();
+
+        Country c = (Country) countryComboBox.getSelectionModel().getSelectedItem();
+
+        //countryId = countryComboBox.getSelectionModel().getSelectedItem().getCountryId();
+        countryId = c.getCountryId();
+
+        ObservableList<Division> usDivisions = Queries.getAllUsStates();
+        ObservableList<Division> ukCountries = Queries.getAllUkCountries();
+        ObservableList<Division> canadianProvinces = Queries.getAllCanadianProvinces();
+
+        if (countryId == 1){
+            stateComboBox.setItems(usDivisions);
+        }
+
+        if (countryId == 2){
+            stateComboBox.setItems(ukCountries);
+        }
+
+        if (countryId == 3){
+            stateComboBox.setItems(canadianProvinces);
+        }
+
+        JDBC.closeConnection();
     }
 
     /** Populate the form with the selected customer's information. **/
@@ -83,6 +109,22 @@ public class UpdateCustomer implements Initializable {
         phoneNumber.setText(phone);
         countryComboBox.getSelectionModel().select(country);
         stateComboBox.getSelectionModel().select(state);
+
+        ObservableList<Division> usDivisions = Queries.getAllUsStates();
+        ObservableList<Division> ukCountries = Queries.getAllUkCountries();
+        ObservableList<Division> canadianProvinces = Queries.getAllCanadianProvinces();
+
+        if (countryId == 1){
+            stateComboBox.setItems(usDivisions);
+        }
+
+        if (countryId == 2){
+            stateComboBox.setItems(ukCountries);
+        }
+
+        if (countryId == 3){
+            stateComboBox.setItems(canadianProvinces);
+        }
 
         JDBC.closeConnection();
     }

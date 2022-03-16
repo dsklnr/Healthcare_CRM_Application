@@ -5,15 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import model.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.sql.*;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.Objects;
 
 /** Creating the queries class **/
 public abstract class Queries {
@@ -202,12 +197,7 @@ public abstract class Queries {
         ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
-                    "appointments.Create_Date, appointments.Created_By, appointments.Last_Update, " +
-                    "appointments.Last_Updated_By, customers.Customer_ID, users.User_ID, contacts.Contact_ID\n" +
-                    "FROM appointments, users, customers, contacts\n" +
-                    "WHERE customers.Customer_ID = appointments.Customer_ID AND users.User_ID = appointments.User_ID " +
-                    "AND contacts.Contact_ID = appointments.Contact_ID\n" +
+            String sql = "SELECT * FROM appointments\n" +
                     "ORDER BY Start";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -221,29 +211,38 @@ public abstract class Queries {
                 String type = rs.getString("Type");
                 LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
                 LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
-                String createDate = rs.getString("Create_Date");
+                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
                 String contact = rs.getString("Created_By");
-                String lastUpdate = rs.getString("Last_Update");
+                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
                 String updateBy = rs.getString("Last_Updated_By");
                 int customerIdFK = rs.getInt("Customer_ID");
                 int userIdFK = rs.getInt("User_ID");
                 int contactIdFK = rs.getInt("Contact_ID");
 
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+                /*
                 ZoneId utcZone = ZoneId.of("UTC");
                 ZonedDateTime utcStartTime = start.atZone(utcZone);
-                ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
-                ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
+                ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneId.systemDefault());
+                String finalStart = localStartTime.format(dtf);
 
                 ZonedDateTime utcEndTime = end.atZone(utcZone);
-                ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
-                ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
+                ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneId.systemDefault());
+                String finalEnd = localEndTime.format(dtf);
 
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String startTime = finalLocalStartTime.format(dtf);
-                String endTime = finalLocalEndTime.format(dtf);
+                ZonedDateTime utcCreate = createDate.atZone(utcZone);
+                ZonedDateTime localCreate = utcCreate.withZoneSameInstant(ZoneId.systemDefault());
+                String finalCreate = localCreate.format(dtf);
+
+                ZonedDateTime utcUpdate = lastUpdate.atZone(utcZone);
+                ZonedDateTime localUpdate = utcUpdate.withZoneSameInstant(ZoneId.systemDefault());
+                String finalUpdate = localUpdate.format(dtf);
+
+                 */
 
                 allAppointmentList.add(new Appointment(appointmentId, title, description, location,
-                        type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
+                        type, start.format(dtf), end.format(dtf), createDate.format(dtf), contact, lastUpdate.format(dtf), updateBy,
                         customerIdFK, userIdFK, contactIdFK));
             }
 
@@ -538,6 +537,8 @@ public abstract class Queries {
      * @return Returns the country name.
      */
     public static String getCountryName(int divisionId, int countryId) throws SQLException {
+        ObservableList<Country> country = FXCollections.observableArrayList();
+
         String sql = "SELECT Country FROM countries, first_level_divisions\n" +
                 "WHERE first_level_divisions.Division_ID = ? AND first_level_divisions.Country_ID = ? AND " +
                 "countries.Country_ID = ?";
@@ -550,7 +551,9 @@ public abstract class Queries {
 
         while (rs.next()) {
             String countryName = rs.getString("Country");
+
             return countryName;
+
         }
         return null;
     }
@@ -586,6 +589,7 @@ public abstract class Queries {
             int userIdFK = rs.getInt("User_ID");
             int contactIdFK = rs.getInt("Contact_ID");
 
+            /*
             ZoneId utcZone = ZoneId.of("UTC");
             ZonedDateTime utcStartTime = start.atZone(utcZone);
             ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
@@ -595,9 +599,11 @@ public abstract class Queries {
             ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
             ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
 
+             */
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
-            String startTime = finalLocalStartTime.format(dtf);
-            String endTime = finalLocalEndTime.format(dtf);
+            String startTime = start.format(dtf);
+            String endTime = end.format(dtf);
 
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
                     type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
@@ -637,6 +643,7 @@ public abstract class Queries {
             int userIdFK = rs.getInt("User_ID");
             int contactIdFK = rs.getInt("Contact_ID");
 
+            /*
             ZoneId utcZone = ZoneId.of("UTC");
             ZonedDateTime utcStartTime = start.atZone(utcZone);
             ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
@@ -646,9 +653,11 @@ public abstract class Queries {
             ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
             ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
 
+             */
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
-            String startTime = finalLocalStartTime.format(dtf);
-            String endTime = finalLocalEndTime.format(dtf);
+            String startTime = start.format(dtf);
+            String endTime = end.format(dtf);
 
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
                     type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
@@ -676,23 +685,26 @@ public abstract class Queries {
             String description = rs.getString("Description");
             String location = rs.getString("Location");
             String type = rs.getString("Type");
-            String start = rs.getString("Start");
-            String end = rs.getString("End");
-            String createDate = rs.getString("Create_Date");
+            Timestamp start = rs.getTimestamp("Start");
+            Timestamp end = rs.getTimestamp("End");
+            Timestamp createDate = rs.getTimestamp("Create_Date");
             String contact = rs.getString("Created_By");
-            String lastUpdate = rs.getString("Last_Update");
+            Timestamp lastUpdate = rs.getTimestamp("Last_Update");
             String updateBy = rs.getString("Last_Updated_By");
             int customerIdFK = rs.getInt("Customer_ID");
             int userIdFK = rs.getInt("User_ID");
             int contactIdFK = rs.getInt("Contact_ID");
 
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
-                    type, start, end, createDate, contact, lastUpdate, updateBy,
+                    type, start.toString(), end.toString(), createDate.toString(), contact, lastUpdate.toString(), updateBy,
                     customerIdFK, userIdFK, contactIdFK));
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime s = start.toLocalDateTime();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Upcoming Appointments");
-            alert.setContentText("Appointment " + appointmentId + " begins at " + start);
+            alert.setContentText("Appointment " + appointmentId + " begins at " + s.format(dtf));
             alert.showAndWait();
 
             return true;
@@ -704,11 +716,12 @@ public abstract class Queries {
      *
      * @return Returns all start dates and times.
      */
-    public static ObservableList<LocalDateTime> getAllStartTimes() throws SQLException {
+    public static ObservableList<LocalDateTime> getAllStartTimes(String userId) throws SQLException {
         ObservableList<LocalDateTime> allAppointmentStartTimes = FXCollections.observableArrayList();
 
-        String sql = "SELECT Start FROM appointments";
+        String sql = "SELECT Start FROM appointments WHERE User_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, userId);
 
         ResultSet rs = ps.executeQuery();
 
@@ -723,11 +736,12 @@ public abstract class Queries {
      *
      * @return Returns all end dates & times.
      */
-    public static ObservableList<LocalDateTime> getAllEndTimes() throws SQLException {
+    public static ObservableList<LocalDateTime> getAllEndTimes(String userId) throws SQLException {
         ObservableList<LocalDateTime> allAppointmentEndTimes = FXCollections.observableArrayList();
 
-        String sql = "SELECT End FROM appointments";
+        String sql = "SELECT End FROM appointments WHERE User_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, userId);
 
         ResultSet rs = ps.executeQuery();
 
@@ -736,6 +750,56 @@ public abstract class Queries {
             allAppointmentEndTimes.add(endDateTime);
         }
         return allAppointmentEndTimes;
+    }
+
+    /** Get all other appointment start times.
+     *
+     * @param appointmentId The appointment ID.
+     * @param userId The user ID.
+     * @return Returns all other appointment start times.
+     */
+    public static ObservableList<LocalDateTime> getAllOtherStartTimes(int appointmentId, String userId) throws SQLException{
+        ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
+
+        String sql = "SELECT Start From appointments\n" +
+                "WHERE Appointment_ID != ? AND User_ID = ?;";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+        ps.setString(2, userId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
+            startTimes.add(startDateTime);
+        }
+        return startTimes;
+    }
+
+    /** Get all other appointment end times.
+     *
+     * @param appointmentId The appointment ID.
+     * @param userId The user ID.
+     * @return Returns all other appointment end times.
+     */
+    public static ObservableList<LocalDateTime> getAllOtherEndTimes(int appointmentId, String userId) throws SQLException{
+        ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
+
+        String sql = "SELECT End From appointments\n" +
+                "WHERE Appointment_ID != ? AND User_ID = ?;";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+        ps.setString(2, userId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
+            endTimes.add(endDateTime);
+        }
+        return endTimes;
     }
 
     /** Get the start date and time for an appointment.
@@ -851,6 +915,108 @@ public abstract class Queries {
 
         String rowsAffected = String.valueOf(ps.executeUpdate());
         return rowsAffected;
+    }
+
+    /** Get all US states.
+     *
+     * @return Returns all US States.
+     */
+    public static ObservableList<Division> getAllUsStates() throws SQLException {
+        ObservableList<Division> usStates = FXCollections.observableArrayList();
+
+        String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = 1";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int divisionId = rs.getInt("Division_ID");
+            String division = rs.getString("Division");
+            String createDate = rs.getString("Create_Date");
+            String createdBy = rs.getString("Created_By");
+            String lastUpdate = rs.getString("Last_Update");
+            String lastUpdateBy = rs.getString("Last_Updated_By");
+            int countryId = rs.getInt("Country_ID");
+
+            Division d = new Division(divisionId, division, createDate, createdBy, lastUpdate, lastUpdateBy, countryId);
+            usStates.add(d);
+        }
+        return usStates;
+    }
+
+    /** Get all countries.
+     *
+     * @return Returns all countries.
+     */
+    public static ObservableList<Division> getAllUkCountries() throws SQLException {
+        ObservableList<Division> ukCountries = FXCollections.observableArrayList();
+
+        String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = 2";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int divisionId = rs.getInt("Division_ID");
+            String division = rs.getString("Division");
+            String createDate = rs.getString("Create_Date");
+            String createdBy = rs.getString("Created_By");
+            String lastUpdate = rs.getString("Last_Update");
+            String lastUpdateBy = rs.getString("Last_Updated_By");
+            int countryId = rs.getInt("Country_ID");
+
+            Division d = new Division(divisionId, division, createDate, createdBy, lastUpdate, lastUpdateBy, countryId);
+            ukCountries.add(d);
+        }
+        return ukCountries;
+    }
+
+    /** Get all canadian provinces.
+     *
+     * @return Returns all canadian provinces.
+     */
+    public static ObservableList<Division> getAllCanadianProvinces() throws SQLException {
+        ObservableList<Division> canadianProvinces = FXCollections.observableArrayList();
+
+        String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = 3";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int divisionId = rs.getInt("Division_ID");
+            String division = rs.getString("Division");
+            String createDate = rs.getString("Create_Date");
+            String createdBy = rs.getString("Created_By");
+            String lastUpdate = rs.getString("Last_Update");
+            String lastUpdateBy = rs.getString("Last_Updated_By");
+            int countryId = rs.getInt("Country_ID");
+
+            Division d = new Division(divisionId, division, createDate, createdBy, lastUpdate, lastUpdateBy, countryId);
+            canadianProvinces.add(d);
+        }
+        return canadianProvinces;
+    }
+
+    /** Get all appointment create dates based on appointment ID.
+     *
+     * @param appointmentId The appointment ID.
+     * @return Returns all appointment create dates.
+     */
+    public static LocalDateTime getAppointmentCreateDate(int appointmentId) throws SQLException {
+
+        String sql = "SELECT Create_Date FROM appointments WHERE Appointment_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            return rs.getTimestamp("Create_Date").toLocalDateTime();
+
+        }
+        return null;
     }
 
 
