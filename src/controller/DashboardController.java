@@ -30,6 +30,8 @@ public class DashboardController implements Initializable {
     public TableColumn<Appointment, String>  locationCol;
     public TableColumn<Appointment, String>  startTimeCol;
     public TableColumn<Appointment, String>  endTimeCol;
+    public TableColumn<Appointment, Integer> contactIdCol;
+    public TableColumn<Appointment, Integer> customerIdCol;
     public TableView<Appointment> dashboardTable;
     public RadioButton monthButton;
     public RadioButton weekButton;
@@ -94,6 +96,14 @@ public class DashboardController implements Initializable {
 
         endTimeCol.setCellValueFactory(colData ->{
             return new ReadOnlyObjectWrapper<>(colData.getValue().getEndDateTime());
+        });
+
+        contactIdCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getContactId());
+        });
+
+        customerIdCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getCustomerId());
         });
 
         JDBC.closeConnection();

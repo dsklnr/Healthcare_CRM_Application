@@ -120,12 +120,46 @@ public class UpdateAppointmentController implements Initializable {
         endDate.setDayCellFactory(dayCellFactory);
 
         startDate.setValue(appointmentStartDateTime.toLocalDate());
-        startHourComboBox.getSelectionModel().select(localStartTime.getHour());
-        startMinuteComboBox.getSelectionModel().select(localStartTime.getMinute());
+        //startHourComboBox.getSelectionModel().select(localStartTime.getHour());
+        //startMinuteComboBox.getSelectionModel().select(localStartTime.getMinute());
+        if (localStartTime.getHour() < 10){
+            String finalLocalStartHour = "0" + String.valueOf(localStartTime.getHour());
+            startHourComboBox.getSelectionModel().select(finalLocalStartHour);
+        }
+        else{
+            startHourComboBox.getSelectionModel().select(localStartTime.getHour());
+        }
+
+        if (localStartTime.getMinute() < 10){
+
+            String finalLocalStartMinute = "0" + String.valueOf(localStartTime.getMinute());
+            startMinuteComboBox.getSelectionModel().select(finalLocalStartMinute);
+        }
+
+        else{
+            startMinuteComboBox.getSelectionModel().select(String.valueOf(localStartTime.getMinute()));
+        }
 
         endDate.setValue(appointmentEndDateTime.toLocalDate());
-        endHourComboBox.getSelectionModel().select(localEndTime.getHour());
-        endMinuteComboBox.getSelectionModel().select(localEndTime.getMinute());
+        //endHourComboBox.getSelectionModel().select(localEndTime.getHour());
+        //endMinuteComboBox.getSelectionModel().select(localEndTime.getMinute());
+        if (localEndTime.getHour() < 10){
+            String finalLocalEndHour = "0" + String.valueOf(localEndTime.getHour());
+            endHourComboBox.getSelectionModel().select(finalLocalEndHour);
+        }
+        else{
+            endHourComboBox.getSelectionModel().select(String.valueOf(localEndTime.getHour()));
+        }
+
+        if (localEndTime.getMinute() < 10){
+
+            String finalLocalEndMinute = "0" + String.valueOf(localEndTime.getMinute());
+            endMinuteComboBox.getSelectionModel().select(finalLocalEndMinute);
+        }
+
+        else{
+            endMinuteComboBox.getSelectionModel().select(String.valueOf(localEndTime.getMinute()));
+        }
 
         JDBC.closeConnection();
     }

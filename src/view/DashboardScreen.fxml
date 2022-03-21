@@ -15,11 +15,13 @@
         <columns>
             <TableColumn fx:id="appointmentIdCol" prefWidth="99.0" text="Appointment ID" />
             <TableColumn fx:id="titleCol" prefWidth="164.0" text="Title" />
-            <TableColumn fx:id="descriptionCol" prefWidth="288.0" text="Description" />
-            <TableColumn fx:id="locationCol" prefWidth="172.0" text="Location" />
+            <TableColumn fx:id="descriptionCol" prefWidth="193.0" text="Description" />
+            <TableColumn fx:id="locationCol" prefWidth="150.0" text="Location" />
             <TableColumn fx:id="typeCol" prefWidth="201.0" text="Type" />
-            <TableColumn fx:id="startTimeCol" prefWidth="224.0" text="Start Time" />
-            <TableColumn fx:id="endTimeCol" prefWidth="193.0" text="End Time" />
+            <TableColumn fx:id="startTimeCol" prefWidth="173.0" text="Start Time" />
+            <TableColumn fx:id="endTimeCol" prefWidth="173.0" text="End Time" />
+            <TableColumn fx:id="contactIdCol" prefWidth="94.0" text="Contact ID" />
+            <TableColumn fx:id="customerIdCol" prefWidth="94.0" text="Customer ID" />
         </columns>
       </TableView>
       <RadioButton fx:id="monthButton" layoutX="1170.0" layoutY="149.0" mnemonicParsing="false" onAction="#onMonthButton" text="Upcoming Month">
