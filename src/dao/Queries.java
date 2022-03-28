@@ -19,7 +19,7 @@ public abstract class Queries {
      * @return Returns a new user.
      * **/
     public static String insertUser(String username, String password) throws SQLException {
-        String sql = "INSERT INTO users (User_Name, Password)" +
+        String sql = "INSERT INTO users2 (User_Name, Password)" +
                 "VALUES(?, ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, username);

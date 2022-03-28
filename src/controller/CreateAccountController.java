@@ -1,5 +1,6 @@
 package controller;
 
+import dao.CreateAccountQueries;
 import dao.JDBC;
 import dao.Queries;
 import javafx.collections.FXCollections;
@@ -7,8 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,11 +20,36 @@ import java.util.ResourceBundle;
 public class CreateAccountController implements Initializable {
     public TextField setUsername;
     public PasswordField setPassword;
+    public Label comboBoxTitle;
+    public ChoiceBox<String> levels;
+    public RadioButton doctorButton;
+    public ToggleGroup employeeType;
+    public RadioButton nurseButton;
+    public ObservableList<String> doctorLevel = FXCollections.observableArrayList();
+    public ObservableList<String> nurseType = FXCollections.observableArrayList();
 
     /** Initialize the create account controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        JDBC.openConnection();
+        doctorLevel.add("Intern");
+        doctorLevel.add("Fellow");
+        doctorLevel.add("Junior Resident");
+        doctorLevel.add("Senior Resident");
+        doctorLevel.add("Chief Resident");
+        doctorLevel.add("Attending Physician");
+        doctorLevel.add("Head of Department");
+        doctorLevel.add("Medical Director");
+
+        nurseType.add("CNA");
+        nurseType.add("LPN");
+        nurseType.add("RN");
+        nurseType.add("ER RN");
+        nurseType.add("Surgical Assistant RN");
+        nurseType.add("Labor/Delivery Nurse");
+
+        doctorButton.setSelected(true);
+        levels.getItems().setAll(doctorLevel);
+
     }
 
     /** Insert a new user into the database.
@@ -37,7 +62,7 @@ public class CreateAccountController implements Initializable {
         String user = setUsername.getText();
         String password = setPassword.getText();
 
-        String p = String.valueOf(password.strip().chars().peek(encrypt ->{
+        if (doctorButton.isSelected()){
             char[] userPassword = password.toCharArray();
 
             ObservableList<String> encryptedPassword = FXCollections.observableArrayList();
@@ -46,31 +71,30 @@ public class CreateAccountController implements Initializable {
                 pass += 10;
                 encryptedPassword.add(String.valueOf(pass));
             }
-        }));
 
-        String finalPassword = p.chars().toString();
+            String lvl = levels.getSelectionModel().getSelectedItem();
 
-        System.out.println(finalPassword);
-
-        /*
-        char[] userPassword = password.toCharArray();
-
-        ObservableList<String> encryptedPassword = FXCollections.observableArrayList();
-
-        for (char pass : userPassword){
-            pass += 10;
-            encryptedPassword.add(String.valueOf(pass));
+            Queries.insertUser(user, String.valueOf(encryptedPassword));
+            CreateAccountQueries.insertDoctor(user, user, String.valueOf(encryptedPassword), lvl);
         }
 
-         */
 
-
-        Queries.insertUser(user, p);
+        //Queries.insertUser(user, p);
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
 
         JDBC.closeConnection();
 
+    }
+
+    public void onDoctorButton(ActionEvent actionEvent) {
+        doctorButton.setSelected(true);
+        levels.getItems().setAll(doctorLevel);
+    }
+
+    public void onNurseButton(ActionEvent actionEvent) {
+        nurseButton.setSelected(true);
+        levels.getItems().setAll(nurseType);
     }
 }

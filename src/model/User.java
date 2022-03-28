@@ -1,5 +1,8 @@
 package model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 /** Creating the user class **/
 public class User {
     private int userId;
@@ -51,4 +54,25 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public static ObservableList<Doctor> allDoctors = FXCollections.observableArrayList();
+
+    public static ObservableList<Nurse> allNurses = FXCollections.observableArrayList();
+
+    public static void addDoctor(Doctor doctor){
+        allDoctors.add(doctor);
+    }
+
+    public static void addNurse(Nurse nurse){
+        allNurses.add(nurse);
+    }
+
+    public static ObservableList<Doctor> getAllDoctors(){
+        return allDoctors;
+    }
+
+    public static ObservableList<Nurse> getAllNurses(){
+        return allNurses;
+    }
+
 }

@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import model.Doctor;
 import model.User;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.Optional;
 /** Creating the main class. **/
 
 public class Main extends Application {
+
 
     /** Set the scene for the main screen. **/
     @Override
