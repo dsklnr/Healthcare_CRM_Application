@@ -21,6 +21,8 @@ import java.util.ResourceBundle;
 
 /** Creating the create account controller. **/
 public class CreateAccountController implements Initializable {
+    public TextField fullName;
+    public TextField email;
     public TextField setUsername;
     public PasswordField setPassword;
     public Label comboBoxTitle;
@@ -62,6 +64,8 @@ public class CreateAccountController implements Initializable {
     public void onCreateAccount(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
+        String name = fullName.getText();
+        String contactEmail = email.getText();
         String user = setUsername.getText();
         String password = setPassword.getText();
 
@@ -78,10 +82,7 @@ public class CreateAccountController implements Initializable {
             String lvl = levels.getSelectionModel().getSelectedItem();
 
             CreateAccountQueries.insertDoctor(user, String.valueOf(encryptedPassword), lvl);
-
-            int ID = CreateAccountQueries.getId(user);
-
-            User.addDoctor(new Doctor(ID, user, String.valueOf(encryptedPassword), lvl));
+            CreateAccountQueries.insertContact(name, contactEmail);
         }
 
         if (nurseButton.isSelected()){
@@ -97,14 +98,7 @@ public class CreateAccountController implements Initializable {
             String type = levels.getSelectionModel().getSelectedItem();
 
             CreateAccountQueries.insertNurse(user, String.valueOf(encryptedPassword), type);
-
-            int ID = CreateAccountQueries.getId(user);
-
-            User.addNurse(new Nurse(ID, user,String.valueOf(encryptedPassword), type));
         }
-
-
-        //Queries.insertUser(user, p);
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();

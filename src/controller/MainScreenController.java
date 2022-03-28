@@ -203,7 +203,7 @@ public class MainScreenController implements Initializable {
         Parent root = loader.load();
         Stage stage = new Stage();
         stage.setTitle("User Login");
-        stage.setScene(new Scene(root, 600, 400));
+        stage.setScene(new Scene(root, 600, 700));
         stage.show();
         JDBC.closeConnection();
     }

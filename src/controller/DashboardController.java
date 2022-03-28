@@ -46,8 +46,6 @@ public class DashboardController implements Initializable {
         JDBC.openConnection();
 
         user = currentUser;
-        System.out.println(currentUser.getUserId());
-        System.out.println(user.getUserId());
 
         ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
 
