@@ -1,5 +1,6 @@
 package controller;
 
+import dao.DashboardQueries;
 import dao.JDBC;
 import dao.Queries;
 import javafx.beans.property.*;
@@ -18,6 +19,7 @@ import model.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 
@@ -36,23 +38,37 @@ public class DashboardController implements Initializable {
     public RadioButton monthButton;
     public RadioButton weekButton;
     public ToggleGroup toggle;
-    static User user;
+    public User user;
 
     /** Set the user object to the currently logged-in user and populate the table with appointments within the next
      * month. **/
-    public void setUser(User currentUser) {
+    public void setUser(User currentUser) throws SQLException {
         JDBC.openConnection();
 
         user = currentUser;
+        System.out.println(currentUser.getUserId());
+        System.out.println(user.getUserId());
 
         ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
 
-        try {
-            upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getUserId()));
-            dashboardTable.setItems(upcomingAppointment);
+        if (DashboardQueries.getDoctorLevel(user.getUsername()) == null){
+            try {
+                upcomingAppointment.addAll(Queries.getAllNextMonthAppointments());
+                dashboardTable.setItems(upcomingAppointment);
 
-        }catch (Exception ex){
-            ex.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        else if (DashboardQueries.getDoctorLevel(user.getUsername()) != null){
+            try {
+                upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getUserId()));
+                dashboardTable.setItems(upcomingAppointment);
+
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
 
 
@@ -111,7 +127,7 @@ public class DashboardController implements Initializable {
     }
 
     /** Upon clicking home, go to the dashboard screen. **/
-    public void onHomeClick(MouseEvent mouseEvent) throws IOException {
+    public void onHomeClick(MouseEvent mouseEvent) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
 
@@ -166,7 +182,7 @@ public class DashboardController implements Initializable {
     }
 
     /** Upon clicking the month radio button, display the upcoming month's appointments. **/
-    public void onMonthButton(ActionEvent actionEvent) {
+    public void onMonthButton(ActionEvent actionEvent) throws SQLException {
         JDBC.openConnection();
 
         monthButton.setSelected(true);
@@ -175,30 +191,55 @@ public class DashboardController implements Initializable {
 
         ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
 
-        try {
-            upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getUserId()));
-            dashboardTable.setItems(upcomingAppointment);
+        if (DashboardQueries.getDoctorLevel(user.getUsername()) == null){
+            try {
+                upcomingAppointment.addAll(Queries.getAllNextMonthAppointments());
+                dashboardTable.setItems(upcomingAppointment);
 
-        }catch (Exception ex){
-            ex.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
-        JDBC.closeConnection();
+        else if (DashboardQueries.getDoctorLevel(user.getUsername()) != null){
+            try {
+                upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getUserId()));
+                dashboardTable.setItems(upcomingAppointment);
+
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
+
 
     }
 
     /** Upon clicking the week radio button, display the upcoming week's appointments. **/
-    public void onWeekButton(ActionEvent actionEvent) {
+    public void onWeekButton(ActionEvent actionEvent) throws SQLException {
         JDBC.openConnection();
 
         weekButton.setSelected(true);
 
-        try {
-            dashboardTable.setItems(Queries.getNextWeekAppointments(user.getUserId()));
-            System.out.println(user.getUserId());
+        ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
 
-        }catch (Exception ex){
-            ex.printStackTrace();
+        if (DashboardQueries.getDoctorLevel(user.getUsername()) == null){
+            try {
+                upcomingAppointment.addAll(Queries.getAllNextWeekAppointments());
+                dashboardTable.setItems(upcomingAppointment);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        else if (DashboardQueries.getDoctorLevel(user.getUsername()) != null){
+            try {
+                upcomingAppointment.addAll(Queries.getNextWeekAppointments(user.getUserId()));
+                dashboardTable.setItems(upcomingAppointment);
+
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
 
         JDBC.closeConnection();

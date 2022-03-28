@@ -75,7 +75,7 @@ public class AllAppointmentsController implements Initializable {
     }
 
     /** Upon clicking home, go to the dashboard screen. **/
-    public void onHomeClick(MouseEvent mouseEvent) throws IOException {
+    public void onHomeClick(MouseEvent mouseEvent) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
         DashboardController dashboardUser = loader.getController();

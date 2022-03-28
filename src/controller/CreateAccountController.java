@@ -10,6 +10,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Doctor;
+import model.Nurse;
+import model.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -74,8 +77,30 @@ public class CreateAccountController implements Initializable {
 
             String lvl = levels.getSelectionModel().getSelectedItem();
 
-            Queries.insertUser(user, String.valueOf(encryptedPassword));
-            CreateAccountQueries.insertDoctor(user, user, String.valueOf(encryptedPassword), lvl);
+            CreateAccountQueries.insertDoctor(user, String.valueOf(encryptedPassword), lvl);
+
+            int ID = CreateAccountQueries.getId(user);
+
+            User.addDoctor(new Doctor(ID, user, String.valueOf(encryptedPassword), lvl));
+        }
+
+        if (nurseButton.isSelected()){
+            char[] userPassword = password.toCharArray();
+
+            ObservableList<String> encryptedPassword = FXCollections.observableArrayList();
+
+            for (char pass : userPassword){
+                pass += 10;
+                encryptedPassword.add(String.valueOf(pass));
+            }
+
+            String type = levels.getSelectionModel().getSelectedItem();
+
+            CreateAccountQueries.insertNurse(user, String.valueOf(encryptedPassword), type);
+
+            int ID = CreateAccountQueries.getId(user);
+
+            User.addNurse(new Nurse(ID, user,String.valueOf(encryptedPassword), type));
         }
 
 

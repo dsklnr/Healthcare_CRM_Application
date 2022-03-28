@@ -589,17 +589,41 @@ public abstract class Queries {
             int userIdFK = rs.getInt("User_ID");
             int contactIdFK = rs.getInt("Contact_ID");
 
-            /*
-            ZoneId utcZone = ZoneId.of("UTC");
-            ZonedDateTime utcStartTime = start.atZone(utcZone);
-            ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
-            ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
+            String startTime = start.format(dtf);
+            String endTime = end.format(dtf);
 
-            ZonedDateTime utcEndTime = end.atZone(utcZone);
-            ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
-            ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
+            appointmentsList.add(new Appointment(appointmentId, title, description, location,
+                    type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
+                    customerIdFK, userIdFK, contactIdFK));
+        }
+        return appointmentsList;
+    }
 
-             */
+    public static ObservableList<Appointment> getAllNextMonthAppointments() throws SQLException {
+        ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
+
+        String sql = "SELECT * FROM appointments WHERE Start BETWEEN CURDATE() AND CURDATE() + " +
+                "INTERVAL 1 MONTH";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int appointmentId = rs.getInt("Appointment_ID");
+            String title = rs.getString("Title");
+            String description = rs.getString("Description");
+            String location = rs.getString("Location");
+            String type = rs.getString("Type");
+            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+            String createDate = rs.getString("Create_Date");
+            String contact = rs.getString("Created_By");
+            String lastUpdate = rs.getString("Last_Update");
+            String updateBy = rs.getString("Last_Updated_By");
+            int customerIdFK = rs.getInt("Customer_ID");
+            int userIdFK = rs.getInt("User_ID");
+            int contactIdFK = rs.getInt("Contact_ID");
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
             String startTime = start.format(dtf);
@@ -643,17 +667,41 @@ public abstract class Queries {
             int userIdFK = rs.getInt("User_ID");
             int contactIdFK = rs.getInt("Contact_ID");
 
-            /*
-            ZoneId utcZone = ZoneId.of("UTC");
-            ZonedDateTime utcStartTime = start.atZone(utcZone);
-            ZonedDateTime localStartTime = utcStartTime.withZoneSameInstant(ZoneOffset.systemDefault());
-            ZonedDateTime finalLocalStartTime = localStartTime.minusHours(1);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
+            String startTime = start.format(dtf);
+            String endTime = end.format(dtf);
 
-            ZonedDateTime utcEndTime = end.atZone(utcZone);
-            ZonedDateTime localEndTime = utcEndTime.withZoneSameInstant(ZoneOffset.systemDefault());
-            ZonedDateTime finalLocalEndTime = localEndTime.minusHours(1);
+            appointmentsList.add(new Appointment(appointmentId, title, description, location,
+                    type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
+                    customerIdFK, userIdFK, contactIdFK));
+        }
+        return appointmentsList;
+    }
 
-             */
+    public static ObservableList<Appointment> getAllNextWeekAppointments() throws SQLException {
+        ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
+
+        String sql = "SELECT * FROM appointments WHERE Start BETWEEN CURDATE() AND CURDATE() + " +
+                "INTERVAL 7 DAY";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int appointmentId = rs.getInt("Appointment_ID");
+            String title = rs.getString("Title");
+            String description = rs.getString("Description");
+            String location = rs.getString("Location");
+            String type = rs.getString("Type");
+            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+            String createDate = rs.getString("Create_Date");
+            String contact = rs.getString("Created_By");
+            String lastUpdate = rs.getString("Last_Update");
+            String updateBy = rs.getString("Last_Updated_By");
+            int customerIdFK = rs.getInt("Customer_ID");
+            int userIdFK = rs.getInt("User_ID");
+            int contactIdFK = rs.getInt("Contact_ID");
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
             String startTime = start.format(dtf);

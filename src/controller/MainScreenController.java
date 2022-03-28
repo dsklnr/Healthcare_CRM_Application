@@ -2,6 +2,8 @@ package controller;
 
 import dao.JDBC;
 import dao.Queries;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -101,6 +103,15 @@ public class MainScreenController implements Initializable {
         String user = username.getText();
         String pass = password.getText();
 
+        char[] userPassword = pass.toCharArray();
+
+        ObservableList<String> encryptedPassword = FXCollections.observableArrayList();
+
+        for (char p : userPassword){
+            p += 10;
+            encryptedPassword.add(String.valueOf(p));
+        }
+
         LocalDateTime ldt = LocalDateTime.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
         String formatDateTime1 = ldt.format(format);
@@ -108,7 +119,7 @@ public class MainScreenController implements Initializable {
         String country = Locale.getDefault(Locale.Category.FORMAT).getCountry();
         String zone = String.valueOf(ZoneId.systemDefault());
 
-        if (Queries.login(user, pass)) {
+        if (Queries.login(user, String.valueOf(encryptedPassword))) {
 
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter("login_activity.txt", true));
@@ -126,7 +137,8 @@ public class MainScreenController implements Initializable {
 
                 }
 
-                User currentUser = new User(Queries.selectUser(user, pass), user, pass);
+                User currentUser = new User(Queries.selectUser(user, String.valueOf(encryptedPassword)), user, pass);
+                System.out.println(currentUser.getUserId());
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
                 Parent root = loader.load();
@@ -146,7 +158,7 @@ public class MainScreenController implements Initializable {
 
         }
 
-        else if (!Queries.login(user, pass)){
+        else if (!Queries.login(user, String.valueOf(encryptedPassword))){
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 try {
                     BufferedWriter bw = new BufferedWriter(new FileWriter("login_activity.txt", true));
