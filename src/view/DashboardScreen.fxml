@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardController">
+<AnchorPane prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardController">
    <children>
-      <Label layoutX="73.0" layoutY="30.0" text="Dashboard">
+      <Label layoutX="73.0" layoutY="94.0" text="Dashboard">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
@@ -20,35 +22,66 @@
             <TableColumn fx:id="typeCol" prefWidth="201.0" text="Type" />
             <TableColumn fx:id="startTimeCol" prefWidth="173.0" text="Start Time" />
             <TableColumn fx:id="endTimeCol" prefWidth="173.0" text="End Time" />
-            <TableColumn fx:id="contactIdCol" prefWidth="94.0" text="Contact ID" />
-            <TableColumn fx:id="customerIdCol" prefWidth="94.0" text="Customer ID" />
+            <TableColumn fx:id="contactIdCol" prefWidth="94.0" text="Doctor ID" />
+            <TableColumn fx:id="customerIdCol" prefWidth="94.0" text="Patient ID" />
         </columns>
       </TableView>
       <RadioButton fx:id="monthButton" layoutX="1170.0" layoutY="149.0" mnemonicParsing="false" onAction="#onMonthButton" text="Upcoming Month">
          <toggleGroup>
             <ToggleGroup fx:id="toggle" />
-         </toggleGroup></RadioButton>
-      <RadioButton fx:id="weekButton" layoutX="1306.0" layoutY="149.0" mnemonicParsing="false" onAction="#onWeekButton" text="Upcoming Week" toggleGroup="$toggle" />
-      <Label layoutX="916.0" layoutY="35.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand;" text="Home">
-         <font>
-            <Font size="15.0" />
-         </font></Label>
-      <Label layoutX="1002.0" layoutY="35.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand;" text="Customers">
-         <font>
-            <Font size="15.0" />
-         </font></Label>
-      <Label layoutX="1106.0" layoutY="35.0" onMouseClicked="#onScheduleClick" style="-fx-cursor: hand;" text="Schedule Appointment">
-         <font>
-            <Font size="15.0" />
-         </font></Label>
-      <Label layoutX="1285.0" layoutY="35.0" onMouseClicked="#onReportClick" style="-fx-cursor: hand;" text="Generate Report">
-         <font>
-            <Font size="15.0" />
-         </font></Label>
+         </toggleGroup>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></RadioButton>
+      <RadioButton fx:id="weekButton" layoutX="1306.0" layoutY="149.0" mnemonicParsing="false" onAction="#onWeekButton" text="Upcoming Week" toggleGroup="$toggle">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></RadioButton>
       <Label layoutX="73.0" layoutY="147.0" text="Upcoming Appointments" underline="true">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
+      <Pane layoutX="-6.0" layoutY="-4.0" prefHeight="79.0" prefWidth="1506.0" style="-fx-background-color: #000000;">
+         <children>
+            <Label fx:id="homeLabel" layoutX="994.0" layoutY="30.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="HOME">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+            <Label fx:id="customersLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+            <Label fx:id="scheduleLabel" layoutX="1196.0" layoutY="30.0" onMouseClicked="#onScheduleClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="APPOINTMENTS">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+            <Label fx:id="reportLabel" layoutX="1348.0" layoutY="30.0" onMouseClicked="#onReportClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="REPORTS">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+            <ImageView fx:id="logo" fitHeight="72.0" fitWidth="78.0" layoutX="14.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
+            <Label layoutX="92.0" layoutY="25.0" style="-fx-text-fill: #1C6CF6;" text="BLACK BOX" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="25.0" />
+               </font>
+            </Label>
+         </children></Pane>
    </children>
 </AnchorPane>

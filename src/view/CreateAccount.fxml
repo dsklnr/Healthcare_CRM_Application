@@ -15,7 +15,7 @@
       <Label layoutX="224.0" layoutY="291.0" text="Password" />
       <TextField fx:id="setUsername" layoutX="224.0" layoutY="244.0" />
       <PasswordField fx:id="setPassword" layoutX="224.0" layoutY="308.0" />
-      <Button layoutX="224.0" layoutY="577.0" mnemonicParsing="false" onAction="#onCreateAccount" prefHeight="25.0" prefWidth="149.0" style="-fx-background-radius: 45;" text="Create Account" />
+      <Button layoutX="224.0" layoutY="577.0" mnemonicParsing="false" onAction="#onCreateAccount" prefHeight="25.0" prefWidth="149.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Create Account" />
       <Label fx:id="comboBoxTitle" layoutX="224.0" layoutY="398.0" text="Choose Level" />
       <ChoiceBox fx:id="levels" layoutX="224.0" layoutY="416.0" prefWidth="150.0" />
       <RadioButton fx:id="doctorButton" layoutX="224.0" layoutY="359.0" mnemonicParsing="false" onAction="#onDoctorButton" text="Doctor">

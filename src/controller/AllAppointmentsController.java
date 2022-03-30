@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointment;
@@ -41,12 +43,25 @@ public class AllAppointmentsController implements Initializable {
     public TableColumn contactIdCol;
     public TableView allAppointmentsTable;
     public TextField searchAppointments;
+    public Label homeLabel;
+    public Label customersLabel;
+    public Label scheduleLabel;
+    public Label reportLabel;
+    public ImageView logo;
     private User currentUser;
 
     /** Initialize the all appointments controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
+
+        Image image = new Image("/icons/Brackets.png");
+        logo.setImage(image);
+
+        homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        customersLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        scheduleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        reportLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
 
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));

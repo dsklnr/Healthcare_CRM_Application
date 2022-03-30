@@ -12,6 +12,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointment;
@@ -39,6 +42,11 @@ public class DashboardController implements Initializable {
     public RadioButton weekButton;
     public ToggleGroup toggle;
     public User user;
+    public ImageView logo;
+    public Label homeLabel;
+    public Label customersLabel;
+    public Label scheduleLabel;
+    public Label reportLabel;
 
     /** Set the user object to the currently logged-in user and populate the table with appointments within the next
      * month. **/
@@ -81,6 +89,15 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
+
+        Image image = new Image("/icons/Brackets.png");
+        logo.setImage(image);
+
+        homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        customersLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        scheduleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        reportLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+
 
         monthButton.setSelected(true);
 

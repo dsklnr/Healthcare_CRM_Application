@@ -1,43 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1400.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsController">
   <content>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1400.0" prefWidth="1500.0">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1400.0" prefWidth="1500.0" style="-fx-background-color: #FFFFFF;">
          <children>
-            <Label layoutX="73.0" layoutY="30.0" text="Reports">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font></Label>
-             <Label layoutX="916.0" layoutY="35.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand;" text="Home">
-                 <font>
-                     <Font size="15.0" />
-                 </font></Label>
-             <Label layoutX="1002.0" layoutY="35.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand;" text="Customers">
-                 <font>
-                     <Font size="15.0" />
-                 </font></Label>
-             <Label layoutX="1106.0" layoutY="35.0" onMouseClicked="#onScheduleClick" style="-fx-cursor: hand;" text="Schedule Appointment">
-                 <font>
-                     <Font size="15.0" />
-                 </font></Label>
-             <Label layoutX="1285.0" layoutY="35.0" onMouseClicked="#onReportClick" style="-fx-cursor: hand;" text="Generate Report">
-                 <font>
-                     <Font size="15.0" />
-                 </font></Label>
-             <Label layoutX="73.0" layoutY="147.0" text="Total Customer Appointments" underline="true">
-                 <font>
-                     <Font size="15.0" />
-                 </font>
-             </Label>
+             <Pane layoutX="-6.0" layoutY="-4.0" prefHeight="79.0" prefWidth="1506.0" style="-fx-background-color: #000000;">
+              <Label fx:id="homeLabel" layoutX="994.0" layoutY="30.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="HOME">
+                  <font>
+                      <Font size="15.0" />
+                  </font>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+              </Label>
+                 <Label fx:id="customersLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
+                     <font>
+                         <Font size="15.0" />
+                     </font>
+                     <cursor>
+                         <Cursor fx:constant="HAND" />
+                     </cursor>
+                 </Label>
+              <Label fx:id="scheduleLabel" layoutX="1196.0" layoutY="30.0" onMouseClicked="#onScheduleClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="APPOINTMENTS">
+                  <font>
+                      <Font size="15.0" />
+                  </font>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+              </Label>
+              <Label fx:id="reportLabel" layoutX="1348.0" layoutY="30.0" onMouseClicked="#onReportClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="REPORTS">
+                  <font>
+                      <Font size="15.0" />
+                  </font>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+              </Label>
+              <ImageView fx:id="logo" fitHeight="72.0" fitWidth="78.0" layoutX="14.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
+              <Label layoutX="92.0" layoutY="25.0" style="-fx-text-fill: #1C6CF6;" text="BLACK BOX" textFill="WHITE">
+                  <font>
+                      <Font name="Arial" size="25.0" />
+                  </font>
+              </Label>
+         </Pane>
              <TableView fx:id="appointmentTypeTable" layoutX="771.0" layoutY="178.0" prefHeight="514.0" prefWidth="637.0">
                  <columns>
                      <TableColumn fx:id="countryCol" prefWidth="236.0" text="Country" />
                      <TableColumn fx:id="stateCol" prefWidth="172.0" text="State/Province" />
-                     <TableColumn fx:id="numberOfCustomersCol" prefWidth="228.0" text="Number of Customers" />
+                     <TableColumn fx:id="numberOfCustomersCol" prefWidth="228.0" text="Number of Patients" />
                  </columns>
              </TableView>
              <TableView fx:id="divisionTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="637.0">
@@ -52,15 +69,15 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="73.0" layoutY="752.0" text="Schedule For All Contacts" underline="true">
+            <Label layoutX="73.0" layoutY="752.0" text="Schedule For All Doctors" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
              <TableView fx:id="contactScheduleTable" layoutX="73.0" layoutY="783.0" prefHeight="514.0" prefWidth="1333.0">
                  <columns>
-                     <TableColumn fx:id="contactCol" prefWidth="90.0" text="Contact" />
-                     <TableColumn fx:id="customerIdCol" prefWidth="90.0" text="Customer ID" />
+                     <TableColumn fx:id="contactCol" prefWidth="90.0" text="Doctor" />
+                     <TableColumn fx:id="customerIdCol" prefWidth="90.0" text="Patient ID" />
                      <TableColumn fx:id="appointmentIdCol" prefWidth="114.0" text="Appointment ID" />
                      <TableColumn fx:id="titleCol" prefWidth="178.0" text="Title" />
                      <TableColumn fx:id="typeCol" prefWidth="173.0" text="Type" />

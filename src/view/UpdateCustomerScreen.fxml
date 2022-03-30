@@ -4,46 +4,46 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateCustomer">
+<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateCustomer">
    <children>
-      <Label layoutX="37.0" layoutY="58.0" text="Update Customer">
+      <Label layoutX="37.0" layoutY="58.0" style="-fx-text-fill: #1C6CF6;" text="Update Customer">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <Label layoutX="37.0" layoutY="134.0" text="Customer ID">
+      <Label layoutX="37.0" layoutY="134.0" style="-fx-text-fill: #1C6CF6;" text="Customer ID">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
       <TextField fx:id="customerId" disable="true" editable="false" layoutX="155.0" layoutY="132.0" promptText="Disabled" />
-      <Label layoutX="37.0" layoutY="194.0" text="Name">
+      <Label layoutX="37.0" layoutY="194.0" style="-fx-text-fill: #1C6CF6;" text="Name">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
       <TextField fx:id="name" layoutX="155.0" layoutY="192.0" />
-      <Label layoutX="37.0" layoutY="374.0" text="Address">
+      <Label layoutX="37.0" layoutY="374.0" style="-fx-text-fill: #1C6CF6;" text="Address">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="37.0" layoutY="434.0" text="Postal Code">
+      <Label layoutX="37.0" layoutY="434.0" style="-fx-text-fill: #1C6CF6;" text="Postal Code">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="37.0" layoutY="494.0" text="Phone Number">
+      <Label layoutX="37.0" layoutY="494.0" style="-fx-text-fill: #1C6CF6;" text="Phone Number">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Button layoutX="400.0" layoutY="548.0" mnemonicParsing="false" onAction="#onSaveUpdateCustomer" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Save">
+      <Button layoutX="400.0" layoutY="548.0" mnemonicParsing="false" onAction="#onSaveUpdateCustomer" prefHeight="31.0" prefWidth="79.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Save">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <Button layoutX="300.0" layoutY="548.0" mnemonicParsing="false" onAction="#onCancelUpdateCustomer" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45;" text="Cancel">
+      <Button layoutX="300.0" layoutY="548.0" mnemonicParsing="false" onAction="#onCancelUpdateCustomer" prefHeight="25.0" prefWidth="79.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Cancel">
          <font>
             <Font size="15.0" />
          </font>
@@ -51,12 +51,12 @@
       <TextField fx:id="address" layoutX="155.0" layoutY="371.0" />
       <TextField fx:id="postalCode" layoutX="155.0" layoutY="431.0" />
       <TextField fx:id="phoneNumber" layoutX="155.0" layoutY="491.0" />
-      <Label layoutX="37.0" layoutY="254.0" text="Country">
+      <Label layoutX="37.0" layoutY="254.0" style="-fx-text-fill: #1C6CF6;" text="Country">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="37.0" layoutY="314.0" text="State/Province">
+      <Label layoutX="37.0" layoutY="314.0" style="-fx-text-fill: #1C6CF6;" text="State/Province">
          <font>
             <Font size="15.0" />
          </font>

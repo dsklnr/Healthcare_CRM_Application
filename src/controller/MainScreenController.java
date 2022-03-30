@@ -150,7 +150,6 @@ public class MainScreenController implements Initializable {
                 }
 
                 User currentUser = new User(Queries.selectUser(user, String.valueOf(encryptedPassword)), user, pass);
-                System.out.println(currentUser.getUserId());
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
                 Parent root = loader.load();

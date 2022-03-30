@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Customer;
@@ -38,21 +40,35 @@ public class AllCustomersController implements Initializable {
     public TableView customersTable;
     public User currentUser;
     public TextField searchCustomers;
+    public Label homeLabel;
+    public Label customersLabel;
+    public Label scheduleLabel;
+    public Label reportLabel;
+    public ImageView logo;
+    public TableColumn CountryCol;
 
     /** Initialize the all customers controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
+        Image image = new Image("/icons/Brackets.png");
+        logo.setImage(image);
+        
+        homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        customersLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        scheduleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        reportLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
         postalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         phoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        createDateCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        createdByCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        lastUpdateCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
-        lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdateBy"));
+        //createDateCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        //createdByCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        //lastUpdateCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
+        //lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdateBy"));
         divisionIdCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
         customersTable.setItems(Queries.getAllCustomers());

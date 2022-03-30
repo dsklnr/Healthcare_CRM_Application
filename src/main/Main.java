@@ -11,10 +11,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Doctor;
 import model.User;
 
+import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.*;
@@ -34,6 +37,8 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
         stage.setTitle("Login");
         stage.setScene(new Scene(root, 400, 600));
+        Image image = new Image("/icons/crm_icon.jpeg");
+        stage.getIcons().add(image);
         stage.show();
     }
 
