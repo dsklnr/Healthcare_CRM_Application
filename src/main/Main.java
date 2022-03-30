@@ -32,7 +32,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws SQLException, IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
-        stage.setTitle("User Login");
+        stage.setTitle("Login");
         stage.setScene(new Scene(root, 400, 600));
         stage.show();
     }

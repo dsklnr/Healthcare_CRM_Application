@@ -12,6 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -39,17 +41,21 @@ public class MainScreenController implements Initializable {
     public Label forgotLabel;
     public Label time;
     public Label locationLabel;
+    public ImageView logo;
 
     /** Initialize the dashboard controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
-        LocalDateTime ldt = LocalDateTime.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm   " +
-                "MM-dd-yyyy");
-        String formatDateTime = ldt.format(format);
-        time.setText(formatDateTime);
+        Image image = new Image("/icons/BB_Logo.jpeg");
+        logo.setImage(image);
+
+        crmLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
+        usernameLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
+        passwordLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
+        createLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
+        forgotLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
 
         crmLabel.setMaxWidth(Double.MAX_VALUE);
         AnchorPane.setLeftAnchor(crmLabel, 0.0);
@@ -78,6 +84,12 @@ public class MainScreenController implements Initializable {
 
         ZoneId system = ZoneId.systemDefault();
         locationLabel.setText(String.valueOf(system));
+
+        LocalDateTime ldt = LocalDateTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm   " +
+                "MM-dd-yyyy");
+        String formatDateTime = ldt.format(format);
+        time.setText(formatDateTime);
 
         if (Locale.getDefault().getLanguage().equals("fr")) {
             try {
