@@ -338,8 +338,8 @@ public class  AddAppointmentController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();
-            AllAppointmentsController appointmentsUser = loader.getController();
-            appointmentsUser.setUser(user);
+            AllAppointmentsController allAppointmentsController = loader.getController();
+            allAppointmentsController.setUser(user);
             Scene scene = new Scene(root, 1500, 800);
             scene.getStylesheets().add("/css/styles.css");
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -357,8 +357,8 @@ public class  AddAppointmentController implements Initializable {
     public void onCancelAddAppointment (ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
-        AllAppointmentsController appointmentsUser = loader.getController();
-        appointmentsUser.setUser(user);
+        AllAppointmentsController allAppointmentsController = loader.getController();
+        allAppointmentsController.setUser(user);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

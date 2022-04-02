@@ -30,7 +30,7 @@ public class UpdateAppointmentController implements Initializable {
     public TextField title;
     public TextField location;
     public TextField type;
-    public TextField customerId;
+    public TextField patientId;
     public TextField userId;
     public TextArea description;
     public ComboBox contactComboBox;
@@ -87,7 +87,7 @@ public class UpdateAppointmentController implements Initializable {
         String createDate = appointment.getCreateDate();
 
         String createdBy = appointment.getCreatedBy();
-        int customerID = appointment.getPatientID();
+        int patientID = appointment.getPatientID();
         int userID = appointment.getUserId();
 
         appointmentId.setText(String.valueOf(id));
@@ -95,7 +95,7 @@ public class UpdateAppointmentController implements Initializable {
         description.setText(appointmentDescription);
         location.setText(appointmentLocation);
         type.setText(appointmentType);
-        customerId.setText(String.valueOf(customerID));
+        patientId.setText(String.valueOf(patientID));
         userId.setText(String.valueOf(userID));
 
         String contactName = Queries.getContactName(appointment.getContactId(), appointment.getAppointmentId());
@@ -205,7 +205,7 @@ public class UpdateAppointmentController implements Initializable {
         LocalDateTime createDate = Queries.getAppointmentCreateDate(selectedAppointment.getAppointmentId());
         String createdBy = user.getUsername();
         LocalDateTime lastUpdate = LocalDateTime.now();
-        String customerID = customerId.getText();
+        String patientID = patientId.getText();
         String userID = userId.getText();
         String appointmentDescription = description.getText();
         String appointmentContact = String.valueOf(contactComboBox.getSelectionModel().getSelectedItem());
@@ -236,7 +236,7 @@ public class UpdateAppointmentController implements Initializable {
                 startMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
                 endHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 endMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
-                customerId.getText().equals("") || userId.getText().equals("") || appointmentDescription.equals("")){
+                patientId.getText().equals("") || userId.getText().equals("") || appointmentDescription.equals("")){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -415,13 +415,13 @@ public class UpdateAppointmentController implements Initializable {
 
             Queries.updateAppointment(appointmentID, appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                     finalStartTime, finalEndTime, finalCreateDate, createdBy, finalUpdateTime, lastUpdateBy,
-                    Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
+                    Integer.parseInt(patientID), Integer.parseInt(userID), contactId);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            AllAppointmentsController appointmentsUser = loader.getController();
-            appointmentsUser.setUser(user);
+            AllAppointmentsController allAppointmentsController = loader.getController();
+            allAppointmentsController.setUser(user);
             Scene scene = new Scene(root, 1500, 800);
             scene.getStylesheets().add("/css/styles.css");
             stage.close();
@@ -439,8 +439,8 @@ public class UpdateAppointmentController implements Initializable {
     public void onCancelAddAppointment(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
-        AllAppointmentsController appointmentsUser = loader.getController();
-        appointmentsUser.setUser(user);
+        AllAppointmentsController allAppointmentsController = loader.getController();
+        allAppointmentsController.setUser(user);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

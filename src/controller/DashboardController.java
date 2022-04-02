@@ -162,8 +162,8 @@ public class DashboardController implements Initializable {
     public void onPatientsClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllPatientsController patientController = loader.getController();
-        patientController.setUser(user);
+        AllPatientsController allPatientsController = loader.getController();
+        allPatientsController.setUser(user);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -179,8 +179,8 @@ public class DashboardController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
-        AllAppointmentsController appointmentsUser = loader.getController();
-        appointmentsUser.setUser(user);
+        AllAppointmentsController allAppointmentsController = loader.getController();
+        allAppointmentsController.setUser(user);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();

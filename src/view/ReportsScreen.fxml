@@ -19,7 +19,7 @@
                      <Cursor fx:constant="HAND" />
                   </cursor>
               </Label>
-                 <Label fx:id="customersLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
+                 <Label fx:id="patientsLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onPatientsClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
                      <font>
                          <Font size="15.0" />
                      </font>
@@ -54,7 +54,7 @@
                  <columns>
                      <TableColumn fx:id="countryCol" prefWidth="236.0" text="Country" />
                      <TableColumn fx:id="stateCol" prefWidth="172.0" text="State/Province" />
-                     <TableColumn fx:id="numberOfCustomersCol" prefWidth="228.0" text="Number of Patients" />
+                     <TableColumn fx:id="numberOfPatientsCol" prefWidth="228.0" text="Number of Patients" />
                  </columns>
              </TableView>
              <TableView fx:id="divisionTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="637.0">
@@ -77,7 +77,7 @@
              <TableView fx:id="contactScheduleTable" layoutX="73.0" layoutY="783.0" prefHeight="514.0" prefWidth="1333.0">
                  <columns>
                      <TableColumn fx:id="contactCol" prefWidth="90.0" text="Doctor" />
-                     <TableColumn fx:id="customerIdCol" prefWidth="90.0" text="Patient ID" />
+                     <TableColumn fx:id="patientIdCol" prefWidth="90.0" text="Patient ID" />
                      <TableColumn fx:id="appointmentIdCol" prefWidth="114.0" text="Appointment ID" />
                      <TableColumn fx:id="titleCol" prefWidth="178.0" text="Title" />
                      <TableColumn fx:id="typeCol" prefWidth="173.0" text="Type" />

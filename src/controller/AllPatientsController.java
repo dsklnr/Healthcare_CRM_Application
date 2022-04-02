@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 /** Creating the all customers controller. **/
 public class AllPatientsController implements Initializable {
-    public TableColumn customerIdCol;
+    public TableColumn patientIdCol;
     public TableColumn nameCol;
     public TableColumn addressCol;
     public TableColumn postalCodeCol;
@@ -37,17 +37,17 @@ public class AllPatientsController implements Initializable {
     public TableColumn lastUpdateCol;
     public TableColumn lastUpdatedByCol;
     public TableColumn divisionIdCol;
-    public TableView customersTable;
+    public TableView patientsTable;
     public User currentUser;
-    public TextField searchCustomers;
+    public TextField searchPatients;
     public Label homeLabel;
-    public Label customersLabel;
+    public Label patientsLabel;
     public Label scheduleLabel;
     public Label reportLabel;
     public ImageView logo;
     public TableColumn CountryCol;
 
-    /** Initialize the all customers controller. **/
+    /** Initialize the all patients controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -56,11 +56,11 @@ public class AllPatientsController implements Initializable {
         logo.setImage(image);
         
         homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
-        customersLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        patientsLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
         scheduleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
         reportLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
 
-        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        patientIdCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
         postalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
@@ -71,7 +71,7 @@ public class AllPatientsController implements Initializable {
         //lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdateBy"));
         divisionIdCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
-        customersTable.setItems(Queries.getAllPatients());
+        patientsTable.setItems(Queries.getAllPatients());
 
         JDBC.closeConnection();
     }
@@ -85,8 +85,8 @@ public class AllPatientsController implements Initializable {
     public void onHomeClick(MouseEvent mouseEvent) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
-        DashboardController dashboardUser = loader.getController();
-        dashboardUser.setUser(currentUser);
+        DashboardController dashboardController = loader.getController();
+        dashboardController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -98,12 +98,12 @@ public class AllPatientsController implements Initializable {
         stage.show();
     }
 
-    /** Upon clicking customers, go to the all customers screen. **/
-    public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
+    /** Upon clicking patients, go to the all patients screen. **/
+    public void onPatientsClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllPatientsController customerUser = loader.getController();
-        customerUser.setUser(currentUser);
+        AllPatientsController allPatientsController = loader.getController();
+        allPatientsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -119,8 +119,8 @@ public class AllPatientsController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
-        AllAppointmentsController appointmentsUser = loader.getController();
-        appointmentsUser.setUser(currentUser);
+        AllAppointmentsController allAppointmentsController = loader.getController();
+        allAppointmentsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -149,12 +149,12 @@ public class AllPatientsController implements Initializable {
         stage.show();
     }
 
-    /** Upon clicking the add button, go to the add customer screen. **/
-    public void onAddCustomer(ActionEvent actionEvent) throws IOException {
+    /** Upon clicking the add button, go to the add patient screen. **/
+    public void onAddPatient(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddPatientScreen.fxml"));
         Parent root = loader.load();
-        AddPatientController customerUser = loader.getController();
-        customerUser.setUser(currentUser);
+        AddPatientController addPatientController = loader.getController();
+        addPatientController.setUser(currentUser);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
         Image image = new Image("/icons/Brackets_Black.png");
@@ -164,19 +164,19 @@ public class AllPatientsController implements Initializable {
         stage.show();
     }
 
-    /** Upon clicking the update button, go to the add appointment screen and populate the form based on the customer
+    /** Upon clicking the update button, go to the add appointment screen and populate the form based on the patient
      * selected. **/
-    public void onUpdateCustomer(ActionEvent actionEvent) throws IOException {
-        Patient customer = (Patient) customersTable.getSelectionModel().getSelectedItem();
+    public void onUpdatePatient(ActionEvent actionEvent) throws IOException {
+        Patient patient = (Patient) patientsTable.getSelectionModel().getSelectedItem();
 
-        if (customer != null){
+        if (patient != null){
             try{
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdatePatientScreen.fxml"));
                 Parent root = loader.load();
-                UpdatePatient selectedCustomer = loader.getController();
-                selectedCustomer.setCustomer(customer);
-                UpdatePatient customerUser = loader.getController();
-                customerUser.setUser(currentUser);
+                UpdatePatientController updatePatientController = loader.getController();
+                updatePatientController.setPatient(patient);
+                UpdatePatientController user = loader.getController();
+                user.setUser(currentUser);
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.close();
                 Image image = new Image("/icons/Brackets_Black.png");
@@ -191,13 +191,13 @@ public class AllPatientsController implements Initializable {
         }
     }
 
-    /** Upon clicking the delete button, delete the selected customer if they do not have any appointment(s). **/
-    public void onDeleteCustomer(ActionEvent actionEvent) throws SQLException, IOException {
+    /** Upon clicking the delete button, delete the selected patient if they do not have any appointment(s). **/
+    public void onDeletePatient(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
-        Patient customer = (Patient) customersTable.getSelectionModel().getSelectedItem();
+        Patient patient = (Patient) patientsTable.getSelectionModel().getSelectedItem();
 
-        if (customer != null){
+        if (patient != null){
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -207,12 +207,12 @@ public class AllPatientsController implements Initializable {
             alert.setContentText("Are you sure you want to delete this patient?");
             Optional<ButtonType> action = alert.showAndWait();
 
-            if (action.get().equals(ButtonType.OK) && Queries.checkDeletePatient(customer.getPatientID())) {
-                Queries.deletePatient(customer.getPatientID());
+            if (action.get().equals(ButtonType.OK) && Queries.checkDeletePatient(patient.getPatientID())) {
+                Queries.deletePatient(patient.getPatientID());
                 alert.close();
             }
 
-            if (action.get().equals(ButtonType.OK) && !Queries.checkDeletePatient(customer.getPatientID())){
+            if (action.get().equals(ButtonType.OK) && !Queries.checkDeletePatient(patient.getPatientID())){
                 alert.close();
                 Alert alert2 = new Alert(Alert.AlertType.ERROR);
                 Stage stage2 = (Stage) alert2.getDialogPane().getScene().getWindow();
@@ -223,31 +223,31 @@ public class AllPatientsController implements Initializable {
                 alert2.showAndWait();
             }
 
-            customersTable.setItems(Queries.getAllPatients());
+            patientsTable.setItems(Queries.getAllPatients());
 
         }
 
         JDBC.closeConnection();
     }
 
-    /** Upon typing in the search bar, display the searched customer name. **/
-    public void onSearchCustomers(ActionEvent actionEvent) {
+    /** Upon typing in the search bar, display the searched patient name. **/
+    public void onSearchPatients(ActionEvent actionEvent) {
         JDBC.openConnection();
 
-        String search = searchCustomers.getText();
+        String search = searchPatients.getText();
 
-        ObservableList<Patient> allCustomers = Queries.getAllPatients();
-        ObservableList<Patient> customerSearch = FXCollections.observableArrayList();
+        ObservableList<Patient> allPatients = Queries.getAllPatients();
+        ObservableList<Patient> patientsSearch = FXCollections.observableArrayList();
 
-        for (Patient c : allCustomers){
+        for (Patient c : allPatients){
             if (c.getName().contains(search)){
-                customerSearch.addAll(c);
+                patientsSearch.addAll(c);
             }
 
         }
 
 
-        customersTable.setItems(customerSearch);
+        patientsTable.setItems(patientsSearch);
 
         JDBC.closeConnection();;
     }

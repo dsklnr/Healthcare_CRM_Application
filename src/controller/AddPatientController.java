@@ -117,8 +117,8 @@ public class AddPatientController implements Initializable {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllPatientsController user = loader.getController();
-        user.setUser(currentUser);
+        AllPatientsController allPatientsController = loader.getController();
+        allPatientsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -137,8 +137,8 @@ public class AddPatientController implements Initializable {
     public void onCancelAddPatient(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllPatientsController user = loader.getController();
-        user.setUser(currentUser);
+        AllPatientsController allPatientsController = loader.getController();
+        allPatientsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

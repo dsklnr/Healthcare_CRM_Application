@@ -28,22 +28,22 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-/** Creating the update customer controller. **/
-public class UpdatePatient implements Initializable {
+/** Creating the update patient controller. **/
+public class UpdatePatientController implements Initializable {
     public User currentUser;
     public ComboBox countryComboBox;
     public ComboBox stateComboBox;
-    public TextField customerId;
+    public TextField patientId;
     public TextField name;
     public TextField address;
     public TextField postalCode;
     public TextField phoneNumber;
-    public Patient selectedCustomer;
+    public Patient selectedPatient;
     public LocalDateTime createDate;
     public String createdBy;
     public int countryId;
 
-    /** Initialize the update customer controller. **/
+    /** Initialize the update patient controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -83,27 +83,27 @@ public class UpdatePatient implements Initializable {
         JDBC.closeConnection();
     }
 
-    /** Populate the form with the selected customer's information. **/
-    public void setCustomer(Patient customer) throws SQLException {
+    /** Populate the form with the selected patient's information. **/
+    public void setPatient(Patient patient) throws SQLException {
         JDBC.openConnection();
 
-        selectedCustomer = customer;
+        selectedPatient = patient;
 
-        int id = customer.getPatientID();
-        String name = customer.getName();
-        String address = customer.getAddress();
-        String postal = customer.getPostalCode();
-        String phone = customer.getPhoneNumber();
-        //String createdDate = customer.getCreateDate();
-        createdBy = customer.getCreatedBy();
+        int id = patient.getPatientID();
+        String name = patient.getName();
+        String address = patient.getAddress();
+        String postal = patient.getPostalCode();
+        String phone = patient.getPhoneNumber();
+        //String createdDate = patient.getCreateDate();
+        createdBy = patient.getCreatedBy();
 
-        int divisionId = customer.getDivisionId();
+        int divisionId = patient.getDivisionId();
 
         String state = Queries.getDivisionName(divisionId);
         int countryId = Queries.getCountryId(divisionId);
         String country = Queries.getCountryName(divisionId, countryId);
 
-        customerId.setText(String.valueOf(id));
+        patientId.setText(String.valueOf(id));
         this.name.setText(name);
         this.address.setText(address);
         postalCode.setText(postal);
@@ -135,18 +135,18 @@ public class UpdatePatient implements Initializable {
         this.currentUser = currentUser;
     }
 
-    /** Update the customer in the MySQL database. **/
-    public void onSaveUpdateCustomer(ActionEvent actionEvent) throws SQLException, IOException {
+    /** Update the patient in the MySQL database. **/
+    public void onSaveUpdatePatient(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
-        int id = Integer.parseInt(customerId.getText());
-        String customerName = name.getText();
-        String customerAddress = address.getText();
+        int id = Integer.parseInt(patientId.getText());
+        String patientName = name.getText();
+        String patientAddress = address.getText();
         String postal = postalCode.getText();
-        String customerPhone = phoneNumber.getText();
+        String patientPhone = phoneNumber.getText();
 
         String createdBy = currentUser.getUsername();
-        String create = selectedCustomer.getCreateDate();
+        String create = selectedPatient.getCreateDate();
         LocalDateTime lastUpdate = LocalDateTime.now();
         String lastUpdateBy = currentUser.getUsername();
         String division = String.valueOf(stateComboBox.getSelectionModel().getSelectedItem());
@@ -160,39 +160,39 @@ public class UpdatePatient implements Initializable {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String updateTime = finalUtcUpdateTime.format(dtf);
 
-        Queries.updatePatient(customerName, customerAddress, postal, customerPhone, create,
+        Queries.updatePatient(patientName, patientAddress, postal, patientPhone, create,
                 createdBy, updateTime, lastUpdateBy, divisionId, id);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllPatientsController customerUser = loader.getController();
-        customerUser.setUser(currentUser);
+        AllPatientsController allPatientsController = loader.getController();
+        allPatientsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
         Image image = new Image("/icons/Brackets_Black.png");
         stage.getIcons().add(image);
-        stage.setTitle("CRM Customers");
+        stage.setTitle("Patients");
         stage.setScene(scene);
         stage.show();
 
         JDBC.closeConnection();
     }
 
-    /** Upon selecting cancel, return to the all customers screen. **/
-    public void onCancelUpdateCustomer(ActionEvent actionEvent) throws IOException {
+    /** Upon selecting cancel, return to the all patients screen. **/
+    public void onCancelUpdatePatient(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllPatientsController customerUser = loader.getController();
-        customerUser.setUser(currentUser);
+        AllPatientsController allPatientsController = loader.getController();
+        allPatientsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
         Image image = new Image("/icons/Brackets_Black.png");
         stage.getIcons().add(image);
-        stage.setTitle("CRM Customers");
+        stage.setTitle("Patients");
         stage.setScene(scene);
         stage.show();
     }

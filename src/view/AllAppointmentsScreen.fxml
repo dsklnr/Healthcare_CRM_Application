@@ -26,7 +26,7 @@
             <TableColumn fx:id="createdByCol" prefWidth="76.0" text="Created By" />
             <TableColumn fx:id="lastUpdateCol" prefWidth="115.0" text="Last Updated" />
             <TableColumn fx:id="lastUpdatedByCol" prefWidth="101.0" text="Last Updated By" />
-            <TableColumn fx:id="customerIdCol" prefWidth="76.0" text="Patient ID" />
+            <TableColumn fx:id="patientIdCol" prefWidth="76.0" text="Patient ID" />
             <TableColumn fx:id="userIdCol" prefWidth="60.0" text="User ID" />
             <TableColumn fx:id="contactIdCol" prefWidth="67.0" text="Doctor ID" />
         </columns>
@@ -42,7 +42,7 @@
                        <Cursor fx:constant="HAND" />
                    </cursor>
                </Label>
-               <Label fx:id="customersLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
+               <Label fx:id="patientsLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onPatientsClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
                    <font>
                        <Font size="15.0" />
                    </font>

@@ -31,13 +31,13 @@ public class ReportsController implements Initializable {
     public TableView appointmentTypeTable;
     public TableColumn countryCol;
     public TableColumn stateCol;
-    public TableColumn numberOfCustomersCol;
+    public TableColumn numberOfPatientsCol;
     public TableView divisionTable;
     public TableColumn appointmentTypeCol;
     public TableColumn monthCol;
     public TableColumn totalAppointmentsCol;
     public TableView contactScheduleTable;
-    public TableColumn customerIdCol;
+    public TableColumn patientIdCol;
     public TableColumn appointmentIdCol;
     public TableColumn titleCol;
     public TableColumn typeCol;
@@ -47,7 +47,7 @@ public class ReportsController implements Initializable {
     public User currentUser;
     public TableColumn contactCol;
     public Label homeLabel;
-    public Label customersLabel;
+    public Label patientsLabel;
     public Label scheduleLabel;
     public Label reportLabel;
     public ImageView logo;
@@ -61,17 +61,17 @@ public class ReportsController implements Initializable {
         logo.setImage(image);
 
         homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
-        customersLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        patientsLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
         scheduleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
         reportLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
 
         ObservableList<Appointment> totalAppointments = FXCollections.observableArrayList();
-        ObservableList<Division> customersByState = FXCollections.observableArrayList();
+        ObservableList<Division> patientsByState = FXCollections.observableArrayList();
         ObservableList<Appointment> contactSchedule = FXCollections.observableArrayList();
 
         try {
             totalAppointments = ReportQueries.getTotalPatientAppointments();
-            customersByState = ReportQueries.getNumberOfPatientsByState();
+            patientsByState = ReportQueries.getNumberOfPatientsByState();
             contactSchedule = ReportQueries.getContactSchedule();
 
         } catch (SQLException e) {
@@ -86,12 +86,12 @@ public class ReportsController implements Initializable {
 
         countryCol.setCellValueFactory(new PropertyValueFactory<>("division"));
         stateCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        numberOfCustomersCol.setCellValueFactory(new PropertyValueFactory<>("countryId"));
+        numberOfPatientsCol.setCellValueFactory(new PropertyValueFactory<>("countryId"));
 
-        appointmentTypeTable.setItems(customersByState);
+        appointmentTypeTable.setItems(patientsByState);
 
         contactCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        patientIdCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -121,24 +121,24 @@ public class ReportsController implements Initializable {
         stage.close();
         Image image = new Image("/icons/Brackets_Black.png");
         stage.getIcons().add(image);
-        stage.setTitle("CRM Dashboard");
+        stage.setTitle("Dashboard");
         stage.setScene(scene);
         stage.show();
     }
 
-    /** Upon clicking customers, go to the all customers screen. **/
-    public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
+    /** Upon clicking patients, go to the all patients screen. **/
+    public void onPatientsClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllPatientsController customerController = loader.getController();
-        customerController.setUser(currentUser);
+        AllPatientsController allPatientsController = loader.getController();
+        allPatientsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         Image image = new Image("/icons/Brackets_Black.png");
         stage.getIcons().add(image);
-        stage.setTitle("CRM Customers");
+        stage.setTitle("Patients");
         stage.setScene(scene);
         stage.show();
     }
@@ -147,15 +147,15 @@ public class ReportsController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
-        AllAppointmentsController appointmentsController = loader.getController();
-        appointmentsController.setUser(currentUser);
+        AllAppointmentsController allAppointmentsController = loader.getController();
+        allAppointmentsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
         Image image = new Image("/icons/Brackets_Black.png");
         stage.getIcons().add(image);
-        stage.setTitle("CRM Appointments");
+        stage.setTitle("Appointments");
         stage.setScene(scene);
         stage.show();
     }
@@ -172,7 +172,7 @@ public class ReportsController implements Initializable {
         stage.close();
         Image image = new Image("/icons/Brackets_Black.png");
         stage.getIcons().add(image);
-        stage.setTitle("CRM Reports");
+        stage.setTitle("Reports");
         stage.setScene(scene);
         stage.show();
     }

@@ -38,13 +38,13 @@ public class AllAppointmentsController implements Initializable {
     public TableColumn createdByCol;
     public TableColumn lastUpdateCol;
     public TableColumn lastUpdatedByCol;
-    public TableColumn customerIdCol;
+    public TableColumn patientIdCol;
     public TableColumn userIdCol;
     public TableColumn contactIdCol;
     public TableView allAppointmentsTable;
     public TextField searchAppointments;
     public Label homeLabel;
-    public Label customersLabel;
+    public Label patientsLabel;
     public Label scheduleLabel;
     public Label reportLabel;
     public ImageView logo;
@@ -59,7 +59,7 @@ public class AllAppointmentsController implements Initializable {
         logo.setImage(image);
 
         homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
-        customersLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
+        patientsLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
         scheduleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
         reportLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
 
@@ -74,7 +74,7 @@ public class AllAppointmentsController implements Initializable {
         createdByCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         lastUpdateCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
         lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
-        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        patientIdCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
         contactIdCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
 
@@ -93,8 +93,8 @@ public class AllAppointmentsController implements Initializable {
     public void onHomeClick(MouseEvent mouseEvent) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
-        DashboardController dashboardUser = loader.getController();
-        dashboardUser.setUser(currentUser);
+        DashboardController dashboardController = loader.getController();
+        dashboardController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -106,12 +106,12 @@ public class AllAppointmentsController implements Initializable {
         stage.show();
     }
 
-    /** Upon clicking customers, go to the all customers screen. **/
-    public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
+    /** Upon clicking patients, go to the all patients screen. **/
+    public void onPatientsClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllPatientsController customerUser = loader.getController();
-        customerUser.setUser(currentUser);
+        AllPatientsController allPatientsController = loader.getController();
+        allPatientsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -127,8 +127,8 @@ public class AllAppointmentsController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
-        AllAppointmentsController appointmentsUser = loader.getController();
-        appointmentsUser.setUser(currentUser);
+        AllAppointmentsController allAppointmentsController = loader.getController();
+        allAppointmentsController.setUser(currentUser);
         Scene scene = new Scene(root, 1500, 800);
         scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -161,8 +161,8 @@ public class AllAppointmentsController implements Initializable {
     public void onScheduleAppointment(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddAppointmentScreen.fxml"));
         Parent root = loader.load();
-        AddAppointmentController appointmentsUser = loader.getController();
-        appointmentsUser.setUser(currentUser);
+        AddAppointmentController addAppointmentController = loader.getController();
+        addAppointmentController.setUser(currentUser);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
         Image image = new Image("/icons/Brackets_Black.png");
@@ -183,9 +183,9 @@ public class AllAppointmentsController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentScreen.fxml"));
             Parent root = loader.load();
-            UpdateAppointmentController updateAppointmentScreen = loader.getController();
-            updateAppointmentScreen.setAppointment(appointment);
-            updateAppointmentScreen.setUser(currentUser);
+            UpdateAppointmentController updateAppointmentController = loader.getController();
+            updateAppointmentController.setAppointment(appointment);
+            updateAppointmentController.setUser(currentUser);
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();
             Image image = new Image("/icons/Brackets_Black.png");

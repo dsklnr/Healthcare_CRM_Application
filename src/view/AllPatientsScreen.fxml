@@ -18,9 +18,9 @@
                <Font size="15.0" />
            </font>
        </Label>
-      <TableView fx:id="customersTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="1342.0">
+      <TableView fx:id="patientsTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="1342.0">
         <columns>
-            <TableColumn fx:id="customerIdCol" prefWidth="76.0" text="Patient ID" />
+            <TableColumn fx:id="patientIdCol" prefWidth="76.0" text="Patient ID" />
             <TableColumn fx:id="nameCol" prefWidth="173.0" text="Patient Name" />
             <TableColumn fx:id="addressCol" prefWidth="214.0" text="Address" />
             <TableColumn fx:id="postalCodeCol" prefWidth="106.0" text="Postal Code" />
@@ -29,7 +29,7 @@
             <TableColumn fx:id="divisionIdCol" prefWidth="234.0" text="Division ID" />
         </columns>
       </TableView>
-      <TextField fx:id="searchCustomers" layoutX="1215.0" layoutY="145.0" onAction="#onSearchCustomers" prefHeight="25.0" prefWidth="200.0" promptText="Search Customer Name" />
+      <TextField fx:id="searchPatients" layoutX="1215.0" layoutY="145.0" onAction="#onSearchPatients" prefHeight="25.0" prefWidth="200.0" promptText="Search Customer Name" />
        <Pane layoutX="-6.0" layoutY="-4.0" prefHeight="79.0" prefWidth="1506.0" style="-fx-background-color: #000000;">
            <children>
                <Label fx:id="homeLabel" layoutX="994.0" layoutY="30.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="HOME">
@@ -40,7 +40,7 @@
                        <Cursor fx:constant="HAND" />
                    </cursor>
                </Label>
-               <Label fx:id="customersLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
+               <Label fx:id="patientsLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onPatientsClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
                    <font>
                        <Font size="15.0" />
                    </font>
@@ -71,21 +71,21 @@
                    </font>
                </Label>
            </children></Pane>
-      <Button layoutX="1124.0" layoutY="706.0" mnemonicParsing="false" onAction="#onAddCustomer" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Add">
+      <Button layoutX="1124.0" layoutY="706.0" mnemonicParsing="false" onAction="#onAddPatient" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Add">
          <font>
             <Font size="15.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button layoutX="1224.0" layoutY="706.0" mnemonicParsing="false" onAction="#onUpdateCustomer" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Update">
+      <Button layoutX="1224.0" layoutY="706.0" mnemonicParsing="false" onAction="#onUpdatePatient" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Update">
           <font>
               <Font size="15.0" />
           </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button layoutX="1324.0" layoutY="706.0" mnemonicParsing="false" onAction="#onDeleteCustomer" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Delete">
+      <Button layoutX="1324.0" layoutY="706.0" mnemonicParsing="false" onAction="#onDeletePatient" prefHeight="25.0" prefWidth="91.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Delete">
           <font>
               <Font size="15.0" />
           </font>

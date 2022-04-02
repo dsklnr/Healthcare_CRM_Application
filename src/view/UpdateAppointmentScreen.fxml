@@ -75,7 +75,7 @@
         </Button>
         <TextField fx:id="location" layoutX="165.0" layoutY="252.0" prefHeight="25.0" prefWidth="174.0" />
         <TextField fx:id="type" layoutX="165.0" layoutY="372.0" prefHeight="25.0" prefWidth="174.0" />
-        <TextField fx:id="customerId" layoutX="165.0" layoutY="552.0" prefHeight="25.0" prefWidth="174.0" />
+        <TextField fx:id="patientId" layoutX="165.0" layoutY="552.0" prefHeight="25.0" prefWidth="174.0" />
         <TextField fx:id="userId" layoutX="165.0" layoutY="612.0" prefHeight="25.0" prefWidth="174.0" />
         <TextArea fx:id="description" layoutX="165.0" layoutY="685.0" prefHeight="112.0" prefWidth="536.0" />
         <ComboBox fx:id="contactComboBox" layoutX="165.0" layoutY="312.0" prefHeight="25.0" prefWidth="174.0" />
