@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.User;
@@ -20,8 +21,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -31,7 +30,7 @@ public class  AddAppointmentController implements Initializable {
     public TextField title;
     public TextField location;
     public TextField type;
-    public TextField customerId;
+    public TextField patientId;
     public TextField userId;
     public TextArea description;
     public ComboBox contactComboBox;
@@ -118,7 +117,7 @@ public class  AddAppointmentController implements Initializable {
         String createdBy = user.getUsername();
         LocalDateTime lastUpdate = LocalDateTime.now();
         String lastUpdateBy = user.getUsername();
-        String customerID = customerId.getText();
+        String patientID = patientId.getText();
         String userID = userId.getText();
         String appointmentDescription = description.getText();
         String appointmentContact = String.valueOf(contactComboBox.getSelectionModel().getSelectedItem());
@@ -148,9 +147,12 @@ public class  AddAppointmentController implements Initializable {
                 startMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
                 endHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 endMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
-                customerId.getText().equals("") || userId.getText().equals("") || appointmentDescription.equals("")){
+                patientId.getText().equals("") || userId.getText().equals("") || appointmentDescription.equals("")){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            Image image = new Image("/icons/Error.png");
+            stage.getIcons().add(image);
             alert.setTitle("ERROR");
             alert.setContentText("One or more value(s) is missing");
             Optional<ButtonType> action = alert.showAndWait();
@@ -163,6 +165,9 @@ public class  AddAppointmentController implements Initializable {
         if (estST.isBefore(businessOpenHour) || estST.isAfter(businessCloseHour)) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            Image image = new Image("/icons/Error.png");
+            stage.getIcons().add(image);
             alert.setTitle("Error");
             alert.setContentText("Cannot set an appointment outside of business hours \n\nBusiness hours are 08:00 - 22:00 EST Monday - Friday");
             Optional<ButtonType> action = alert.showAndWait();
@@ -175,6 +180,9 @@ public class  AddAppointmentController implements Initializable {
         if (startLocalDateTime.isAfter(endLocalDateTime)){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            Image image = new Image("/icons/Error.png");
+            stage.getIcons().add(image);
             alert.setTitle("Error");
             alert.setContentText("The start date and time must be before the end date and time");
             Optional<ButtonType> action = alert.showAndWait();
@@ -187,6 +195,9 @@ public class  AddAppointmentController implements Initializable {
         if (startLocalDateTime.equals(endLocalDateTime)){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            Image image = new Image("/icons/Error.png");
+            stage.getIcons().add(image);
             alert.setTitle("Error");
             alert.setContentText("The start time cannot be the same as the end time");
             Optional<ButtonType> action = alert.showAndWait();
@@ -253,6 +264,9 @@ public class  AddAppointmentController implements Initializable {
                 if (startLocalDateTime.isAfter(currentStart) && startLocalDateTime.isBefore(currentEnd)) {
 
                     Alert alert = new Alert(Alert.AlertType.ERROR);
+                    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    Image image = new Image("/icons/Error.png");
+                    stage.getIcons().add(image);
                     alert.setTitle("ERROR");
                     alert.setContentText("Your date and time overlaps another appointment starting at " +
                             currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
@@ -266,6 +280,9 @@ public class  AddAppointmentController implements Initializable {
                 if (startLocalDateTime.equals(currentStart) || startLocalDateTime.equals(currentEnd)) {
 
                     Alert alert = new Alert(Alert.AlertType.ERROR);
+                    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    Image image = new Image("/icons/Error.png");
+                    stage.getIcons().add(image);
                     alert.setTitle("ERROR");
                     alert.setContentText("Your date and time overlaps another appointment starting at " +
                             currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
@@ -279,6 +296,9 @@ public class  AddAppointmentController implements Initializable {
                 if (startLocalDateTime.isBefore(currentEnd) && endLocalDateTime.isAfter(currentStart)) {
 
                     Alert alert = new Alert(Alert.AlertType.ERROR);
+                    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    Image image = new Image("/icons/Error.png");
+                    stage.getIcons().add(image);
                     alert.setTitle("ERROR");
                     alert.setContentText("Your date and time overlaps another appointment starting at " +
                             currentStart.format(dateTF) + " and ending at " + currentEnd.format(dateTF));
@@ -312,19 +332,21 @@ public class  AddAppointmentController implements Initializable {
 
             Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                    finalStartTime, finalEndTime, finalCreateTime, createdBy, finalUpdateTime, lastUpdateBy,
-                    Integer.parseInt(customerID), Integer.parseInt(userID), contactId);
+                    Integer.parseInt(patientID), Integer.parseInt(userID), contactId);
 
             JDBC.closeConnection();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();
-
             AllAppointmentsController appointmentsUser = loader.getController();
             appointmentsUser.setUser(user);
-
+            Scene scene = new Scene(root, 1500, 800);
+            scene.getStylesheets().add("/css/styles.css");
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Image image = new Image("/icons/Brackets_Black.png");
+            stage.getIcons().add(image);
             stage.setTitle("Appointments");
-            stage.setScene(new Scene(root, 1500, 800));
+            stage.setScene(scene);
             stage.show();
         }
 
@@ -335,14 +357,16 @@ public class  AddAppointmentController implements Initializable {
     public void onCancelAddAppointment (ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
-
         AllAppointmentsController appointmentsUser = loader.getController();
         appointmentsUser.setUser(user);
-
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage2.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage2.getIcons().add(image);
         stage2.setTitle("Appointments");
-        stage2.setScene(new Scene(root, 1500, 800));
+        stage2.setScene(scene);
         stage2.show();
     }
 }

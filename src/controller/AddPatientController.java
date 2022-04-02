@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.Country;
 import model.Division;
@@ -26,8 +27,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-/** Creating the add customer controller. **/
-public class AddCustomerController implements Initializable {
+/** Creating the add patient controller. **/
+public class AddPatientController implements Initializable {
     public ComboBox<Country> countryComboBox;
     public ComboBox<Division> stateComboBox;
     public TextField name;
@@ -37,7 +38,7 @@ public class AddCustomerController implements Initializable {
     public User currentUser;
     public int countryId;
 
-    /** Initialize the add customer controller. **/
+    /** Initialize the add patient controller. **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
@@ -82,14 +83,14 @@ public class AddCustomerController implements Initializable {
 
     }
 
-    /** Insert a new customer into the database. **/
-    public void onSaveAddCustomer(ActionEvent actionEvent) throws SQLException, IOException {
+    /** Insert a new patient into the database. **/
+    public void onSaveAddPatient(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
-        String customerName = name.getText();
-        String customerAddress = address.getText();
+        String patientName = name.getText();
+        String patientAddress = address.getText();
         String postal = postalCode.getText();
-        String customerPhone = phoneNumber.getText();
+        String patientPhone = phoneNumber.getText();
         LocalDateTime createDate = LocalDateTime.now();
         String createdBy = currentUser.getUsername();
         LocalDateTime lastUpdate = LocalDateTime.now();
@@ -111,37 +112,41 @@ public class AddCustomerController implements Initializable {
         String updateTime = finalUtcUpdateTime.format(dtf);
 
 
-        Queries.createCustomer(customerName, customerAddress, postal, customerPhone, createTime,
+        Queries.createPatient(patientName, patientAddress, postal, patientPhone, createTime,
                 createdBy, updateTime, lastUpdateBy, divisionId);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-
-        AllCustomersController customerUser = loader.getController();
-        customerUser.setUser(currentUser);
-
+        AllPatientsController user = loader.getController();
+        user.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage2.close();
-        stage2.setTitle("CRM Customers");
-        stage2.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage2.getIcons().add(image);
+        stage2.setTitle("Patients");
+        stage2.setScene(scene);
         stage2.show();
 
 
         JDBC.closeConnection();
     }
 
-    /** Upon clicking cancel, return to the all customers screen. **/
-    public void onCancelAddCustomer(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
+    /** Upon clicking cancel, return to the all patients screen. **/
+    public void onCancelAddPatient(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-
-        AllCustomersController customerUser = loader.getController();
-        customerUser.setUser(currentUser);
-
+        AllPatientsController user = loader.getController();
+        user.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage2.close();
-        stage2.setTitle("CRM Customers");
-        stage2.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage2.getIcons().add(image);
+        stage2.setTitle("Patients");
+        stage2.setScene(scene);
         stage2.show();
     }
 }

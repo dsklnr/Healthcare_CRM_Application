@@ -55,7 +55,7 @@ public class AllAppointmentsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
-        Image image = new Image("/icons/Brackets.png");
+        Image image = new Image("/icons/Brackets_White.png");
         logo.setImage(image);
 
         homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
@@ -95,23 +95,31 @@ public class AllAppointmentsController implements Initializable {
         Parent root = loader.load();
         DashboardController dashboardUser = loader.getController();
         dashboardUser.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Dashboard");
-        stage.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
+        stage.setTitle("Dashboard");
+        stage.setScene(scene);
         stage.show();
     }
 
     /** Upon clicking customers, go to the all customers screen. **/
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllCustomersController customerUser = loader.getController();
+        AllPatientsController customerUser = loader.getController();
         customerUser.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Customers");
-        stage.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
+        stage.setTitle("Patients");
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -121,10 +129,14 @@ public class AllAppointmentsController implements Initializable {
         Parent root = loader.load();
         AllAppointmentsController appointmentsUser = loader.getController();
         appointmentsUser.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Dashboard");
-        stage.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
+        stage.setTitle("Appointments");
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -134,10 +146,14 @@ public class AllAppointmentsController implements Initializable {
         Parent root = loader.load();
         ReportsController reportsController = loader.getController();
         reportsController.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Reports");
-        stage.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
+        stage.setTitle("Reports");
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -145,12 +161,12 @@ public class AllAppointmentsController implements Initializable {
     public void onScheduleAppointment(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddAppointmentScreen.fxml"));
         Parent root = loader.load();
-
         AddAppointmentController appointmentsUser = loader.getController();
         appointmentsUser.setUser(currentUser);
-
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("Schedule An Appointment");
         stage.setScene(new Scene(root, 800, 900));
         stage.show();
@@ -167,13 +183,13 @@ public class AllAppointmentsController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentScreen.fxml"));
             Parent root = loader.load();
-
             UpdateAppointmentController updateAppointmentScreen = loader.getController();
             updateAppointmentScreen.setAppointment(appointment);
             updateAppointmentScreen.setUser(currentUser);
-
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();
+            Image image = new Image("/icons/Brackets_Black.png");
+            stage.getIcons().add(image);
             stage.setTitle("Update An Appointment");
             stage.setScene(new Scene(root, 800, 900));
             stage.show();
@@ -191,6 +207,9 @@ public class AllAppointmentsController implements Initializable {
         if (appointment != null){
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            Image image = new Image("/icons/Confirmation.png");
+            stage.getIcons().add(image);
             alert.setTitle("Confirm Delete Appointment");
             alert.setContentText("Are you sure you want to delete appointment ID: " + appointment.getAppointmentId() +
                     ", appointment type: " + appointment.getType() + "?");

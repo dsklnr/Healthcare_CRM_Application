@@ -143,6 +143,9 @@ public class MainScreenController implements Initializable {
 
                 if (!Queries.immediateAppointment(Queries.selectUser(user, pass))) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    Image image = new Image("/icons/Information.png");
+                    stage.getIcons().add(image);
                     alert.setTitle("Upcoming Appointments");
                     alert.setContentText("No immediate upcoming appointments.");
                     alert.showAndWait();
@@ -153,14 +156,16 @@ public class MainScreenController implements Initializable {
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
                 Parent root = loader.load();
-
                 DashboardController dashboardController = loader.getController();
                 dashboardController.setUser(currentUser);
-
+                Scene scene = new Scene(root, 1500, 800);
+                scene.getStylesheets().add("/css/styles.css");
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.close();
-                stage.setTitle("CRM Dashboard");
-                stage.setScene(new Scene(root, 1500, 800));
+                Image image = new Image("/icons/Brackets_Black.png");
+                stage.getIcons().add(image);
+                stage.setTitle("Dashboard");
+                stage.setScene(scene);
                 stage.show();
 
             } catch (IOException ex) {
@@ -182,6 +187,9 @@ public class MainScreenController implements Initializable {
                 }
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                Image image = new Image("/icons/Error.png");
+                stage.getIcons().add(image);
                 alert.setTitle("Informations D'Identification Incorrectes");
                 alert.setContentText("Nom d'utilisateur ou mot de passe invalide");
                 alert.show();
@@ -199,6 +207,9 @@ public class MainScreenController implements Initializable {
                 }
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                Image image = new Image("/icons/Error.png");
+                stage.getIcons().add(image);
                 alert.setTitle("Incorrect Credentials");
                 alert.setContentText("Invalid username or password");
                 alert.show();
@@ -213,6 +224,8 @@ public class MainScreenController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CreateAccount.fxml"));
         Parent root = loader.load();
         Stage stage = new Stage();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("User Login");
         stage.setScene(new Scene(root, 600, 700));
         stage.show();

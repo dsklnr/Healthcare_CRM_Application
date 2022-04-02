@@ -16,7 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import model.Customer;
+import model.Patient;
 import model.User;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /** Creating the all customers controller. **/
-public class AllCustomersController implements Initializable {
+public class AllPatientsController implements Initializable {
     public TableColumn customerIdCol;
     public TableColumn nameCol;
     public TableColumn addressCol;
@@ -52,7 +52,7 @@ public class AllCustomersController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
-        Image image = new Image("/icons/Brackets.png");
+        Image image = new Image("/icons/Brackets_White.png");
         logo.setImage(image);
         
         homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
@@ -71,7 +71,7 @@ public class AllCustomersController implements Initializable {
         //lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdateBy"));
         divisionIdCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
-        customersTable.setItems(Queries.getAllCustomers());
+        customersTable.setItems(Queries.getAllPatients());
 
         JDBC.closeConnection();
     }
@@ -87,23 +87,31 @@ public class AllCustomersController implements Initializable {
         Parent root = loader.load();
         DashboardController dashboardUser = loader.getController();
         dashboardUser.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("CRM Dashboard");
-        stage.setScene(new Scene(root, 1500, 800));
+        stage.setScene(scene);
         stage.show();
     }
 
     /** Upon clicking customers, go to the all customers screen. **/
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-        AllCustomersController customerUser = loader.getController();
+        AllPatientsController customerUser = loader.getController();
         customerUser.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Customers");
-        stage.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
+        stage.setTitle("Patients");
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -113,10 +121,14 @@ public class AllCustomersController implements Initializable {
         Parent root = loader.load();
         AllAppointmentsController appointmentsUser = loader.getController();
         appointmentsUser.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Dashboard");
-        stage.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
+        stage.setTitle("Dashboard");
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -126,22 +138,28 @@ public class AllCustomersController implements Initializable {
         Parent root = loader.load();
         ReportsController reportsController = loader.getController();
         reportsController.setUser(currentUser);
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("CRM Reports");
-        stage.setScene(new Scene(root, 1500, 800));
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
+        stage.setTitle("Reports");
+        stage.setScene(scene);
         stage.show();
     }
 
     /** Upon clicking the add button, go to the add customer screen. **/
     public void onAddCustomer(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddCustomerScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddPatientScreen.fxml"));
         Parent root = loader.load();
-        AddCustomerController customerUser = loader.getController();
+        AddPatientController customerUser = loader.getController();
         customerUser.setUser(currentUser);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
-        stage.setTitle("Add A Customer");
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
+        stage.setTitle("Add Patient");
         stage.setScene(new Scene(root, 500, 600));
         stage.show();
     }
@@ -149,19 +167,21 @@ public class AllCustomersController implements Initializable {
     /** Upon clicking the update button, go to the add appointment screen and populate the form based on the customer
      * selected. **/
     public void onUpdateCustomer(ActionEvent actionEvent) throws IOException {
-        Customer customer = (Customer) customersTable.getSelectionModel().getSelectedItem();
+        Patient customer = (Patient) customersTable.getSelectionModel().getSelectedItem();
 
         if (customer != null){
             try{
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateCustomerScreen.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdatePatientScreen.fxml"));
                 Parent root = loader.load();
-                UpdateCustomer selectedCustomer = loader.getController();
+                UpdatePatient selectedCustomer = loader.getController();
                 selectedCustomer.setCustomer(customer);
-                UpdateCustomer customerUser = loader.getController();
+                UpdatePatient customerUser = loader.getController();
                 customerUser.setUser(currentUser);
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.close();
-                stage.setTitle("Add A Customer");
+                Image image = new Image("/icons/Brackets_Black.png");
+                stage.getIcons().add(image);
+                stage.setTitle("Update Patient");
                 stage.setScene(new Scene(root, 500, 600));
                 stage.show();
 
@@ -175,29 +195,35 @@ public class AllCustomersController implements Initializable {
     public void onDeleteCustomer(ActionEvent actionEvent) throws SQLException, IOException {
         JDBC.openConnection();
 
-        Customer customer = (Customer) customersTable.getSelectionModel().getSelectedItem();
+        Patient customer = (Patient) customersTable.getSelectionModel().getSelectedItem();
 
         if (customer != null){
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Delete Customer");
-            alert.setContentText("Are you sure you want to delete this customer?");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            Image image = new Image("/icons/Confirmation.png");
+            stage.getIcons().add(image);
+            alert.setTitle("Delete Patient");
+            alert.setContentText("Are you sure you want to delete this patient?");
             Optional<ButtonType> action = alert.showAndWait();
 
-            if (action.get().equals(ButtonType.OK) && Queries.checkDeleteCustomer(customer.getCustomerId())) {
-                Queries.deleteCustomer(customer.getCustomerId());
+            if (action.get().equals(ButtonType.OK) && Queries.checkDeletePatient(customer.getPatientID())) {
+                Queries.deletePatient(customer.getPatientID());
                 alert.close();
             }
 
-            if (action.get().equals(ButtonType.OK) && !Queries.checkDeleteCustomer(customer.getCustomerId())){
+            if (action.get().equals(ButtonType.OK) && !Queries.checkDeletePatient(customer.getPatientID())){
                 alert.close();
                 Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                Stage stage2 = (Stage) alert2.getDialogPane().getScene().getWindow();
+                Image image2 = new Image("/icons/Error.png");
+                stage2.getIcons().add(image2);
                 alert2.setTitle("Error");
-                alert2.setContentText("Must delete appointments associated with customers before deleting customers");
+                alert2.setContentText("Must delete all appointments associated with this patient before deleting the patient record");
                 alert2.showAndWait();
             }
 
-            customersTable.setItems(Queries.getAllCustomers());
+            customersTable.setItems(Queries.getAllPatients());
 
         }
 
@@ -210,10 +236,10 @@ public class AllCustomersController implements Initializable {
 
         String search = searchCustomers.getText();
 
-        ObservableList<Customer> allCustomers = Queries.getAllCustomers();
-        ObservableList<Customer> customerSearch = FXCollections.observableArrayList();
+        ObservableList<Patient> allCustomers = Queries.getAllPatients();
+        ObservableList<Patient> customerSearch = FXCollections.observableArrayList();
 
-        for (Customer c : allCustomers){
+        for (Patient c : allCustomers){
             if (c.getName().contains(search)){
                 customerSearch.addAll(c);
             }

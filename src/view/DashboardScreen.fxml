@@ -23,7 +23,7 @@
             <TableColumn fx:id="startTimeCol" prefWidth="173.0" text="Start Time" />
             <TableColumn fx:id="endTimeCol" prefWidth="173.0" text="End Time" />
             <TableColumn fx:id="contactIdCol" prefWidth="94.0" text="Doctor ID" />
-            <TableColumn fx:id="customerIdCol" prefWidth="94.0" text="Patient ID" />
+            <TableColumn fx:id="patientIdCol" prefWidth="94.0" text="Patient ID" />
         </columns>
       </TableView>
       <RadioButton fx:id="monthButton" layoutX="1170.0" layoutY="149.0" mnemonicParsing="false" onAction="#onMonthButton" text="Upcoming Month">
@@ -52,7 +52,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Label>
-            <Label fx:id="customersLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onCustomersClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
+            <Label fx:id="patientLabel" layoutX="1084.0" layoutY="30.0" onMouseClicked="#onPatientsClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="PATIENTS">
                <font>
                   <Font size="15.0" />
                </font>

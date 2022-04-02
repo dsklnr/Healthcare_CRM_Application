@@ -1,8 +1,8 @@
 package model;
 
 /** Creating the customer class **/
-public class Customer {
-    private int customerId;
+public class Patient {
+    private int patientID;
     private String name;
     private String address;
     private String postalCode;
@@ -14,8 +14,8 @@ public class Customer {
     private int divisionId;
 
     /** Creating the customer class constructor. **/
-    public Customer(int customerId, String name, String address, String postalCode, String phoneNumber, String createDate, String createdBy, String lastUpdate, String lastUpdateBy, int divisionId) {
-        this.customerId = customerId;
+    public Patient(int customerId, String name, String address, String postalCode, String phoneNumber, String createDate, String createdBy, String lastUpdate, String lastUpdateBy, int divisionId) {
+        this.patientID = customerId;
         this.name = name;
         this.address = address;
         this.postalCode = postalCode;
@@ -31,13 +31,13 @@ public class Customer {
      *
      * @return Returns the customer ID.
      */
-    public int getCustomerId() {
-        return customerId;
+    public int getPatientID() {
+        return patientID;
     }
 
     /** Set the customer ID. **/
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setPatientID(int patientID) {
+        this.patientID = patientID;
     }
 
     /** Get the customer name.

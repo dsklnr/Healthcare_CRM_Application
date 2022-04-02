@@ -57,7 +57,7 @@ public class ReportsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
 
-        Image image = new Image("/icons/Brackets.png");
+        Image image = new Image("/icons/Brackets_White.png");
         logo.setImage(image);
 
         homeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
@@ -70,8 +70,8 @@ public class ReportsController implements Initializable {
         ObservableList<Appointment> contactSchedule = FXCollections.observableArrayList();
 
         try {
-            totalAppointments = ReportQueries.getTotalCustomerAppointments();
-            customersByState = ReportQueries.getNumberOfCustomersByState();
+            totalAppointments = ReportQueries.getTotalPatientAppointments();
+            customersByState = ReportQueries.getNumberOfPatientsByState();
             contactSchedule = ReportQueries.getContactSchedule();
 
         } catch (SQLException e) {
@@ -113,29 +113,33 @@ public class ReportsController implements Initializable {
     public void onHomeClick(MouseEvent mouseEvent) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
         Parent root = loader.load();
-
         DashboardController dashboardController = loader.getController();
         dashboardController.setUser(currentUser);
-
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("CRM Dashboard");
-        stage.setScene(new Scene(root, 1500, 800));
+        stage.setScene(scene);
         stage.show();
     }
 
     /** Upon clicking customers, go to the all customers screen. **/
     public void onCustomersClick(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-
-        AllCustomersController customerController = loader.getController();
+        AllPatientsController customerController = loader.getController();
         customerController.setUser(currentUser);
-
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("CRM Customers");
-        stage.setScene(new Scene(root, 1500, 800));
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -143,14 +147,16 @@ public class ReportsController implements Initializable {
     public void onScheduleClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
         Parent root = loader.load();
-
         AllAppointmentsController appointmentsController = loader.getController();
         appointmentsController.setUser(currentUser);
-
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("CRM Appointments");
-        stage.setScene(new Scene(root, 1500, 800));
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -158,14 +164,16 @@ public class ReportsController implements Initializable {
     public void onReportClick(MouseEvent mouseEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReportsScreen.fxml"));
         Parent root = loader.load();
-
         ReportsController reportsController = loader.getController();
         reportsController.setUser(currentUser);
-
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("CRM Reports");
-        stage.setScene(new Scene(root, 1500, 800));
+        stage.setScene(scene);
         stage.show();
     }
 

@@ -37,7 +37,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
         stage.setTitle("Login");
         stage.setScene(new Scene(root, 400, 600));
-        Image image = new Image("/icons/crm_icon.jpeg");
+        Image image = new Image("/icons/Brackets_Black.png");
         stage.getIcons().add(image);
         stage.show();
     }

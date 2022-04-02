@@ -13,7 +13,7 @@ public class Appointment {
     private String createdBy;
     private String lastUpdate;
     private String lastUpdatedBy;
-    private int customerId;
+    private int patientID;
     private int userId;
     private int contactId;
 
@@ -32,7 +32,7 @@ public class Appointment {
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
-        this.customerId = customerId;
+        this.patientID = customerId;
         this.userId = userId;
         this.contactId = contactId;
     }
@@ -184,13 +184,13 @@ public class Appointment {
      *
      * @return Returns the appointment customer ID.
      */
-    public int getCustomerId() {
-        return customerId;
+    public int getPatientID() {
+        return patientID;
     }
 
     /** Set the appointment customer ID. **/
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setPatientID(int patientID) {
+        this.patientID = patientID;
     }
 
     /** Get the appointment user ID.

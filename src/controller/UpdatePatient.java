@@ -11,9 +11,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.Country;
-import model.Customer;
+import model.Patient;
 import model.Division;
 import model.User;
 
@@ -28,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /** Creating the update customer controller. **/
-public class UpdateCustomer implements Initializable {
+public class UpdatePatient implements Initializable {
     public User currentUser;
     public ComboBox countryComboBox;
     public ComboBox stateComboBox;
@@ -37,7 +38,7 @@ public class UpdateCustomer implements Initializable {
     public TextField address;
     public TextField postalCode;
     public TextField phoneNumber;
-    public Customer selectedCustomer;
+    public Patient selectedCustomer;
     public LocalDateTime createDate;
     public String createdBy;
     public int countryId;
@@ -83,12 +84,12 @@ public class UpdateCustomer implements Initializable {
     }
 
     /** Populate the form with the selected customer's information. **/
-    public void setCustomer(Customer customer) throws SQLException {
+    public void setCustomer(Patient customer) throws SQLException {
         JDBC.openConnection();
 
         selectedCustomer = customer;
 
-        int id = customer.getCustomerId();
+        int id = customer.getPatientID();
         String name = customer.getName();
         String address = customer.getAddress();
         String postal = customer.getPostalCode();
@@ -159,19 +160,21 @@ public class UpdateCustomer implements Initializable {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String updateTime = finalUtcUpdateTime.format(dtf);
 
-        Queries.updateCustomer(customerName, customerAddress, postal, customerPhone, create,
+        Queries.updatePatient(customerName, customerAddress, postal, customerPhone, create,
                 createdBy, updateTime, lastUpdateBy, divisionId, id);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-
-        AllCustomersController customerUser = loader.getController();
+        AllPatientsController customerUser = loader.getController();
         customerUser.setUser(currentUser);
-
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("CRM Customers");
-        stage.setScene(new Scene(root, 1500, 800));
+        stage.setScene(scene);
         stage.show();
 
         JDBC.closeConnection();
@@ -179,16 +182,18 @@ public class UpdateCustomer implements Initializable {
 
     /** Upon selecting cancel, return to the all customers screen. **/
     public void onCancelUpdateCustomer(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllCustomersScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllPatientsScreen.fxml"));
         Parent root = loader.load();
-
-        AllCustomersController customerUser = loader.getController();
+        AllPatientsController customerUser = loader.getController();
         customerUser.setUser(currentUser);
-
+        Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add("/css/styles.css");
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+        Image image = new Image("/icons/Brackets_Black.png");
+        stage.getIcons().add(image);
         stage.setTitle("CRM Customers");
-        stage.setScene(new Scene(root, 1500, 800));
+        stage.setScene(scene);
         stage.show();
     }
 }
