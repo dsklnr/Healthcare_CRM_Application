@@ -251,20 +251,58 @@ public class AllAppointmentsController implements Initializable {
     public void onSearchAppointments(ActionEvent actionEvent) {
         JDBC.openConnection();
 
-        ObservableList<Appointment> allAppointments = Queries.getAllAppointments();
-        ObservableList<Appointment> appointmentSearch = FXCollections.observableArrayList();
+        String queryAppointment = searchAppointments.getText();
+        ObservableList<Appointment> appointments = searchByPatientName(queryAppointment);
 
-        for (int i = 0; i < allAppointments.size(); i++){
-            Appointment currentAppointment = allAppointments.get(i);
+        if (appointments.size() == 0){
+            try{
+                int appointmentId = Integer.parseInt(queryAppointment);
+                Appointment appointment = getAppointmentId(appointmentId);
 
-            if (String.valueOf(currentAppointment.getAppointmentId()).contains(searchAppointments.getText())){
-                appointmentSearch.addAll(currentAppointment);
+                if (appointment != null){
+                    appointments.add(appointment);
+                }
+            }catch (NumberFormatException ignored){
+
             }
         }
 
-        allAppointmentsTable.setItems(appointmentSearch);
+        if (appointments.size() == 0){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Appointment not found");
+            alert.showAndWait();
+            return;
+        }
+
+        allAppointmentsTable.setItems(appointments);
 
         JDBC.closeConnection();
 
+    }
+
+    private ObservableList<Appointment> searchByPatientName(String queryAppointment) {
+        ObservableList<Appointment> patientNameSearch = FXCollections.observableArrayList();
+        ObservableList<Appointment> allAppointments = Queries.getAllAppointments();
+
+        for (Appointment a : allAppointments){
+            if (a.getCreateDate().contains(queryAppointment)){
+                patientNameSearch.add(a);
+            }
+        }
+        return patientNameSearch;
+    }
+
+    private Appointment getAppointmentId(int appointmentId) {
+        ObservableList<Appointment> allAppointments = Queries.getAllAppointments();
+
+        for (int i = 0; i < allAppointments.size(); i++){
+            Appointment appointment = allAppointments.get(i);
+
+            if (appointment.getAppointmentId() == appointmentId){
+                return appointment;
+            }
+        }
+        return null;
     }
 }

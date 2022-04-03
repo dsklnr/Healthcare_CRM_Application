@@ -15,19 +15,19 @@
       </Label>
       <TableView fx:id="allAppointmentsTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="1342.0">
         <columns>
-            <TableColumn fx:id="appointmentIdCol" prefWidth="71.0" text="Patient ID" />
-            <TableColumn fx:id="patientIdCol" prefWidth="71.0" text="Patient ID" />
-            <TableColumn fx:id="patientNameCol" prefWidth="156.0" text="Patient Name" />
-            <TableColumn fx:id="contactNameCol" prefWidth="152.0" text="Doctor Name" />
-            <TableColumn fx:id="titleCol" prefWidth="134.0" text="Title" />
-            <TableColumn fx:id="typeCol" prefWidth="114.0" text="Type" />
-            <TableColumn fx:id="locationCol" prefWidth="151.0" text="Location" />
-            <TableColumn fx:id="startCol" prefWidth="164.0" text="Start Time" />
-            <TableColumn fx:id="endCol" prefWidth="194.0" text="End Time" />
-            <TableColumn fx:id="descriptionCol" prefWidth="134.0" text="Description" />
+            <TableColumn fx:id="appointmentIdCol" prefWidth="103.0" text="Appointment ID" />
+            <TableColumn fx:id="patientIdCol" prefWidth="99.0" text="Patient ID" />
+            <TableColumn fx:id="patientNameCol" prefWidth="147.0" text="Patient Name" />
+            <TableColumn fx:id="contactNameCol" prefWidth="158.0" text="Doctor Name" />
+            <TableColumn fx:id="titleCol" prefWidth="117.0" text="Title" />
+            <TableColumn fx:id="typeCol" prefWidth="133.0" text="Type" />
+            <TableColumn fx:id="locationCol" prefWidth="156.0" text="Location" />
+            <TableColumn fx:id="startCol" prefWidth="130.0" text="Start Time" />
+            <TableColumn fx:id="endCol" prefWidth="148.0" text="End Time" />
+            <TableColumn fx:id="descriptionCol" prefWidth="150.0" text="Description" />
         </columns>
       </TableView>
-      <TextField fx:id="searchAppointments" layoutX="1215.0" layoutY="145.0" onAction="#onSearchAppointments" prefHeight="25.0" prefWidth="200.0" promptText="Search Appointment ID" />
+      <TextField fx:id="searchAppointments" layoutX="1152.0" layoutY="145.0" onAction="#onSearchAppointments" prefHeight="25.0" prefWidth="263.0" promptText="Search Appointment ID or Patient Name" />
        <Pane layoutX="-6.0" layoutY="-4.0" prefHeight="79.0" prefWidth="1506.0" style="-fx-background-color: #000000;">
            <children>
                <Label fx:id="homeLabel" layoutX="994.0" layoutY="30.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="HOME">
