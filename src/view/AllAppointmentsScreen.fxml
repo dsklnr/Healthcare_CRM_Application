@@ -15,20 +15,16 @@
       </Label>
       <TableView fx:id="allAppointmentsTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="1342.0">
         <columns>
-            <TableColumn fx:id="appointmentIdCol" prefWidth="99.0" text="Appointment ID" />
-            <TableColumn fx:id="titleCol" prefWidth="74.0" text="Title" />
-            <TableColumn fx:id="descriptionCol" prefWidth="103.0" text="Description" />
-            <TableColumn fx:id="locationCol" prefWidth="89.0" text="Location" />
-            <TableColumn fx:id="typeCol" prefWidth="87.0" text="Type" />
-            <TableColumn fx:id="startTimeCol" prefWidth="139.0" text="Start Time" />
-            <TableColumn fx:id="endTimeCol" prefWidth="127.0" text="End Time" />
-            <TableColumn fx:id="createDateCol" prefWidth="128.0" text="Create Date" />
-            <TableColumn fx:id="createdByCol" prefWidth="76.0" text="Created By" />
-            <TableColumn fx:id="lastUpdateCol" prefWidth="115.0" text="Last Updated" />
-            <TableColumn fx:id="lastUpdatedByCol" prefWidth="101.0" text="Last Updated By" />
-            <TableColumn fx:id="patientIdCol" prefWidth="76.0" text="Patient ID" />
-            <TableColumn fx:id="userIdCol" prefWidth="60.0" text="User ID" />
-            <TableColumn fx:id="contactIdCol" prefWidth="67.0" text="Doctor ID" />
+            <TableColumn fx:id="appointmentIdCol" prefWidth="71.0" text="Patient ID" />
+            <TableColumn fx:id="patientIdCol" prefWidth="71.0" text="Patient ID" />
+            <TableColumn fx:id="patientNameCol" prefWidth="156.0" text="Patient Name" />
+            <TableColumn fx:id="contactNameCol" prefWidth="152.0" text="Doctor Name" />
+            <TableColumn fx:id="titleCol" prefWidth="134.0" text="Title" />
+            <TableColumn fx:id="typeCol" prefWidth="114.0" text="Type" />
+            <TableColumn fx:id="locationCol" prefWidth="151.0" text="Location" />
+            <TableColumn fx:id="startCol" prefWidth="164.0" text="Start Time" />
+            <TableColumn fx:id="endCol" prefWidth="194.0" text="End Time" />
+            <TableColumn fx:id="descriptionCol" prefWidth="134.0" text="Description" />
         </columns>
       </TableView>
       <TextField fx:id="searchAppointments" layoutX="1215.0" layoutY="145.0" onAction="#onSearchAppointments" prefHeight="25.0" prefWidth="200.0" promptText="Search Appointment ID" />

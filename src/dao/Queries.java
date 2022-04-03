@@ -196,7 +196,9 @@ public abstract class Queries {
         ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT * FROM appointments\n" +
+            String sql = "SELECT Appointment_ID, appointments.Patient_ID, Patient_Name, Contact_Name, Title, Type, Location, Start, End, Description\n" +
+                    "FROM appointments, patients, contacts\n" +
+                    "WHERE appointments.Patient_ID = patients.Patient_ID AND appointments.Contact_ID = contacts.Contact_ID\n" +
                     "ORDER BY Start";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -204,19 +206,15 @@ public abstract class Queries {
 
             while (rs.next()) {
                 int appointmentId = rs.getInt("Appointment_ID");
+                int patientId = rs.getInt("Patient_ID");
                 String title = rs.getString("Title");
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
                 LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
-                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
-                String contact = rs.getString("Created_By");
-                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
-                String updateBy = rs.getString("Last_Updated_By");
-                int patientIdFK = rs.getInt("Patient_ID");
-                int userIdFK = rs.getInt("User_ID");
-                int contactIdFK = rs.getInt("Contact_ID");
+                String patientName = rs.getString("Patient_Name");
+                String contactName = rs.getString("Contact_Name");
 
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -241,8 +239,8 @@ public abstract class Queries {
                  */
 
                 allAppointmentList.add(new Appointment(appointmentId, title, description, location,
-                        type, start.format(dtf), end.format(dtf), createDate.format(dtf), contact, lastUpdate.format(dtf), updateBy,
-                        patientIdFK, userIdFK, contactIdFK));
+                        type, start.format(dtf), end.format(dtf), patientName, contactName, "", "",
+                        patientId, 0, 0));
             }
 
         } catch (SQLException ex) {
@@ -303,11 +301,9 @@ public abstract class Queries {
         ObservableList<Patient> allPatientList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Patient_ID, Patient_Name, Address, Postal_Code, Phone, patients.Create_Date, " +
-                    "patients.Created_By, patients.Last_Update, patients.Last_Updated_by, " +
-                    "first_level_divisions.Division_ID\n" +
-                    "FROM patients, first_level_divisions\n" +
-                    "WHERE patients.Division_ID = first_level_divisions.Division_ID";
+            String sql = "SELECT Patient_ID, Patient_Name, Address, Postal_Code, Phone, countries.Country, Division\n" +
+                    "FROM patients, first_level_divisions, countries\n" +
+                    "WHERE patients.Division_ID = first_level_divisions.Division_ID AND first_level_divisions.Country_ID = countries.Country_ID";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -318,28 +314,11 @@ public abstract class Queries {
                 String address = rs.getString("Address");
                 String postalCode = rs.getString("Postal_Code");
                 String phone = rs.getString("Phone");
-                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
-                String createdBy = rs.getString("Created_By");
-                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
-                String lastUpdatedBy = rs.getString("Last_Updated_by");
-                int divisionId = rs.getInt("Division_ID");
+                String county = rs.getString("Country");
+                String division = rs.getString("Division");
 
-                //TODO change timezone code
-                ZoneId utcZone = ZoneId.of("UTC");
-                ZonedDateTime utcCreateDate = createDate.atZone(utcZone);
-                ZonedDateTime localCreateDate = utcCreateDate.withZoneSameInstant(ZoneOffset.systemDefault());
-                ZonedDateTime finalLocalStartDate = localCreateDate.minusHours(1);
-
-                ZonedDateTime utcUpdateDate = lastUpdate.atZone(utcZone);
-                ZonedDateTime localUpdateDate = utcUpdateDate.withZoneSameInstant(ZoneOffset.systemDefault());
-                ZonedDateTime finalLocalUpdateDate = localUpdateDate.minusHours(1);
-
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss ");
-                String finalCreateDate = finalLocalStartDate.format(dtf);
-                String finalUpdateDate = finalLocalUpdateDate.format(dtf);
-
-                allPatientList.add(new Patient(patientId, name, address, postalCode, phone, finalCreateDate,
-                        createdBy, finalUpdateDate, lastUpdatedBy, divisionId));
+                allPatientList.add(new Patient(patientId, name, address, postalCode, phone, county,
+                        division, "", "", 0));
             }
 
         } catch (SQLException ex) {

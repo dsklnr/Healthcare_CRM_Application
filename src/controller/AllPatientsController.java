@@ -2,6 +2,7 @@ package controller;
 
 import dao.JDBC;
 import dao.Queries;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,17 +28,14 @@ import java.util.ResourceBundle;
 
 /** Creating the all customers controller. **/
 public class AllPatientsController implements Initializable {
-    public TableColumn patientIdCol;
-    public TableColumn nameCol;
-    public TableColumn addressCol;
-    public TableColumn postalCodeCol;
-    public TableColumn phoneNumberCol;
-    public TableColumn createDateCol;
-    public TableColumn createdByCol;
-    public TableColumn lastUpdateCol;
-    public TableColumn lastUpdatedByCol;
-    public TableColumn divisionIdCol;
-    public TableView patientsTable;
+    public TableColumn<Patient, Integer> patientIdCol;
+    public TableColumn<Patient, String> nameCol;
+    public TableColumn<Patient, String> addressCol;
+    public TableColumn<Patient, String> postalCodeCol;
+    public TableColumn<Patient, String> phoneNumberCol;
+    public TableColumn<Patient, String> countryCol;
+    public TableColumn<Patient, String> divisionCol;
+    public TableView<Patient> patientsTable;
     public User currentUser;
     public TextField searchPatients;
     public Label homeLabel;
@@ -45,7 +43,6 @@ public class AllPatientsController implements Initializable {
     public Label scheduleLabel;
     public Label reportLabel;
     public ImageView logo;
-    public TableColumn CountryCol;
 
     /** Initialize the all patients controller. **/
     @Override
@@ -60,16 +57,33 @@ public class AllPatientsController implements Initializable {
         scheduleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
         reportLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
 
-        patientIdCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
-        postalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
-        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        //createDateCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        //createdByCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        //lastUpdateCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
-        //lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdateBy"));
-        divisionIdCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
+        patientIdCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getPatientID());
+        });
+
+        nameCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getName());
+        });
+
+        addressCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getAddress());
+        });
+
+        postalCodeCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getPostalCode());
+        });
+
+        phoneNumberCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getPhoneNumber());
+        });
+
+        countryCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getCreateDate());
+        });
+
+        divisionCol.setCellValueFactory(colData ->{
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getCreatedBy());
+        });
 
         patientsTable.setItems(Queries.getAllPatients());
 

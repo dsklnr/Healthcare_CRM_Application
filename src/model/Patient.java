@@ -14,8 +14,8 @@ public class Patient {
     private int divisionId;
 
     /** Creating the customer class constructor. **/
-    public Patient(int customerId, String name, String address, String postalCode, String phoneNumber, String createDate, String createdBy, String lastUpdate, String lastUpdateBy, int divisionId) {
-        this.patientID = customerId;
+    public Patient(int patientId, String name, String address, String postalCode, String phoneNumber, String createDate, String createdBy, String lastUpdate, String lastUpdateBy, int divisionId) {
+        this.patientID = patientId;
         this.name = name;
         this.address = address;
         this.postalCode = postalCode;

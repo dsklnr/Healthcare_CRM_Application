@@ -2,6 +2,7 @@ package controller;
 
 import dao.JDBC;
 import dao.Queries;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,21 +28,17 @@ import java.util.ResourceBundle;
 
 /** Creating the all appointments controller. **/
 public class AllAppointmentsController implements Initializable {
-    public TableColumn appointmentIdCol;
-    public TableColumn titleCol;
-    public TableColumn descriptionCol;
-    public TableColumn locationCol;
-    public TableColumn typeCol;
-    public TableColumn startTimeCol;
-    public TableColumn endTimeCol;
-    public TableColumn createDateCol;
-    public TableColumn createdByCol;
-    public TableColumn lastUpdateCol;
-    public TableColumn lastUpdatedByCol;
-    public TableColumn patientIdCol;
-    public TableColumn userIdCol;
-    public TableColumn contactIdCol;
-    public TableView allAppointmentsTable;
+    public TableColumn<Appointment, Integer> appointmentIdCol;
+    public TableColumn<Appointment, Integer> patientIdCol;
+    public TableColumn<Appointment, String> patientNameCol;
+    public TableColumn<Appointment, String> contactNameCol;
+    public TableColumn<Appointment, String> titleCol;
+    public TableColumn<Appointment, String> typeCol;
+    public TableColumn<Appointment, String> locationCol;
+    public TableColumn<Appointment, String> startCol;
+    public TableColumn<Appointment, String> endCol;
+    public TableColumn<Appointment, String> descriptionCol;
+    public TableView<Appointment> allAppointmentsTable;
     public TextField searchAppointments;
     public Label homeLabel;
     public Label patientsLabel;
@@ -63,20 +60,45 @@ public class AllAppointmentsController implements Initializable {
         scheduleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
         reportLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #FFFFFF;");
 
-        appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
-        endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
-        createDateCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        createdByCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        lastUpdateCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
-        lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
-        patientIdCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
-        userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
-        contactIdCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+        appointmentIdCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getAppointmentId());
+        });
+
+        patientIdCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getPatientID());
+        });
+
+        patientNameCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getCreateDate());
+        });
+
+        contactNameCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getCreatedBy());
+        });
+
+        titleCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getTitle());
+        });
+
+        typeCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getType());
+        });
+
+        locationCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getLocation());
+        });
+
+        startCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getStartDateTime());
+        });
+
+        endCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getEndDateTime());
+        });
+
+        descriptionCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getDescription());
+        });
 
         allAppointmentsTable.setItems(Queries.getAllAppointments());
 
