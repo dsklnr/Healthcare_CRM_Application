@@ -6,20 +6,21 @@ import java.sql.SQLException;
 
 public abstract class CreateAccountQueries {
 
-    public static void insertDoctor(String userName, String password, String level) throws SQLException {
+    public static void insertDoctor(String userName, String password, String level, int doctorId) throws SQLException {
         String sql = "INSERT INTO users \n" +
-                "VALUES (null, ?, ?, ?, null, ?, ?)";
+                "VALUES (null, ?, ?, ?, null, ?)";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, userName);
         ps.setString(2, password);
         ps.setString(3, level);
+        ps.setInt(4, doctorId);
         ps.execute();
     }
 
     public static void insertNurse(String userName, String password, String type) throws SQLException {
         String sql = "INSERT INTO users \n" +
-                "VALUES (null, ?, ?, null, ?, ?, ?)";
+                "VALUES (null, ?, ?, null, ?, null)";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, userName);
@@ -28,13 +29,14 @@ public abstract class CreateAccountQueries {
         ps.execute();
     }
 
-    public static void insertContact(String name, String email) throws SQLException {
-        String sql = "INSERT INTO contacts \n" +
-                "VALUES (null, ?, ?)";
+    public static void insertDoctor(int doctorId, String name, String email) throws SQLException {
+        String sql = "INSERT INTO doctors \n" +
+                "VALUES (?, ?, ?)";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setString(1, name);
-        ps.setString(2, email);
+        ps.setInt(1, doctorId);
+        ps.setString(2, name);
+        ps.setString(3, email);
         ps.execute();
     }
 

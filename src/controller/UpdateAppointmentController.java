@@ -30,18 +30,19 @@ public class UpdateAppointmentController implements Initializable {
     public TextField title;
     public TextField location;
     public TextField type;
-    public TextField patientId;
-    public TextField userId;
     public TextArea description;
+    public ComboBox userIdComboBox;
     public ComboBox contactComboBox;
-    public User user;
+    public ComboBox patientComboBox;
     public DatePicker startDate;
     public DatePicker endDate;
     public ComboBox startHourComboBox;
     public ComboBox startMinuteComboBox;
     public ComboBox endHourComboBox;
     public ComboBox endMinuteComboBox;
+    public User user;
     public Appointment selectedAppointment;
+
 
     /** Initialize the update appointment controller. **/
     @Override
@@ -55,15 +56,15 @@ public class UpdateAppointmentController implements Initializable {
         ObservableList<String> minutes = FXCollections.observableArrayList();
         minutes.addAll("00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55");
 
-
-        contactComboBox.setPromptText("Select Contact");
         startHourComboBox.setItems(hours);
         endHourComboBox.setItems(hours);
         startMinuteComboBox.setItems(minutes);
         endMinuteComboBox.setItems(minutes);
 
         try {
-            contactComboBox.setItems(Queries.getAllContacts());
+            userIdComboBox.setItems(Queries.getAllUsers());
+            contactComboBox.setItems(Queries.getAllContactInfo());
+            patientComboBox.setItems(Queries.getAllPatients());
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -95,11 +96,17 @@ public class UpdateAppointmentController implements Initializable {
         description.setText(appointmentDescription);
         location.setText(appointmentLocation);
         type.setText(appointmentType);
-        patientId.setText(String.valueOf(patientID));
-        userId.setText(String.valueOf(userID));
+        //patientId.setText(String.valueOf(patientID));
+        //userId.setText(String.valueOf(userID));
+
+
+        String userId = String.valueOf(appointment.getUserId());
+        userIdComboBox.getSelectionModel().select(userId);
 
         String contactName = Queries.getContactName(appointment.getContactId(), appointment.getAppointmentId());
         contactComboBox.getSelectionModel().select(contactName);
+
+        //String patientName = Queries.;
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -205,11 +212,14 @@ public class UpdateAppointmentController implements Initializable {
         LocalDateTime createDate = Queries.getAppointmentCreateDate(selectedAppointment.getAppointmentId());
         String createdBy = user.getUsername();
         LocalDateTime lastUpdate = LocalDateTime.now();
-        String patientID = patientId.getText();
-        String userID = userId.getText();
+        //String patientID = patientId.getText();
+        //String userID = userId.getText();
         String appointmentDescription = description.getText();
+        int appointmentUser = Integer.parseInt(String.valueOf(userIdComboBox.getSelectionModel().getSelectedItem()));
         String appointmentContact = String.valueOf(contactComboBox.getSelectionModel().getSelectedItem());
-        int contactId = Queries.getContactId(appointmentContact);
+        int contactId = Queries.getOnlyDoctorId(appointmentContact);
+        String appointmentPatient = String.valueOf(patientComboBox.getSelectionModel().getSelectedItem());
+        int patientId =Queries.getPatientId(appointmentPatient);
         String startHours = String.valueOf(startHourComboBox.getSelectionModel().getSelectedItem());
         String startMinutes = String.valueOf(startMinuteComboBox.getSelectionModel().getSelectedItem());
         String endHours = String.valueOf(endHourComboBox.getSelectionModel().getSelectedItem());
@@ -236,7 +246,7 @@ public class UpdateAppointmentController implements Initializable {
                 startMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
                 endHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 endMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
-                patientId.getText().equals("") || userId.getText().equals("") || appointmentDescription.equals("")){
+                appointmentDescription.equals("")){
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -297,8 +307,8 @@ public class UpdateAppointmentController implements Initializable {
         }
 
         else {
-            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllOtherStartTimes(appointmentID,userID);
-            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllOtherEndTimes(appointmentID, userID);
+            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllOtherStartTimes(appointmentID, String.valueOf(appointmentUser));
+            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllOtherEndTimes(appointmentID, String.valueOf(appointmentUser));
 
             ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
             ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
@@ -415,7 +425,7 @@ public class UpdateAppointmentController implements Initializable {
 
             Queries.updateAppointment(appointmentID, appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                     finalStartTime, finalEndTime, finalCreateDate, createdBy, finalUpdateTime, lastUpdateBy,
-                    Integer.parseInt(patientID), Integer.parseInt(userID), contactId);
+                    patientId, appointmentUser, contactId);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();

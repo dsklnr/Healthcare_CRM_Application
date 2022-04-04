@@ -36,16 +36,7 @@ public class ReportsController implements Initializable {
     public TableColumn appointmentTypeCol;
     public TableColumn monthCol;
     public TableColumn totalAppointmentsCol;
-    public TableView contactScheduleTable;
-    public TableColumn patientIdCol;
-    public TableColumn appointmentIdCol;
-    public TableColumn titleCol;
-    public TableColumn typeCol;
-    public TableColumn descriptionCol;
-    public TableColumn startCol;
-    public TableColumn endCol;
     public User currentUser;
-    public TableColumn contactCol;
     public Label homeLabel;
     public Label patientsLabel;
     public Label scheduleLabel;
@@ -67,12 +58,10 @@ public class ReportsController implements Initializable {
 
         ObservableList<Appointment> totalAppointments = FXCollections.observableArrayList();
         ObservableList<Division> patientsByState = FXCollections.observableArrayList();
-        ObservableList<Appointment> contactSchedule = FXCollections.observableArrayList();
 
         try {
             totalAppointments = ReportQueries.getTotalPatientAppointments();
             patientsByState = ReportQueries.getNumberOfPatientsByState();
-            contactSchedule = ReportQueries.getContactSchedule();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,17 +78,6 @@ public class ReportsController implements Initializable {
         numberOfPatientsCol.setCellValueFactory(new PropertyValueFactory<>("countryId"));
 
         appointmentTypeTable.setItems(patientsByState);
-
-        contactCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        patientIdCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
-        appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        startCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
-        endCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
-
-        contactScheduleTable.setItems(contactSchedule);
 
         JDBC.closeConnection();
     }

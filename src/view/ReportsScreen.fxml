@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1400.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsController">
   <content>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1400.0" prefWidth="1500.0" style="-fx-background-color: #FFFFFF;">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: #FFFFFF;">
          <children>
              <Pane layoutX="-6.0" layoutY="-4.0" prefHeight="79.0" prefWidth="1506.0" style="-fx-background-color: #000000;">
               <Label fx:id="homeLabel" layoutX="994.0" layoutY="30.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="HOME">
@@ -69,23 +69,11 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="73.0" layoutY="752.0" text="Schedule For All Doctors" underline="true">
+            <Label layoutX="73.0" layoutY="149.0" text="Total Number of Unique Appointment Types Each Month" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-             <TableView fx:id="contactScheduleTable" layoutX="73.0" layoutY="783.0" prefHeight="514.0" prefWidth="1333.0">
-                 <columns>
-                     <TableColumn fx:id="contactCol" prefWidth="90.0" text="Doctor" />
-                     <TableColumn fx:id="patientIdCol" prefWidth="90.0" text="Patient ID" />
-                     <TableColumn fx:id="appointmentIdCol" prefWidth="114.0" text="Appointment ID" />
-                     <TableColumn fx:id="titleCol" prefWidth="178.0" text="Title" />
-                     <TableColumn fx:id="typeCol" prefWidth="173.0" text="Type" />
-                     <TableColumn fx:id="descriptionCol" prefWidth="166.0" text="Description" />
-                     <TableColumn fx:id="startCol" minWidth="8.0" prefWidth="225.0" text="Start" />
-                     <TableColumn fx:id="endCol" prefWidth="242.0" text="End" />
-                 </columns>
-             </TableView>
          </children>
       </AnchorPane>
   </content>

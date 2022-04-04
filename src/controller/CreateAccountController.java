@@ -2,18 +2,13 @@ package controller;
 
 import dao.CreateAccountQueries;
 import dao.JDBC;
-import dao.Queries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import model.Doctor;
-import model.Nurse;
-import model.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,11 +21,12 @@ public class CreateAccountController implements Initializable {
     public TextField email;
     public TextField setUsername;
     public PasswordField setPassword;
-    public Label comboBoxTitle;
+    public Label levelLabel;
     public ChoiceBox<String> levels;
     public RadioButton doctorButton;
     public ToggleGroup employeeType;
     public RadioButton nurseButton;
+    public TextField doctorId;
     public ObservableList<String> doctorLevel = FXCollections.observableArrayList();
     public ObservableList<String> nurseType = FXCollections.observableArrayList();
 
@@ -69,6 +65,7 @@ public class CreateAccountController implements Initializable {
         String contactEmail = email.getText();
         String user = setUsername.getText();
         String password = setPassword.getText();
+        int doctorID = Integer.parseInt(doctorId.getText());
 
         if (doctorButton.isSelected()){
             char[] userPassword = password.toCharArray();
@@ -82,8 +79,8 @@ public class CreateAccountController implements Initializable {
 
             String lvl = levels.getSelectionModel().getSelectedItem();
 
-            CreateAccountQueries.insertDoctor(user, String.valueOf(encryptedPassword), lvl);
-            CreateAccountQueries.insertContact(name, contactEmail);
+            CreateAccountQueries.insertDoctor(doctorID, name, contactEmail);
+            CreateAccountQueries.insertDoctor(user, String.valueOf(encryptedPassword), lvl, doctorID);
         }
 
         if (nurseButton.isSelected()){
@@ -111,10 +108,12 @@ public class CreateAccountController implements Initializable {
     public void onDoctorButton(ActionEvent actionEvent) {
         doctorButton.setSelected(true);
         levels.getItems().setAll(doctorLevel);
+        doctorId.setDisable(false);
     }
 
     public void onNurseButton(ActionEvent actionEvent) {
         nurseButton.setSelected(true);
         levels.getItems().setAll(nurseType);
+        doctorId.setDisable(true);
     }
 }

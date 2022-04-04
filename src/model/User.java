@@ -8,12 +8,14 @@ public class User {
     private int userId;
     private String username;
     private String password;
+    private int contactId;
 
     /** Creating the user class constructor. **/
-    public User(int userId, String username, String password) {
+    public User(int userId, String username, String password, int contactId) {
         this.userId = userId;
         this.username = username;
         this.password = password;
+        this.contactId = contactId;
     }
 
     /** Get the user's ID.
@@ -55,24 +57,16 @@ public class User {
         this.password = password;
     }
 
-    public static ObservableList<Doctor> allDoctors = FXCollections.observableArrayList();
-
-    public static ObservableList<Nurse> allNurses = FXCollections.observableArrayList();
-
-    public static void addDoctor(Doctor doctor){
-        allDoctors.add(doctor);
+    public int getContactId() {
+        return contactId;
     }
 
-    public static void addNurse(Nurse nurse){
-        allNurses.add(nurse);
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
     }
 
-    public static ObservableList<Doctor> getAllDoctors(){
-        return allDoctors;
+    @Override
+    public String toString(){
+        return String.valueOf(userId);
     }
-
-    public static ObservableList<Nurse> getAllNurses(){
-        return allNurses;
-    }
-
 }

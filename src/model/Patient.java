@@ -156,4 +156,9 @@ public class Patient {
     public void setDivisionId(int divisionId) {
         this.divisionId = divisionId;
     }
+
+    @Override
+    public String toString(){
+        return name;
+    }
 }

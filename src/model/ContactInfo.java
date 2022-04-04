@@ -1,13 +1,13 @@
 package model;
 
 /** Creating the contact class **/
-public class Contact {
+public class ContactInfo {
     private int contactId;
     private String name;
     private String email;
 
     /** Creating the contact class constructor. **/
-    public Contact(int contactId, String name, String email) {
+    public ContactInfo(int contactId, String name, String email) {
         this.contactId = contactId;
         this.name = name;
         this.email = email;

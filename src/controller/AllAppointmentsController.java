@@ -31,6 +31,7 @@ public class AllAppointmentsController implements Initializable {
     public TableColumn<Appointment, Integer> appointmentIdCol;
     public TableColumn<Appointment, Integer> patientIdCol;
     public TableColumn<Appointment, String> patientNameCol;
+    public TableColumn<Appointment, Integer> userIdCol;
     public TableColumn<Appointment, String> contactNameCol;
     public TableColumn<Appointment, String> titleCol;
     public TableColumn<Appointment, String> typeCol;
@@ -70,6 +71,10 @@ public class AllAppointmentsController implements Initializable {
 
         patientNameCol.setCellValueFactory(colData -> {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getCreateDate());
+        });
+
+        userIdCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getUserId());
         });
 
         contactNameCol.setCellValueFactory(colData -> {
@@ -269,6 +274,9 @@ public class AllAppointmentsController implements Initializable {
 
         if (appointments.size() == 0){
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            Image image = new Image("/icons/Error.png");
+            stage.getIcons().add(image);
             alert.setTitle("Error");
             alert.setContentText("Appointment not found");
             alert.showAndWait();

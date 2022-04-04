@@ -6,26 +6,28 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateAccountController">
    <children>
-      <Label layoutX="27.0" layoutY="38.0" text="Create An Account">
+      <Label layoutX="27.0" layoutY="38.0" style="-fx-text-fill: #1C6CF6;" text="Create An Account">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <Label layoutX="224.0" layoutY="227.0" text="Username" />
-      <Label layoutX="224.0" layoutY="291.0" text="Password" />
+      <Label layoutX="224.0" layoutY="227.0" style="-fx-text-fill: #1C6CF6;" text="Username" />
+      <Label layoutX="224.0" layoutY="291.0" style="-fx-text-fill: #1C6CF6;" text="Password" />
       <TextField fx:id="setUsername" layoutX="224.0" layoutY="244.0" />
       <PasswordField fx:id="setPassword" layoutX="224.0" layoutY="308.0" />
       <Button layoutX="224.0" layoutY="577.0" mnemonicParsing="false" onAction="#onCreateAccount" prefHeight="25.0" prefWidth="149.0" style="-fx-background-radius: 45; -fx-background-color: #00F6FF; -fx-border-radius: 45; -fx-border-color: #FAF9F6;" text="Create Account" />
-      <Label fx:id="comboBoxTitle" layoutX="224.0" layoutY="398.0" text="Choose Level" />
-      <ChoiceBox fx:id="levels" layoutX="224.0" layoutY="416.0" prefWidth="150.0" />
-      <RadioButton fx:id="doctorButton" layoutX="224.0" layoutY="359.0" mnemonicParsing="false" onAction="#onDoctorButton" text="Doctor">
+      <Label fx:id="levelLabel" layoutX="225.0" layoutY="464.0" style="-fx-text-fill: #1C6CF6;" text="Choose Level" />
+      <ChoiceBox fx:id="levels" layoutX="225.0" layoutY="482.0" prefWidth="150.0" />
+      <RadioButton fx:id="doctorButton" layoutX="224.0" layoutY="359.0" mnemonicParsing="false" onAction="#onDoctorButton" style="-fx-text-fill: #1C6CF6;" text="Doctor">
          <toggleGroup>
             <ToggleGroup fx:id="employeeType" />
          </toggleGroup></RadioButton>
-      <RadioButton fx:id="nurseButton" layoutX="320.0" layoutY="359.0" mnemonicParsing="false" onAction="#onNurseButton" text="Nurse" toggleGroup="$employeeType" />
+      <RadioButton fx:id="nurseButton" layoutX="320.0" layoutY="359.0" mnemonicParsing="false" onAction="#onNurseButton" style="-fx-text-fill: #1C6CF6;" text="Nurse" toggleGroup="$employeeType" />
       <TextField fx:id="fullName" layoutX="224.0" layoutY="116.0" />
       <TextField fx:id="email" layoutX="224.0" layoutY="180.0" />
-      <Label layoutX="224.0" layoutY="99.0" text="Full Name" />
-      <Label layoutX="224.0" layoutY="163.0" text="Email" />
+      <Label layoutX="224.0" layoutY="99.0" style="-fx-text-fill: #1C6CF6;" text="Full Name" />
+      <Label layoutX="224.0" layoutY="163.0" style="-fx-text-fill: #1C6CF6;" text="Email" />
+      <TextField fx:id="doctorId" layoutX="224.0" layoutY="417.0" promptText="Enter Your Doctor ID #" />
+      <Label layoutX="225.0" layoutY="400.0" style="-fx-text-fill: #1C6CF6;" text="Doctor ID" />
    </children>
 </AnchorPane>

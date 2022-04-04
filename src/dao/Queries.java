@@ -43,17 +43,17 @@ public abstract class Queries {
      * @param lastUpdateBy The appointment last updated by field.
      * @param patientId The appointment patient ID.
      * @param userId The appointment user ID.
-     * @param contactId The appointment contact ID.
+     * @param doctorId The appointment doctor ID.
      */
     public static void updateAppointment(int appointmentId, String title, String description, String location, String type,
                                          String startTime, String endTime, String createDate, String createdBy,
                                          String updateDateTime, String lastUpdateBy, int patientId, int userId,
-                                         int contactId) throws SQLException {
+                                         int doctorId) throws SQLException {
 
         String sql = "UPDATE appointments\n" +
                 "SET Appointment_ID = ?, Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
                 "Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Patient_ID = ?, User_ID = ?," +
-                " Contact_ID = ?\n" +
+                " Doctor_ID = ?\n" +
                 "WHERE Appointment_ID = ?";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -70,7 +70,7 @@ public abstract class Queries {
         ps.setString(11, lastUpdateBy);
         ps.setInt(12, patientId);
         ps.setInt(13, userId);
-        ps.setInt(14, contactId);
+        ps.setInt(14, doctorId);
         ps.setInt(15, appointmentId);
         ps.execute();
 
@@ -83,7 +83,7 @@ public abstract class Queries {
      * @return Returns the user's user ID.
      */
     public static int selectUser(String username, String password) throws SQLException {
-        String sql = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
+        String sql = "SELECT User_ID FROM users WHERE User_Name = ? AND Password = ?";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, username);
@@ -98,66 +98,101 @@ public abstract class Queries {
         return 0;
     }
 
-    /** Get all contacts.
-     *
-     * @return Returns all contacts.
-     */
-    public static ObservableList<Contact> getAllContacts() throws SQLException {
-        ObservableList<Contact> contactsList = FXCollections.observableArrayList();
+    public static ObservableList<User> getAllUsers() throws SQLException {
+        ObservableList<User> userList = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM contacts";
+        String sql = "SELECT * FROM users";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            int contactId = rs.getInt("Contact_ID");
-            String name = rs.getString("Contact_Name");
+            int userId = rs.getInt("User_ID");
+            String username = rs.getString("User_Name");
+            String password = rs.getString("Password");
+            int doctorId = rs.getInt("Contact_ID");
+
+            userList.add(new User(userId, username, password, doctorId));
+        }
+        return userList;
+    }
+
+    /** Get all Contact Info.
+     *
+     * @return Returns all contact info.
+     */
+    public static ObservableList<ContactInfo> getAllContactInfo() throws SQLException {
+        ObservableList<ContactInfo> contactsList = FXCollections.observableArrayList();
+
+        String sql = "SELECT * FROM doctors";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int doctorId = rs.getInt("Doctor_ID");
+            String name = rs.getString("Doctor_Name");
             String email = rs.getString("Email");
 
-            contactsList.add(new Contact(contactId, name, email));
+            contactsList.add(new ContactInfo(doctorId, name, email));
         }
         return contactsList;
     }
 
-    /** Get the contact ID.
+    /** Get the Doctor ID.
      *
-     * @param name The contact's name.
-     * @return Returns the contact's ID.
+     * @param name The doctor's name.
+     * @return Returns the doctor's ID.
      */
-    public static int getContactId(String name) throws SQLException {
-        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
+    public static int getOnlyDoctorId(String name) throws SQLException {
+        String sql = "SELECT Doctor_ID FROM doctors WHERE Doctor_Name = ?";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, name);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            int contactId = rs.getInt("Contact_ID");
-            return contactId;
+            int doctorId = rs.getInt("Doctor_ID");
+            return doctorId;
         }
         return 0;
     }
 
-    /** Get the contact's name.
-     *
-     * @param contactId The contact ID.
-     * @param appointmentId The contact's appointment ID.
-     * @return Returns the contact's name.
-     */
-    public static String getContactName(int contactId, int appointmentId) throws SQLException {
-        String sql = "SELECT Contact_Name\n" +
-                "FROM appointments, contacts\n" +
-                "WHERE contacts.Contact_ID = ? AND appointments.Appointment_ID = ?";
+    public static int getPatientId(String name) throws SQLException{
+        String sql = "SELECT Patient_ID\n" +
+                "FROM patients\n" +
+                "WHERE Patient_Name = ?";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, contactId);
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int patientId = rs.getInt("Patient_ID");
+            return patientId;
+        }
+        return 0;
+    }
+
+    /** Get the doctor's name.
+     *
+     * @param doctorId The doctor ID.
+     * @param appointmentId The doctor's appointment ID.
+     * @return Returns the doctor's name.
+     */
+    public static String getContactName(int doctorId, int appointmentId) throws SQLException {
+        String sql = "SELECT Doctor_Name\n" +
+                "FROM appointments, doctors\n" +
+                "WHERE doctors.Doctor_ID = ? AND appointments.Appointment_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, doctorId);
         ps.setInt(2, appointmentId);
 
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            String name = rs.getString("Contact_Name");
+            String name = rs.getString("Doctor_Name");
             return name;
         }
         return null;
@@ -180,7 +215,8 @@ public abstract class Queries {
 
         while (rs.next()) {
             int userId = rs.getInt("User_ID");
-            User user = new User(userId, username, password);
+            int doctorId = rs.getInt("Doctor_ID");
+            User user = new User(userId, username, password, doctorId);
             userList.add(user);
             return true;
         }
@@ -196,9 +232,9 @@ public abstract class Queries {
         ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, appointments.Patient_ID, Patient_Name, Contact_Name, Title, Type, Location, Start, End, Description\n" +
-                    "FROM appointments, patients, contacts\n" +
-                    "WHERE appointments.Patient_ID = patients.Patient_ID AND appointments.Contact_ID = contacts.Contact_ID\n" +
+            String sql = "SELECT Appointment_ID, appointments.Patient_ID, Patient_Name, User_ID, Doctor_Name, Title, Type, Location, Start, End, Description\n" +
+                    "FROM appointments, patients, doctors\n" +
+                    "WHERE appointments.Patient_ID = patients.Patient_ID AND appointments.Doctor_ID = doctors.Doctor_ID\n" +
                     "ORDER BY Start";
 
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -214,7 +250,8 @@ public abstract class Queries {
                 LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
                 LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
                 String patientName = rs.getString("Patient_Name");
-                String contactName = rs.getString("Contact_Name");
+                String doctorName = rs.getString("Doctor_Name");
+                int userId = rs.getInt("User_ID");
 
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -239,8 +276,8 @@ public abstract class Queries {
                  */
 
                 allAppointmentList.add(new Appointment(appointmentId, title, description, location,
-                        type, start.format(dtf), end.format(dtf), patientName, contactName, "", "",
-                        patientId, 0, 0));
+                        type, start.format(dtf), end.format(dtf), patientName, doctorName, "", "",
+                        patientId, userId, 0));
             }
 
         } catch (SQLException ex) {
@@ -264,13 +301,13 @@ public abstract class Queries {
      * @param lastUpdatedBy The appointment last updated by field.
      * @param patientId The appointment patient ID.
      * @param userId The appointment user ID.
-     * @param contactId The appointment contact ID.
+     * @param doctorId The appointment doctor ID.
      * @return Returns a new appointment.
      */
     public static String insertAppointment(String title, String description, String location, String type,
                                            String startDateTime, String endDateTime, String createDate,
                                            String createdBy, String lastUpdate, String lastUpdatedBy,
-                                           int patientId, int userId, int contactId) throws SQLException {
+                                           int patientId, int userId, int doctorId) throws SQLException {
 
         String sql = "INSERT INTO appointments VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -287,7 +324,7 @@ public abstract class Queries {
         ps.setString(10, lastUpdatedBy);
         ps.setInt(11, patientId);
         ps.setInt(12, userId);
-        ps.setInt(13, contactId);
+        ps.setInt(13, doctorId);
         String rowsAffected = String.valueOf(ps.executeUpdate());
         return rowsAffected;
 
@@ -566,7 +603,7 @@ public abstract class Queries {
             String updateBy = rs.getString("Last_Updated_By");
             int patientIdFK = rs.getInt("Patient_ID");
             int userIdFK = rs.getInt("User_ID");
-            int contactIdFK = rs.getInt("Contact_ID");
+            int doctorIdFK = rs.getInt("Doctor_ID");
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
             String startTime = start.format(dtf);
@@ -574,7 +611,7 @@ public abstract class Queries {
 
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
                     type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
-                    patientIdFK, userIdFK, contactIdFK));
+                    patientIdFK, userIdFK, doctorIdFK));
         }
         return appointmentsList;
     }
@@ -602,7 +639,7 @@ public abstract class Queries {
             String updateBy = rs.getString("Last_Updated_By");
             int patientIdFK = rs.getInt("Patient_ID");
             int userIdFK = rs.getInt("User_ID");
-            int contactIdFK = rs.getInt("Contact_ID");
+            int doctorIdFK = rs.getInt("Doctor_ID");
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
             String startTime = start.format(dtf);
@@ -610,7 +647,7 @@ public abstract class Queries {
 
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
                     type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
-                    patientIdFK, userIdFK, contactIdFK));
+                    patientIdFK, userIdFK, doctorIdFK));
         }
         return appointmentsList;
     }
@@ -644,7 +681,7 @@ public abstract class Queries {
             String updateBy = rs.getString("Last_Updated_By");
             int patientIdFK = rs.getInt("Patient_ID");
             int userIdFK = rs.getInt("User_ID");
-            int contactIdFK = rs.getInt("Contact_ID");
+            int doctorIdFK = rs.getInt("Doctor_ID");
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
             String startTime = start.format(dtf);
@@ -652,7 +689,7 @@ public abstract class Queries {
 
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
                     type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
-                    patientIdFK, userIdFK, contactIdFK));
+                    patientIdFK, userIdFK, doctorIdFK));
         }
         return appointmentsList;
     }
@@ -680,7 +717,7 @@ public abstract class Queries {
             String updateBy = rs.getString("Last_Updated_By");
             int patientIdFK = rs.getInt("Patient_ID");
             int userIdFK = rs.getInt("User_ID");
-            int contactIdFK = rs.getInt("Contact_ID");
+            int doctorIdFK = rs.getInt("Doctor_ID");
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss MM/dd/yyyy");
             String startTime = start.format(dtf);
@@ -688,7 +725,7 @@ public abstract class Queries {
 
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
                     type, startTime, endTime, createDate, contact, lastUpdate, updateBy,
-                    patientIdFK, userIdFK, contactIdFK));
+                    patientIdFK, userIdFK, doctorIdFK));
         }
         return appointmentsList;
     }
@@ -720,11 +757,11 @@ public abstract class Queries {
             String updateBy = rs.getString("Last_Updated_By");
             int patientIdFK = rs.getInt("Patient_ID");
             int userIdFK = rs.getInt("User_ID");
-            int contactIdFK = rs.getInt("Contact_ID");
+            int doctorIdFK = rs.getInt("Doctor_ID");
 
             appointmentsList.add(new Appointment(appointmentId, title, description, location,
                     type, start.toString(), end.toString(), createDate.toString(), contact, lastUpdate.toString(), updateBy,
-                    patientIdFK, userIdFK, contactIdFK));
+                    patientIdFK, userIdFK, doctorIdFK));
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime s = start.toLocalDateTime();
@@ -1046,5 +1083,25 @@ public abstract class Queries {
         return null;
     }
 
+    /** Get the doctor ID based on the user's username.
+     *
+     * @param username The user's username.
+     * @return Returns the user's doctor ID.
+     */
+    public static int getDoctorId(String username) throws SQLException {
+        String sql = "SELECT Doctor_ID\n" +
+                "FROM users\n" +
+                "WHERE User_Name = ?";
 
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, username);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int doctorID = rs.getInt("Doctor_ID");
+            return doctorID;
+        }
+        return 0;
+    }
 }

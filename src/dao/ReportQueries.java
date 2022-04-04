@@ -70,42 +70,4 @@ public abstract class ReportQueries {
 
         return allPatients;
     }
-
-    /** Get a schedule for all contacts.
-     *
-     * @return Returns a schedule for all contacts.
-     */
-    public static ObservableList<Appointment> getContactSchedule() throws SQLException {
-        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
-
-        String sql = "SELECT contacts.Contact_Name, appointments.Patient_ID, Appointment_ID, Title, Type, " +
-                "Description, Start, End\n" +
-        "FROM appointments, contacts\n" +
-        "WHERE appointments.Contact_ID = contacts.Contact_ID\n" +
-        "ORDER BY Contact_Name";
-
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()){
-            String contact = rs.getString("Contact_Name");
-            int appointmentId = rs.getInt("Appointment_ID");
-            String title = rs.getString("Title");
-            String type = rs.getString("Type");
-            String description = rs.getString("Description");
-            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
-            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
-            int patientId = rs.getInt("Patient_ID");
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String s = start.format(dtf);
-            String e = end.format(dtf);
-
-            allAppointments.add(new Appointment(appointmentId, title, description, "", type, s, e,
-                    "", contact, "", "", patientId, 1, 1));
-
-        }
-
-        return allAppointments;
-    }
 }

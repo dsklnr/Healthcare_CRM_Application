@@ -10,8 +10,8 @@ public class Doctor extends User{
      * @param username
      * @param password
      **/
-    public Doctor(int userId, String username, String password, String doctorLevel) {
-        super(userId, username, password);
+    public Doctor(int userId, String username, String password, String doctorLevel, int doctorId) {
+        super(userId, username, password, doctorId);
 
         this.doctorLevel = doctorLevel;
     }

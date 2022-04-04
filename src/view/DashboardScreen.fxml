@@ -14,17 +14,19 @@
          </font>
       </Label>
       <TableView fx:id="dashboardTable" layoutX="73.0" layoutY="178.0" prefHeight="514.0" prefWidth="1342.0">
-        <columns>
-            <TableColumn fx:id="appointmentIdCol" prefWidth="99.0" text="Appointment ID" />
-            <TableColumn fx:id="titleCol" prefWidth="164.0" text="Title" />
-            <TableColumn fx:id="descriptionCol" prefWidth="193.0" text="Description" />
-            <TableColumn fx:id="locationCol" prefWidth="150.0" text="Location" />
-            <TableColumn fx:id="typeCol" prefWidth="201.0" text="Type" />
-            <TableColumn fx:id="startTimeCol" prefWidth="173.0" text="Start Time" />
-            <TableColumn fx:id="endTimeCol" prefWidth="173.0" text="End Time" />
-            <TableColumn fx:id="contactIdCol" prefWidth="94.0" text="Doctor ID" />
-            <TableColumn fx:id="patientIdCol" prefWidth="94.0" text="Patient ID" />
-        </columns>
+         <columns>
+            <TableColumn fx:id="appointmentIdCol" prefWidth="103.0" text="Appointment ID" />
+            <TableColumn fx:id="patientIdCol" prefWidth="64.0" text="Patient ID" />
+            <TableColumn fx:id="patientNameCol" prefWidth="183.0" text="Patient Name" />
+            <TableColumn fx:id="userIdCol" prefWidth="60.0" text="Doctor ID" />
+            <TableColumn fx:id="contactNameCol" prefWidth="144.0" text="Doctor Name" />
+            <TableColumn fx:id="titleCol" prefWidth="114.0" text="Title" />
+            <TableColumn fx:id="typeCol" prefWidth="125.0" text="Type" />
+            <TableColumn fx:id="locationCol" prefWidth="107.0" text="Location" />
+            <TableColumn fx:id="startCol" prefWidth="130.0" text="Start Time" />
+            <TableColumn fx:id="endCol" prefWidth="130.0" text="End Time" />
+            <TableColumn fx:id="descriptionCol" prefWidth="181.0" text="Description" />
+         </columns>
       </TableView>
       <RadioButton fx:id="monthButton" layoutX="1170.0" layoutY="149.0" mnemonicParsing="false" onAction="#onMonthButton" text="Upcoming Month">
          <toggleGroup>

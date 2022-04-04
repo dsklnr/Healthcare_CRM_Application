@@ -10,8 +10,8 @@ public class Nurse extends User{
      * @param username
      * @param password
      **/
-    public Nurse(int userId, String username, String password, String nurseType) {
-        super(userId, username, password);
+    public Nurse(int userId, String username, String password, String nurseType, int doctorId) {
+        super(userId, username, password, doctorId);
 
         this.nurseType = nurseType;
     }

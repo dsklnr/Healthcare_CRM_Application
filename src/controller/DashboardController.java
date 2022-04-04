@@ -29,14 +29,16 @@ import javafx.event.ActionEvent;
 /** Creating the dashboard controller. **/
 public class DashboardController implements Initializable {
     public TableColumn<Appointment, Integer> appointmentIdCol;
-    public TableColumn<Appointment, String> typeCol;
-    public TableColumn<Appointment, String> titleCol;
-    public TableColumn<Appointment, String> descriptionCol;
-    public TableColumn<Appointment, String>  locationCol;
-    public TableColumn<Appointment, String>  startTimeCol;
-    public TableColumn<Appointment, String>  endTimeCol;
-    public TableColumn<Appointment, Integer> contactIdCol;
     public TableColumn<Appointment, Integer> patientIdCol;
+    public TableColumn<Appointment, String> patientNameCol;
+    public TableColumn<Appointment, Integer> userIdCol;
+    public TableColumn<Appointment, String> contactNameCol;
+    public TableColumn<Appointment, String> titleCol;
+    public TableColumn<Appointment, String> typeCol;
+    public TableColumn<Appointment, String> locationCol;
+    public TableColumn<Appointment, String> startCol;
+    public TableColumn<Appointment, String> endCol;
+    public TableColumn<Appointment, String> descriptionCol;
     public TableView<Appointment> dashboardTable;
     public RadioButton monthButton;
     public RadioButton weekButton;
@@ -105,36 +107,40 @@ public class DashboardController implements Initializable {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getAppointmentId());
         });
 
-        typeCol.setCellValueFactory(colData ->{
-            return new ReadOnlyObjectWrapper<>(colData.getValue().getType());
+        patientIdCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getPatientID());
         });
 
-        titleCol.setCellValueFactory(colData ->{
+        patientNameCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getCreateDate());
+        });
+
+        contactNameCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getCreatedBy());
+        });
+
+        titleCol.setCellValueFactory(colData -> {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getTitle());
         });
 
-        descriptionCol.setCellValueFactory(colData ->{
-            return new ReadOnlyObjectWrapper<>(colData.getValue().getDescription());
+        typeCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getType());
         });
 
-        locationCol.setCellValueFactory(colData ->{
+        locationCol.setCellValueFactory(colData -> {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getLocation());
         });
 
-        startTimeCol.setCellValueFactory(colData ->{
+        startCol.setCellValueFactory(colData -> {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getStartDateTime());
         });
 
-        endTimeCol.setCellValueFactory(colData ->{
+        endCol.setCellValueFactory(colData -> {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getEndDateTime());
         });
 
-        contactIdCol.setCellValueFactory(colData ->{
-            return new ReadOnlyObjectWrapper<>(colData.getValue().getContactId());
-        });
-
-        patientIdCol.setCellValueFactory(colData ->{
-            return new ReadOnlyObjectWrapper<>(colData.getValue().getPatientID());
+        descriptionCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getDescription());
         });
 
         JDBC.closeConnection();
