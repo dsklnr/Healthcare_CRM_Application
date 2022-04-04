@@ -15,12 +15,12 @@ public class Appointment {
     private String lastUpdatedBy;
     private int patientID;
     private int userId;
-    private int contactId;
+    private int doctorId;
 
     /** Creating the appointment class constructor. **/
     public Appointment(int appointmentId, String title, String description, String location, String type,
                        String startDateTime, String endDateTime, String createDate, String createdBy,
-                       String lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) {
+                       String lastUpdate, String lastUpdatedBy, int customerId, int userId, int doctorId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -34,7 +34,7 @@ public class Appointment {
         this.lastUpdatedBy = lastUpdatedBy;
         this.patientID = customerId;
         this.userId = userId;
-        this.contactId = contactId;
+        this.doctorId = doctorId;
     }
 
     /** Get the appointment ID.
@@ -206,16 +206,16 @@ public class Appointment {
         this.userId = userId;
     }
 
-    /** Get the appointment contact ID.
+    /** Get the appointment doctor ID.
      *
-     * @return Returns the appointment contact ID.
+     * @return Returns the appointment doctor ID.
      */
-    public int getContactId() {
-        return contactId;
+    public int getDoctorId() {
+        return doctorId;
     }
 
-    /** Set the appointment contact ID. **/
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
+    /** Set the appointment doctor ID. **/
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
     }
 }

@@ -17,43 +17,43 @@
             </font>
         </Label>
         <TextField fx:id="appointmentId" disable="true" editable="false" layoutX="165.0" layoutY="132.0" prefHeight="25.0" prefWidth="174.0" promptText="Disabled" />
-        <Label layoutX="39.0" layoutY="373.0" style="-fx-text-fill: #1C6CF6;" text="Title">
+        <Label layoutX="39.0" layoutY="316.0" style="-fx-text-fill: #1C6CF6;" text="Title">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <TextField fx:id="title" layoutX="167.0" layoutY="371.0" prefHeight="25.0" prefWidth="174.0" />
-        <Label layoutX="39.0" layoutY="497.0" style="-fx-text-fill: #1C6CF6;" text="Location">
+        <TextField fx:id="title" layoutX="167.0" layoutY="314.0" prefHeight="25.0" prefWidth="174.0" />
+        <Label layoutX="39.0" layoutY="440.0" style="-fx-text-fill: #1C6CF6;" text="Location">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <Label layoutX="39.0" layoutY="255.0" style="-fx-text-fill: #1C6CF6;" text="Doctor">
+        <Label layoutX="39.0" layoutY="198.0" style="-fx-text-fill: #1C6CF6;" text="Doctor">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <Label layoutX="37.0" layoutY="432.0" style="-fx-text-fill: #1C6CF6;" text="Type">
+        <Label layoutX="37.0" layoutY="375.0" style="-fx-text-fill: #1C6CF6;" text="Type">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <Label layoutX="39.0" layoutY="551.0" style="-fx-text-fill: #1C6CF6;" text="Start Date &amp; Time">
+        <Label layoutX="39.0" layoutY="494.0" style="-fx-text-fill: #1C6CF6;" text="Start Date &amp; Time">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <Label layoutX="39.0" layoutY="611.0" style="-fx-text-fill: #1C6CF6;" text="End Date &amp; Time">
+        <Label layoutX="39.0" layoutY="554.0" style="-fx-text-fill: #1C6CF6;" text="End Date &amp; Time">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <Label layoutX="39.0" layoutY="314.0" style="-fx-text-fill: #1C6CF6;" text="Patient">
+        <Label layoutX="39.0" layoutY="257.0" style="-fx-text-fill: #1C6CF6;" text="Patient">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <Label layoutX="37.0" layoutY="688.0" style="-fx-text-fill: #1C6CF6;" text="Description">
+        <Label layoutX="39.0" layoutY="615.0" style="-fx-text-fill: #1C6CF6;" text="Description">
             <font>
                 <Font size="15.0" />
             </font>
@@ -68,22 +68,17 @@
                 <Font size="15.0" />
             </font>
         </Button>
-        <TextField fx:id="location" layoutX="167.0" layoutY="495.0" prefHeight="25.0" prefWidth="174.0" />
-        <TextField fx:id="type" layoutX="165.0" layoutY="430.0" prefHeight="25.0" prefWidth="174.0" />
-        <TextArea fx:id="description" layoutX="165.0" layoutY="688.0" prefHeight="109.0" prefWidth="536.0" />
-        <ComboBox fx:id="contactComboBox" layoutX="167.0" layoutY="253.0" prefHeight="25.0" prefWidth="174.0" />
-        <DatePicker fx:id="startDate" layoutX="167.0" layoutY="549.0" />
-        <DatePicker fx:id="endDate" layoutX="165.0" layoutY="609.0" />
-        <ComboBox fx:id="startHourComboBox" layoutX="402.0" layoutY="549.0" prefWidth="150.0" promptText="Select Hour" />
-        <ComboBox fx:id="startMinuteComboBox" layoutX="603.0" layoutY="549.0" prefWidth="150.0" promptText="Select Minute" />
-        <ComboBox fx:id="endHourComboBox" layoutX="402.0" layoutY="609.0" prefWidth="150.0" promptText="Select Hour" />
-        <ComboBox fx:id="endMinuteComboBox" layoutX="603.0" layoutY="609.0" prefWidth="150.0" promptText="Select Minute" />
-        <ComboBox fx:id="patientComboBox" layoutX="167.0" layoutY="312.0" prefHeight="25.0" prefWidth="174.0" />
-        <Label layoutX="39.0" layoutY="195.0" style="-fx-text-fill: #1C6CF6;" text="Doctor ID">
-         <font>
-            <Font size="15.0" />
-         </font></Label>
-      <ComboBox fx:id="userIdComboBox" layoutX="167.0" layoutY="193.0" prefHeight="25.0" prefWidth="174.0" />
+        <TextField fx:id="location" layoutX="167.0" layoutY="438.0" prefHeight="25.0" prefWidth="174.0" />
+        <TextField fx:id="type" layoutX="165.0" layoutY="373.0" prefHeight="25.0" prefWidth="174.0" />
+        <TextArea fx:id="description" layoutX="165.0" layoutY="622.0" prefHeight="175.0" prefWidth="536.0" />
+        <ComboBox fx:id="doctorNameComboBox" layoutX="167.0" layoutY="196.0" prefHeight="25.0" prefWidth="174.0" />
+        <DatePicker fx:id="startDate" layoutX="167.0" layoutY="492.0" />
+        <DatePicker fx:id="endDate" layoutX="165.0" layoutY="552.0" />
+        <ComboBox fx:id="startHourComboBox" layoutX="402.0" layoutY="492.0" prefWidth="150.0" promptText="Select Hour" />
+        <ComboBox fx:id="startMinuteComboBox" layoutX="603.0" layoutY="492.0" prefWidth="150.0" promptText="Select Minute" />
+        <ComboBox fx:id="endHourComboBox" layoutX="402.0" layoutY="552.0" prefWidth="150.0" promptText="Select Hour" />
+        <ComboBox fx:id="endMinuteComboBox" layoutX="603.0" layoutY="552.0" prefWidth="150.0" promptText="Select Minute" />
+        <ComboBox fx:id="patientComboBox" layoutX="167.0" layoutY="255.0" prefHeight="25.0" prefWidth="174.0" />
     </children>
 
 </AnchorPane>

@@ -1,21 +1,18 @@
 package model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 /** Creating the user class **/
 public class User {
     private int userId;
     private String username;
     private String password;
-    private int contactId;
+    private int doctorId;
 
     /** Creating the user class constructor. **/
     public User(int userId, String username, String password, int contactId) {
         this.userId = userId;
         this.username = username;
         this.password = password;
-        this.contactId = contactId;
+        this.doctorId = contactId;
     }
 
     /** Get the user's ID.
@@ -57,12 +54,12 @@ public class User {
         this.password = password;
     }
 
-    public int getContactId() {
-        return contactId;
+    public int getDoctorId() {
+        return doctorId;
     }
 
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
     }
 
     @Override

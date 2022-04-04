@@ -98,7 +98,7 @@ public abstract class Queries {
         return 0;
     }
 
-    public static ObservableList<User> getAllUsers() throws SQLException {
+    public static ObservableList<User> getAllDoctorIds() throws SQLException {
         ObservableList<User> userList = FXCollections.observableArrayList();
 
         String sql = "SELECT * FROM users";
@@ -110,7 +110,7 @@ public abstract class Queries {
             int userId = rs.getInt("User_ID");
             String username = rs.getString("User_Name");
             String password = rs.getString("Password");
-            int doctorId = rs.getInt("Contact_ID");
+            int doctorId = rs.getInt("Doctor_ID");
 
             userList.add(new User(userId, username, password, doctorId));
         }
@@ -180,7 +180,7 @@ public abstract class Queries {
      * @param appointmentId The doctor's appointment ID.
      * @return Returns the doctor's name.
      */
-    public static String getContactName(int doctorId, int appointmentId) throws SQLException {
+    public static String getDoctorName(int doctorId, int appointmentId) throws SQLException {
         String sql = "SELECT Doctor_Name\n" +
                 "FROM appointments, doctors\n" +
                 "WHERE doctors.Doctor_ID = ? AND appointments.Appointment_ID = ?";
@@ -232,7 +232,7 @@ public abstract class Queries {
         ObservableList<Appointment> allAppointmentList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, appointments.Patient_ID, Patient_Name, User_ID, Doctor_Name, Title, Type, Location, Start, End, Description\n" +
+            String sql = "SELECT Appointment_ID, appointments.Patient_ID, Patient_Name, appointments.Doctor_ID, Doctor_Name, Title, Type, Location, Start, End, Description\n" +
                     "FROM appointments, patients, doctors\n" +
                     "WHERE appointments.Patient_ID = patients.Patient_ID AND appointments.Doctor_ID = doctors.Doctor_ID\n" +
                     "ORDER BY Start";
@@ -251,7 +251,7 @@ public abstract class Queries {
                 LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
                 String patientName = rs.getString("Patient_Name");
                 String doctorName = rs.getString("Doctor_Name");
-                int userId = rs.getInt("User_ID");
+                int doctorId = rs.getInt("Doctor_ID");
 
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -277,7 +277,7 @@ public abstract class Queries {
 
                 allAppointmentList.add(new Appointment(appointmentId, title, description, location,
                         type, start.format(dtf), end.format(dtf), patientName, doctorName, "", "",
-                        patientId, userId, 0));
+                        patientId, 0, doctorId));
             }
 
         } catch (SQLException ex) {
@@ -576,17 +576,17 @@ public abstract class Queries {
 
     /** Get the upcoming month's appointments.
      *
-     * @param userId The user ID.
+     * @param doctorId The user ID.
      * @return Returns the users upcoming month of appointments.
      */
-    public static ObservableList<Appointment> getNextMonthAppointments(int userId) throws SQLException {
+    public static ObservableList<Appointment> getNextMonthAppointments(int doctorId) throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN CURDATE() AND CURDATE() + " +
+        String sql = "SELECT * FROM appointments WHERE Doctor_ID = ? AND Start BETWEEN CURDATE() AND CURDATE() + " +
                 "INTERVAL 1 MONTH";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, userId);
+        ps.setInt(1, doctorId);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
@@ -654,17 +654,17 @@ public abstract class Queries {
 
     /** Get the upcoming week's appointments.
      *
-     * @param userId The user ID.
+     * @param doctorId The user ID.
      * @return Returns the users upcoming week of appointments.
      */
-    public static ObservableList<Appointment> getNextWeekAppointments(int userId) throws SQLException {
+    public static ObservableList<Appointment> getNextWeekAppointments(int doctorId) throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN CURDATE() AND CURDATE() + " +
+        String sql = "SELECT * FROM appointments WHERE Doctor_ID = ? AND Start BETWEEN CURDATE() AND CURDATE() + " +
                 "INTERVAL 7 DAY";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, userId);
+        ps.setInt(1, doctorId);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
@@ -1103,5 +1103,37 @@ public abstract class Queries {
             return doctorID;
         }
         return 0;
+    }
+
+    public static int getUserId(int doctorId) throws SQLException {
+        String sql = "SELECT User_ID\n" +
+                "FROM users WHERE Doctor_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, doctorId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int userId = rs.getInt("User_ID");
+            return userId;
+        }
+        return 0;
+    }
+
+    public static String getPatientName(int patientId, int appointmentId) throws SQLException {
+        String sql = "SELECT Patient_Name\n" +
+                "FROM appointments, patients\n" +
+                "WHERE patients.Patient_ID = ? AND appointments.Appointment_ID = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, patientId);
+        ps.setInt(2, appointmentId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            String patientName = rs.getString("Patient_Name");
+            return patientName;
+        }
+        return null;
     }
 }

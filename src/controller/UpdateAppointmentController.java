@@ -31,8 +31,7 @@ public class UpdateAppointmentController implements Initializable {
     public TextField location;
     public TextField type;
     public TextArea description;
-    public ComboBox userIdComboBox;
-    public ComboBox contactComboBox;
+    public ComboBox doctorNameComboBox;
     public ComboBox patientComboBox;
     public DatePicker startDate;
     public DatePicker endDate;
@@ -62,8 +61,7 @@ public class UpdateAppointmentController implements Initializable {
         endMinuteComboBox.setItems(minutes);
 
         try {
-            userIdComboBox.setItems(Queries.getAllUsers());
-            contactComboBox.setItems(Queries.getAllContactInfo());
+            doctorNameComboBox.setItems(Queries.getAllContactInfo());
             patientComboBox.setItems(Queries.getAllPatients());
 
         } catch (SQLException e) {
@@ -85,28 +83,18 @@ public class UpdateAppointmentController implements Initializable {
         String appointmentDescription = appointment.getDescription();
         String appointmentLocation = appointment.getLocation();
         String appointmentType = appointment.getType();
-        String createDate = appointment.getCreateDate();
-
-        String createdBy = appointment.getCreatedBy();
-        int patientID = appointment.getPatientID();
-        int userID = appointment.getUserId();
 
         appointmentId.setText(String.valueOf(id));
         title.setText(appointmentTitle);
         description.setText(appointmentDescription);
         location.setText(appointmentLocation);
         type.setText(appointmentType);
-        //patientId.setText(String.valueOf(patientID));
-        //userId.setText(String.valueOf(userID));
 
+        String doctorName = Queries.getDoctorName(appointment.getDoctorId(), appointment.getAppointmentId());
+        doctorNameComboBox.getSelectionModel().select(String.valueOf(doctorName));
 
-        String userId = String.valueOf(appointment.getUserId());
-        userIdComboBox.getSelectionModel().select(userId);
-
-        String contactName = Queries.getContactName(appointment.getContactId(), appointment.getAppointmentId());
-        contactComboBox.getSelectionModel().select(contactName);
-
-        //String patientName = Queries.;
+        String patientName = Queries.getPatientName(appointment.getPatientID(), appointment.getAppointmentId());
+        patientComboBox.getSelectionModel().select(String.valueOf(patientName));
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -127,8 +115,6 @@ public class UpdateAppointmentController implements Initializable {
         endDate.setDayCellFactory(dayCellFactory);
 
         startDate.setValue(appointmentStartDateTime.toLocalDate());
-        //startHourComboBox.getSelectionModel().select(localStartTime.getHour());
-        //startMinuteComboBox.getSelectionModel().select(localStartTime.getMinute());
         if (localStartTime.getHour() < 10){
             String finalLocalStartHour = "0" + String.valueOf(localStartTime.getHour());
             startHourComboBox.getSelectionModel().select(finalLocalStartHour);
@@ -148,8 +134,6 @@ public class UpdateAppointmentController implements Initializable {
         }
 
         endDate.setValue(appointmentEndDateTime.toLocalDate());
-        //endHourComboBox.getSelectionModel().select(localEndTime.getHour());
-        //endMinuteComboBox.getSelectionModel().select(localEndTime.getMinute());
         if (localEndTime.getHour() < 10){
             String finalLocalEndHour = "0" + String.valueOf(localEndTime.getHour());
             endHourComboBox.getSelectionModel().select(finalLocalEndHour);
@@ -212,12 +196,10 @@ public class UpdateAppointmentController implements Initializable {
         LocalDateTime createDate = Queries.getAppointmentCreateDate(selectedAppointment.getAppointmentId());
         String createdBy = user.getUsername();
         LocalDateTime lastUpdate = LocalDateTime.now();
-        //String patientID = patientId.getText();
-        //String userID = userId.getText();
         String appointmentDescription = description.getText();
-        int appointmentUser = Integer.parseInt(String.valueOf(userIdComboBox.getSelectionModel().getSelectedItem()));
-        String appointmentContact = String.valueOf(contactComboBox.getSelectionModel().getSelectedItem());
-        int contactId = Queries.getOnlyDoctorId(appointmentContact);
+        String appointmentContact = String.valueOf(doctorNameComboBox.getSelectionModel().getSelectedItem());
+        int doctorId = Queries.getOnlyDoctorId(appointmentContact);
+        int appointmentUserId = Queries.getUserId(doctorId);
         String appointmentPatient = String.valueOf(patientComboBox.getSelectionModel().getSelectedItem());
         int patientId =Queries.getPatientId(appointmentPatient);
         String startHours = String.valueOf(startHourComboBox.getSelectionModel().getSelectedItem());
@@ -241,7 +223,8 @@ public class UpdateAppointmentController implements Initializable {
         LocalTime businessCloseHour = LocalTime.of(22, 00);
 
         if (appointmentTitle.equals("")|| appointmentLocation.equals("") || appointmentType.equals("") ||
-                contactComboBox.getSelectionModel().getSelectedItem() == null || start == null ||
+                doctorNameComboBox.getSelectionModel().getSelectedItem() == null ||
+                patientComboBox.getSelectionModel().getSelectedItem() == null || start == null ||
                 end == null || startHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 startMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
                 endHourComboBox.getSelectionModel().getSelectedItem() == null ||
@@ -307,8 +290,8 @@ public class UpdateAppointmentController implements Initializable {
         }
 
         else {
-            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllOtherStartTimes(appointmentID, String.valueOf(appointmentUser));
-            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllOtherEndTimes(appointmentID, String.valueOf(appointmentUser));
+            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllOtherStartTimes(appointmentID, String.valueOf(appointmentUserId));
+            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllOtherEndTimes(appointmentID, String.valueOf(appointmentUserId));
 
             ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
             ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
@@ -320,14 +303,7 @@ public class UpdateAppointmentController implements Initializable {
                 int startHour = x.getHour();
                 int startMinute = x.getMinute();
 
-                ZoneId utc = ZoneId.of("UTC");
-                ZoneId system = ZoneId.systemDefault();
-
                 LocalDateTime ldt = LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
-                ZonedDateTime zdt = ldt.atZone(utc);
-                ZonedDateTime Zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
-
-                //startTimes.addAll(LocalDateTime.from(Zdt));
                 startTimes.addAll(ldt);
             }
 
@@ -338,14 +314,7 @@ public class UpdateAppointmentController implements Initializable {
                 int endHour = y.getHour();
                 int endMinute = y.getMinute();
 
-                ZoneId utc = ZoneId.of("UTC");
-                ZoneId system = ZoneId.systemDefault();
-
                 LocalDateTime ldt = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute);
-                ZonedDateTime zdt = ldt.atZone(utc);
-                ZonedDateTime Zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
-
-                //endTimes.addAll(LocalDateTime.from(Zdt));
                 endTimes.addAll(ldt);
             }
 
@@ -425,7 +394,7 @@ public class UpdateAppointmentController implements Initializable {
 
             Queries.updateAppointment(appointmentID, appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                     finalStartTime, finalEndTime, finalCreateDate, createdBy, finalUpdateTime, lastUpdateBy,
-                    patientId, appointmentUser, contactId);
+                    patientId, appointmentUserId, doctorId);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllAppointmentsScreen.fxml"));
             Parent root = loader.load();

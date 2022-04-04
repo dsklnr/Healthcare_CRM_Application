@@ -31,8 +31,7 @@ public class  AddAppointmentController implements Initializable {
     public TextField location;
     public TextField type;
     public TextArea description;
-    public ComboBox userIdComboBox;
-    public ComboBox contactComboBox;
+    public ComboBox doctorNameComboBox;
     public ComboBox patientComboBox;
     public DatePicker startDate;
     public DatePicker endDate;
@@ -59,8 +58,7 @@ public class  AddAppointmentController implements Initializable {
         ObservableList<String> minutes = FXCollections.observableArrayList();
         minutes.addAll("00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55");
 
-        userIdComboBox.setPromptText("Select Doctor ID");
-        contactComboBox.setPromptText("Select Doctor");
+        doctorNameComboBox.setPromptText("Select Doctor");
         patientComboBox.setPromptText("Select Patient");
         startHourComboBox.setItems(hours);
         endHourComboBox.setItems(hours);
@@ -68,8 +66,7 @@ public class  AddAppointmentController implements Initializable {
         endMinuteComboBox.setItems(minutes);
 
         try {
-            userIdComboBox.setItems(Queries.getAllUsers());
-            contactComboBox.setItems(Queries.getAllContactInfo());
+            doctorNameComboBox.setItems(Queries.getAllContactInfo());
             patientComboBox.setItems(Queries.getAllPatients());
 
         } catch (SQLException e) {
@@ -124,9 +121,9 @@ public class  AddAppointmentController implements Initializable {
         //String patientID = patientId.getText();
         //String userID = userId.getText();
         String appointmentDescription = description.getText();
-        int appointmentUser = Integer.parseInt(String.valueOf(userIdComboBox.getSelectionModel().getSelectedItem()));
-        String appointmentContact = String.valueOf(contactComboBox.getSelectionModel().getSelectedItem());
-        int contactId = Queries.getOnlyDoctorId(appointmentContact);
+        String appointmentContact = String.valueOf(doctorNameComboBox.getSelectionModel().getSelectedItem());
+        int doctorId = Queries.getOnlyDoctorId(appointmentContact);
+        int appointmentUserId = Queries.getUserId(doctorId);
         String appointmentPatient = String.valueOf(patientComboBox.getSelectionModel().getSelectedItem());
         int patientId =Queries.getPatientId(appointmentPatient);
         String startHours = String.valueOf(startHourComboBox.getSelectionModel().getSelectedItem());
@@ -149,8 +146,7 @@ public class  AddAppointmentController implements Initializable {
         LocalTime businessCloseHour = LocalTime.of(22, 00);
 
         if (appointmentTitle.equals("")|| appointmentLocation.equals("") || appointmentType.equals("") ||
-                userIdComboBox.getSelectionModel().getSelectedItem() == null ||
-                contactComboBox.getSelectionModel().getSelectedItem() == null ||
+                doctorNameComboBox.getSelectionModel().getSelectedItem() == null ||
                 patientComboBox.getSelectionModel().getSelectedItem() == null || start == null ||
                 end == null || startHourComboBox.getSelectionModel().getSelectedItem() == null ||
                 startMinuteComboBox.getSelectionModel().getSelectedItem() == null ||
@@ -217,8 +213,8 @@ public class  AddAppointmentController implements Initializable {
         }
 
         else {
-            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllStartTimes(String.valueOf(appointmentUser));
-            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllEndTimes(String.valueOf(appointmentUser));
+            ObservableList<LocalDateTime> appointmentStartDateTimes = Queries.getAllStartTimes(String.valueOf(appointmentUserId));
+            ObservableList<LocalDateTime> appointmentEndDateTimes = Queries.getAllEndTimes(String.valueOf(appointmentUserId));
 
             ObservableList<LocalDateTime> startTimes = FXCollections.observableArrayList();
             ObservableList<LocalDateTime> endTimes = FXCollections.observableArrayList();
@@ -341,7 +337,9 @@ public class  AddAppointmentController implements Initializable {
 
             Queries.insertAppointment(appointmentTitle, appointmentDescription, appointmentLocation, appointmentType,
                    finalStartTime, finalEndTime, finalCreateTime, createdBy, finalUpdateTime, lastUpdateBy,
-                    patientId, appointmentUser, contactId);
+                    patientId, appointmentUserId, doctorId);
+
+            System.out.println(doctorId);
 
             JDBC.closeConnection();
 

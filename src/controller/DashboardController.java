@@ -31,7 +31,7 @@ public class DashboardController implements Initializable {
     public TableColumn<Appointment, Integer> appointmentIdCol;
     public TableColumn<Appointment, Integer> patientIdCol;
     public TableColumn<Appointment, String> patientNameCol;
-    public TableColumn<Appointment, Integer> userIdCol;
+    public TableColumn<Appointment, Integer> doctorIdCol;
     public TableColumn<Appointment, String> contactNameCol;
     public TableColumn<Appointment, String> titleCol;
     public TableColumn<Appointment, String> typeCol;
@@ -71,7 +71,7 @@ public class DashboardController implements Initializable {
 
         else if (DashboardQueries.getDoctorLevel(user.getUsername()) != null){
             try {
-                upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getUserId()));
+                upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getDoctorId()));
                 dashboardTable.setItems(upcomingAppointment);
 
             }catch (Exception ex){
@@ -113,6 +113,10 @@ public class DashboardController implements Initializable {
 
         patientNameCol.setCellValueFactory(colData -> {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getCreateDate());
+        });
+
+        doctorIdCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getDoctorId());
         });
 
         contactNameCol.setCellValueFactory(colData -> {

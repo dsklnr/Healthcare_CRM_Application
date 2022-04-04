@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -31,8 +30,8 @@ public class AllAppointmentsController implements Initializable {
     public TableColumn<Appointment, Integer> appointmentIdCol;
     public TableColumn<Appointment, Integer> patientIdCol;
     public TableColumn<Appointment, String> patientNameCol;
-    public TableColumn<Appointment, Integer> userIdCol;
-    public TableColumn<Appointment, String> contactNameCol;
+    public TableColumn<Appointment, Integer> doctorIdCol;
+    public TableColumn<Appointment, String> doctorNameCol;
     public TableColumn<Appointment, String> titleCol;
     public TableColumn<Appointment, String> typeCol;
     public TableColumn<Appointment, String> locationCol;
@@ -73,11 +72,11 @@ public class AllAppointmentsController implements Initializable {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getCreateDate());
         });
 
-        userIdCol.setCellValueFactory(colData -> {
-            return new ReadOnlyObjectWrapper<>(colData.getValue().getUserId());
+        doctorIdCol.setCellValueFactory(colData -> {
+            return new ReadOnlyObjectWrapper<>(colData.getValue().getDoctorId());
         });
 
-        contactNameCol.setCellValueFactory(colData -> {
+        doctorNameCol.setCellValueFactory(colData -> {
             return new ReadOnlyObjectWrapper<>(colData.getValue().getCreatedBy());
         });
 
