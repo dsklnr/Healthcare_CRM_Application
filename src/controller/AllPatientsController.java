@@ -12,11 +12,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.Patient;
 import model.User;
 
@@ -248,21 +248,61 @@ public class AllPatientsController implements Initializable {
     public void onSearchPatients(ActionEvent actionEvent) {
         JDBC.openConnection();
 
-        String search = searchPatients.getText();
+        String queryPatient = searchPatients.getText();
+        ObservableList<Patient> patients = searchByPatientName(queryPatient);
 
-        ObservableList<Patient> allPatients = Queries.getAllPatients();
-        ObservableList<Patient> patientsSearch = FXCollections.observableArrayList();
+        if (patients.size() == 0){
+            try{
+                int patientId = Integer.parseInt(queryPatient);
+                Patient patient = getPatientId(patientId);
 
-        for (Patient c : allPatients){
-            if (c.getName().contains(search)){
-                patientsSearch.addAll(c);
+                if (patient != null){
+                    patients.add(patient);
+                }
+            }catch (NumberFormatException ignored){
+
             }
-
         }
 
+        if (patients.size() == 0){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            Image image = new Image("/icons/Error.png");
+            stage.getIcons().add(image);
+            alert.setTitle("Error");
+            alert.setContentText("Appointment not found");
+            alert.showAndWait();
+            return;
+        }
 
-        patientsTable.setItems(patientsSearch);
+        patientsTable.setItems(patients);
 
-        JDBC.closeConnection();;
+        JDBC.closeConnection();
+
+    }
+
+    private ObservableList<Patient> searchByPatientName(String queryPatient) {
+        ObservableList<Patient> patientNameSearch = FXCollections.observableArrayList();
+        ObservableList<Patient> allPatients = Queries.getAllPatients();
+
+        for (Patient p : allPatients){
+            if (p.getName().contains(queryPatient)){
+                patientNameSearch.add(p);
+            }
+        }
+        return patientNameSearch;
+    }
+
+    private Patient getPatientId(int patientId) {
+        ObservableList<Patient> allPatients = Queries.getAllPatients();
+
+        for (int i = 0; i < allPatients.size(); i++){
+            Patient patient = allPatients.get(i);
+
+            if (patient.getPatientID() == patientId){
+                return patient;
+            }
+        }
+        return null;
     }
 }

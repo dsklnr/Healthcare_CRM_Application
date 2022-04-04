@@ -157,6 +157,10 @@ public class Patient {
         this.divisionId = divisionId;
     }
 
+    /** Get the patient's name.
+     *
+     * @return Returns the patient's name.
+     */
     @Override
     public String toString(){
         return name;

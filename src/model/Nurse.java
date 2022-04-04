@@ -1,5 +1,6 @@
 package model;
 
+/** Creating the Nurse class **/
 public class Nurse extends User{
     private String nurseType;
 
@@ -16,10 +17,18 @@ public class Nurse extends User{
         this.nurseType = nurseType;
     }
 
+    /** Get the nurse type.
+     *
+     * @return Returns the nurse type.
+     */
     public String getNurseType() {
         return nurseType;
     }
 
+    /** Set the nurse type.
+     *
+     * @param nurseType The nurse type.
+     */
     public void setNurseType(String nurseType) {
         this.nurseType = nurseType;
     }

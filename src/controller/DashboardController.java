@@ -1,6 +1,5 @@
 package controller;
 
-import dao.DashboardQueries;
 import dao.JDBC;
 import dao.Queries;
 import javafx.beans.property.*;
@@ -59,7 +58,7 @@ public class DashboardController implements Initializable {
 
         ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
 
-        if (DashboardQueries.getDoctorLevel(user.getUsername()) == null){
+        if (Queries.getDoctorLevel(user.getUsername()) == null){
             try {
                 upcomingAppointment.addAll(Queries.getAllNextMonthAppointments());
                 dashboardTable.setItems(upcomingAppointment);
@@ -69,7 +68,7 @@ public class DashboardController implements Initializable {
             }
         }
 
-        else if (DashboardQueries.getDoctorLevel(user.getUsername()) != null){
+        else if (Queries.getDoctorLevel(user.getUsername()) != null){
             try {
                 upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getDoctorId()));
                 dashboardTable.setItems(upcomingAppointment);
@@ -230,7 +229,7 @@ public class DashboardController implements Initializable {
 
         ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
 
-        if (DashboardQueries.getDoctorLevel(user.getUsername()) == null){
+        if (Queries.getDoctorLevel(user.getUsername()) == null){
             try {
                 upcomingAppointment.addAll(Queries.getAllNextMonthAppointments());
                 dashboardTable.setItems(upcomingAppointment);
@@ -240,7 +239,7 @@ public class DashboardController implements Initializable {
             }
         }
 
-        else if (DashboardQueries.getDoctorLevel(user.getUsername()) != null){
+        else if (Queries.getDoctorLevel(user.getUsername()) != null){
             try {
                 upcomingAppointment.addAll(Queries.getNextMonthAppointments(user.getUserId()));
                 dashboardTable.setItems(upcomingAppointment);
@@ -261,7 +260,7 @@ public class DashboardController implements Initializable {
 
         ObservableList<Appointment> upcomingAppointment = FXCollections.observableArrayList();
 
-        if (DashboardQueries.getDoctorLevel(user.getUsername()) == null){
+        if (Queries.getDoctorLevel(user.getUsername()) == null){
             try {
                 upcomingAppointment.addAll(Queries.getAllNextWeekAppointments());
                 dashboardTable.setItems(upcomingAppointment);
@@ -271,7 +270,7 @@ public class DashboardController implements Initializable {
             }
         }
 
-        else if (DashboardQueries.getDoctorLevel(user.getUsername()) != null){
+        else if (Queries.getDoctorLevel(user.getUsername()) != null){
             try {
                 upcomingAppointment.addAll(Queries.getNextWeekAppointments(user.getUserId()));
                 dashboardTable.setItems(upcomingAppointment);

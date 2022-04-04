@@ -54,14 +54,26 @@ public class User {
         this.password = password;
     }
 
+    /** Get the doctor's ID.
+     *
+     * @return Returns the doctor's ID.
+     */
     public int getDoctorId() {
         return doctorId;
     }
 
+    /** Set the doctor's ID.
+     *
+     * @param doctorId The doctor's ID.
+     */
     public void setDoctorId(int doctorId) {
         this.doctorId = doctorId;
     }
 
+    /** Get the user's ID.
+     *
+     * @return Returns the user's ID.
+     */
     @Override
     public String toString(){
         return String.valueOf(userId);

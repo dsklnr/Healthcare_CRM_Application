@@ -1,7 +1,7 @@
 package controller;
 
-import dao.CreateAccountQueries;
 import dao.JDBC;
+import dao.Queries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -79,8 +79,8 @@ public class CreateAccountController implements Initializable {
 
             String lvl = levels.getSelectionModel().getSelectedItem();
 
-            CreateAccountQueries.insertDoctor(doctorID, name, contactEmail);
-            CreateAccountQueries.insertDoctor(user, String.valueOf(encryptedPassword), lvl, doctorID);
+            Queries.insertDoctor(doctorID, name, contactEmail);
+            Queries.insertDoctor(user, String.valueOf(encryptedPassword), lvl, doctorID);
         }
 
         if (nurseButton.isSelected()){
@@ -95,7 +95,7 @@ public class CreateAccountController implements Initializable {
 
             String type = levels.getSelectionModel().getSelectedItem();
 
-            CreateAccountQueries.insertNurse(user, String.valueOf(encryptedPassword), type);
+            Queries.insertNurse(user, String.valueOf(encryptedPassword), type);
         }
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

@@ -98,6 +98,10 @@ public abstract class Queries {
         return 0;
     }
 
+    /** Get all doctor IDs.
+     *
+     * @return Returns all doctor IDs.
+     */
     public static ObservableList<User> getAllDoctorIds() throws SQLException {
         ObservableList<User> userList = FXCollections.observableArrayList();
 
@@ -616,6 +620,11 @@ public abstract class Queries {
         return appointmentsList;
     }
 
+    /** Get the upcoming months appointments.
+     *
+     * @return Returns the users upcoming month of appointments.
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAllNextMonthAppointments() throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
@@ -694,6 +703,10 @@ public abstract class Queries {
         return appointmentsList;
     }
 
+    /** Get all the upcoming week's appointments.
+     *
+     * @return Returns all upcoming appointments within the next week.
+     */
     public static ObservableList<Appointment> getAllNextWeekAppointments() throws SQLException {
         ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
 
@@ -1105,6 +1118,11 @@ public abstract class Queries {
         return 0;
     }
 
+    /** Get the doctor's user ID.
+     *
+     * @param doctorId The doctor's ID number.
+     * @return Returns the doctor's user ID.
+     */
     public static int getUserId(int doctorId) throws SQLException {
         String sql = "SELECT User_ID\n" +
                 "FROM users WHERE Doctor_ID = ?";
@@ -1120,6 +1138,12 @@ public abstract class Queries {
         return 0;
     }
 
+    /** Get the patient's name.
+     *
+     * @param patientId The patient ID.
+     * @param appointmentId The patient's appointment ID.
+     * @return Returns the patients name.
+     */
     public static String getPatientName(int patientId, int appointmentId) throws SQLException {
         String sql = "SELECT Patient_Name\n" +
                 "FROM appointments, patients\n" +
@@ -1135,5 +1159,158 @@ public abstract class Queries {
             return patientName;
         }
         return null;
+    }
+
+    /** Get all the patient appointments.
+     * @return Returns all patient appointments.
+     */
+    public static ObservableList<Appointment> getTotalPatientAppointments() throws SQLException {
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+
+        String sql = "SELECT distinct Type, MONTHNAME(Start) AS Month, COUNT(Type) AS Count_Type\n" +
+                "FROM appointments\n" +
+                "GROUP by Type";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            String type = rs.getString("Type");
+            String month = rs.getString("Month");
+            String number = rs.getString("Count_Type");
+
+            allAppointments.add(new Appointment(1, "", "", "",
+                    type, month, "", number, "", "", "",
+                    1, 1, 1));
+        }
+
+        return allAppointments;
+
+    }
+
+    /** Get the number of patients by state.
+     *
+     * @return Returns the number of patients by state.
+     */
+    public static ObservableList<Division> getNumberOfPatientsByState() throws SQLException {
+        ObservableList<Division> allPatients = FXCollections.observableArrayList();
+
+        String sql = "SELECT countries.Country, first_level_divisions.Division, COUNT(distinct patients.Patient_ID) AS Num_Of_Patients\n" +
+                "FROM ((first_level_divisions\n" +
+                "INNER JOIN countries ON first_level_divisions.Country_ID = countries.Country_ID)\n" +
+                "INNER JOIN patients ON first_level_divisions.Division_ID = patients.Division_ID)\n" +
+                "GROUP BY countries.Country\n" +
+                "order by countries.Country";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            String country = rs.getString("Country");
+            String division = rs.getString("Division");
+            int patients = rs.getInt("Num_Of_Patients");
+
+            allPatients.add(new Division(1, country, division, "", "", "", patients));
+
+        }
+
+
+        return allPatients;
+    }
+
+    /** Get the doctor's level.
+     *
+     * @param username The doctor's username.
+     * @return Returns the doctor's level.
+     */
+    public static String getDoctorLevel(String username) throws SQLException {
+        String sql = "SELECT Doctor_Level\n" +
+                "FROM users\n" +
+                "WHERE User_Name = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            String level = rs.getString("Doctor_Level");
+            return level;
+        }
+        return null;
+    }
+
+    /** Insert a doctor into the users table.
+     *
+     * @param userName The doctor's username.
+     * @param password The doctor's password.
+     * @param level The doctor's level.
+     * @param doctorId The doctor's ID number.
+     */
+    public static void insertDoctor(String userName, String password, String level, int doctorId) throws SQLException {
+        String sql = "INSERT INTO users \n" +
+                "VALUES (null, ?, ?, ?, null, ?)";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, userName);
+        ps.setString(2, password);
+        ps.setString(3, level);
+        ps.setInt(4, doctorId);
+        ps.execute();
+    }
+
+    /** Insert a new nurse into the users table.
+     *
+     * @param userName The nurse's username.
+     * @param password The nurse's password.
+     * @param type the nurse's type.
+     */
+    public static void insertNurse(String userName, String password, String type) throws SQLException {
+        String sql = "INSERT INTO users \n" +
+                "VALUES (null, ?, ?, null, ?, null)";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, userName);
+        ps.setString(2, password);
+        ps.setString(3, type);
+        ps.execute();
+    }
+
+    /** Insert a new doctor into the doctor's table.
+     *
+     * @param doctorId The doctor ID.
+     * @param name The doctor's name.
+     * @param email The doctor's email.
+     */
+    public static void insertDoctor(int doctorId, String name, String email) throws SQLException {
+        String sql = "INSERT INTO doctors \n" +
+                "VALUES (?, ?, ?)";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, doctorId);
+        ps.setString(2, name);
+        ps.setString(3, email);
+        ps.execute();
+    }
+
+    /** Get the user's user ID.
+     *
+     * @param username The user's username.
+     * @return Returns the user's User ID.
+     */
+    public static int getId(String username) throws SQLException {
+        String sql = "SELECT User_ID\n" +
+                "FROM users\n" +
+                "WHERE User_Name = ?";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            int id = rs.getInt("User_ID");
+            return id;
+        }
+
+        return 0;
     }
 }

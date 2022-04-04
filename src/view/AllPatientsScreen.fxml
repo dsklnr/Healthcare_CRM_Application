@@ -29,7 +29,7 @@
             <TableColumn fx:id="divisionCol" prefWidth="234.0" text="State/Province" />
         </columns>
       </TableView>
-      <TextField fx:id="searchPatients" layoutX="1215.0" layoutY="145.0" onAction="#onSearchPatients" prefHeight="25.0" prefWidth="200.0" promptText="Search Customer Name" />
+      <TextField fx:id="searchPatients" layoutX="1152.0" layoutY="145.0" onAction="#onSearchPatients" prefHeight="25.0" prefWidth="263.0" promptText="Search Patient ID or Name" />
        <Pane layoutX="-6.0" layoutY="-4.0" prefHeight="79.0" prefWidth="1506.0" style="-fx-background-color: #000000;">
            <children>
                <Label fx:id="homeLabel" layoutX="994.0" layoutY="30.0" onMouseClicked="#onHomeClick" style="-fx-cursor: hand; -fx-text-fill: #FFFFFF;" text="HOME">

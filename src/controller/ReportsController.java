@@ -1,7 +1,7 @@
 package controller;
 
 import dao.JDBC;
-import dao.ReportQueries;
+import dao.Queries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -60,8 +60,8 @@ public class ReportsController implements Initializable {
         ObservableList<Division> patientsByState = FXCollections.observableArrayList();
 
         try {
-            totalAppointments = ReportQueries.getTotalPatientAppointments();
-            patientsByState = ReportQueries.getNumberOfPatientsByState();
+            totalAppointments = Queries.getTotalPatientAppointments();
+            patientsByState = Queries.getNumberOfPatientsByState();
 
         } catch (SQLException e) {
             e.printStackTrace();

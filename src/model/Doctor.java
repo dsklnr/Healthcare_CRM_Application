@@ -1,5 +1,6 @@
 package model;
 
+/** Creating the Doctor class **/
 public class Doctor extends User{
     private String doctorLevel;
 
@@ -16,10 +17,18 @@ public class Doctor extends User{
         this.doctorLevel = doctorLevel;
     }
 
+    /** Get the doctor's level.
+     *
+     * @return Returns the doctor's level.
+     */
     public String getDoctorLevel() {
         return doctorLevel;
     }
 
+    /** Set the doctor's level.
+     *
+     * @param doctorLevel The doctor's level.
+     */
     public void setDoctorLevel(String doctorLevel) {
         this.doctorLevel = doctorLevel;
     }
