@@ -38,7 +38,6 @@ public class MainScreenController implements Initializable {
     public Label usernameLabel;
     public Label passwordLabel;
     public Label createLabel;
-    public Label forgotLabel;
     public Label time;
     public Label locationLabel;
     public ImageView logo;
@@ -55,7 +54,6 @@ public class MainScreenController implements Initializable {
         usernameLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
         passwordLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
         createLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
-        forgotLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1C6CF6;");
 
         crmLabel.setMaxWidth(Double.MAX_VALUE);
         AnchorPane.setLeftAnchor(crmLabel, 0.0);
@@ -66,11 +64,6 @@ public class MainScreenController implements Initializable {
         AnchorPane.setLeftAnchor(createLabel, 0.0);
         AnchorPane.setRightAnchor(createLabel, 0.0);
         createLabel.setAlignment(Pos.CENTER);
-
-        forgotLabel.setMaxWidth(Double.MAX_VALUE);
-        AnchorPane.setLeftAnchor(forgotLabel, 0.0);
-        AnchorPane.setRightAnchor(forgotLabel, 0.0);
-        forgotLabel.setAlignment(Pos.CENTER);
 
         locationLabel.setMaxWidth(Double.MAX_VALUE);
         AnchorPane.setLeftAnchor(locationLabel, 0.0);
@@ -100,7 +93,6 @@ public class MainScreenController implements Initializable {
                 usernameLabel.setText(rb.getString("username"));
                 passwordLabel.setText(rb.getString("password"));
                 createLabel.setText(rb.getString("createAccount"));
-                forgotLabel.setText(rb.getString("forgotPassword"));
                 login.setText(rb.getString("login"));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -149,10 +141,10 @@ public class MainScreenController implements Initializable {
                     alert.setTitle("Upcoming Appointments");
                     alert.setContentText("No immediate upcoming appointments.");
                     alert.showAndWait();
-
                 }
 
-                User currentUser = new User(Queries.selectUser(user, String.valueOf(encryptedPassword)), user, pass, Queries.getDoctorId(user));
+                User currentUser = new User(Queries.selectUser(user, String.valueOf(encryptedPassword)), user, pass,
+                        Queries.getDoctorId(user));
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardScreen.fxml"));
                 Parent root = loader.load();
