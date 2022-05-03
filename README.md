@@ -24,8 +24,14 @@ Login Screen: <br/>
 <img src="https://imgur.com/swKEblC.png" height="35%" width="35%" alt="Login Screen"/>
 <br />
 <br />
+Upon successfully loging into the CRM, the user receives an alert notifying them if there is an upcoming appointment within the next 15 minutes.
+<br />
+<br />
 Successful Login Upcoming Appointment Alert:  <br/>
 <img src="https://imgur.com/68J2n2j.png" height="35%" width="35%" alt="Upcoming Appointment Alert"/>
+<br />
+<br />
+If the user is a doctor, the dashboard screen will show their upcoming appointments. If the user is a nurse, the dashboard will show all upcoming appointments. Above the top right of the dashboard table, the user can toggle between upcoming appointments within the next week or the next month.
 <br />
 <br />
 Dashboard Screen: <br/>
@@ -62,6 +68,9 @@ Update an Appointment:  <br/>
 <br />
 Delete an Appointment:  <br/>
 <img src="https://imgur.com/tk8sOP4.png" height="100%" width="100%" alt="Update Patient Screen"/>
+<br />
+<br />
+The business reports screen helps the hospital be aware of the most popular type of appointment and which state/province has the most patients who visit the hospital.
 <br />
 <br />
 Business Reports Screen:  <br/>
