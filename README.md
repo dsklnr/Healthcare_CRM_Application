@@ -13,7 +13,7 @@ Project consists of Java and MySQL to create an application where doctors and nu
 
 <h2>Environments Used </h2>
 
-- <b>Windows 10</b>
+- <b>Windows 10 VM</b>
 - <b>IntelliJ</b>
 - <b>MySQL Workbench</b>
 
