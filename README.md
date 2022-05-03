@@ -53,11 +53,11 @@ All Appointments Screen:  <br/>
 <br />
 <br />
 Add an Appointment:  <br/>
-<img src="https://imgur.com/Lw4Sqi7.png" height="50%" width="50%" alt="Add Appointment Screen"/>
+<img src="https://imgur.com/Lw4Sqi7.png" height="55%" width="55%" alt="Add Appointment Screen"/>
 <br />
 <br />
 Update an Appointment:  <br/>
-<img src="https://imgur.com/1woVO9A.png" height="50%" width="50%" alt="Update Appointment Screen"/>
+<img src="https://imgur.com/1woVO9A.png" height="55%" width="55%" alt="Update Appointment Screen"/>
 <br />
 <br />
 Delete an Appointment:  <br/>
