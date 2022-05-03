@@ -21,11 +21,11 @@ Project consists of Java and MySQL to create an application where doctors and nu
 
 <p align="center">
 Login Screen: <br/>
-<img src="https://imgur.com/swKEblC.png" height="30%" width="30%" alt="Login Screen"/>
+<img src="https://imgur.com/swKEblC.png" height="35%" width="35%" alt="Login Screen"/>
 <br />
 <br />
 Successful Login Upcoming Appointment Alert:  <br/>
-<img src="https://imgur.com/68J2n2j.png" height="30%" width="30%" alt="Upcoming Appointment Alert"/>
+<img src="https://imgur.com/68J2n2j.png" height="35%" width="35%" alt="Upcoming Appointment Alert"/>
 <br />
 <br />
 Dashboard Screen: <br/>
@@ -37,11 +37,11 @@ All Patients Screen:  <br/>
 <br />
 <br />
 Add a Patient:  <br/>
-<img src="https://imgur.com/hsFBMrp.png" height="30%" width="30%" alt="Add Patient Screen"/>
+<img src="https://imgur.com/hsFBMrp.png" height="40%" width="40%" alt="Add Patient Screen"/>
 <br />
 <br />
 Update a Patient:  <br/>
-<img src="https://imgur.com/07MHIIU.png" height="30%" width="30%" alt="Update Patient Screen"/>
+<img src="https://imgur.com/07MHIIU.png" height="40%" width="40%" alt="Update Patient Screen"/>
 <br />
 <br />
 Delete a Patient:  <br/>
@@ -53,11 +53,11 @@ All Appointments Screen:  <br/>
 <br />
 <br />
 Add an Appointment:  <br/>
-<img src="https://imgur.com/Lw4Sqi7.png" height="30%" width="30%" alt="Add Appointment Screen"/>
+<img src="https://imgur.com/Lw4Sqi7.png" height="50%" width="50%" alt="Add Appointment Screen"/>
 <br />
 <br />
 Update an Appointment:  <br/>
-<img src="https://imgur.com/1woVO9A.png" height="30%" width="30%" alt="Update Appointment Screen"/>
+<img src="https://imgur.com/1woVO9A.png" height="50%" width="50%" alt="Update Appointment Screen"/>
 <br />
 <br />
 Delete an Appointment:  <br/>
