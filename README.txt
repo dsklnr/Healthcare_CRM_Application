@@ -5,7 +5,7 @@ JDK Version: Java SE 17.0.2
 JavaFX Version: JavaFX-SDK-17.0.2
 MySQL Connector Driver: mysql-connector-java-8.0.28
 
-This application was designed for doctors and nurses to schedule patient appointment.
+This application was designed for doctors and nurses to schedule patient appointments.
 
 The main screen is where the user may either create a new account or login. Either nurses or 
 doctors can create an account. When creating an account, passwords are encrypted for secutity 
