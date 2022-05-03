@@ -1,25 +1,26 @@
-<h1>JWipe - Disk Sanitization</h1>
-
- ### [YouTube Demonstration](https://youtu.be/7eJexJVCqJo)
+<h1>Healthcare CRM Application</h1>
 
 <h2>Description</h2>
-Project consists of a simple PowerShell script that walks the user through "zeroing out" (wiping) any drives that are connected to the system. The utility allows you to select the target disk and choose the number of passes that are performed. The PowerShell script will configure a diskpart script file based on the user's selections and then launch Diskpart to perform the disk sanitization.
-<br />
+Project consists of Java and MySQL to create an application where doctors and nurses can schedule patient appointments. Users are required to login in order to gain access the the CRM. After loggin in, users are notified of any upcoming appointments within the next 15 minutes. The dashboard contains a list of the logged in doctor's upcoming appointments or all doctors upcoming appointments if the user is a nurse. Users can navigate through the dashboard, patient, appointment, and reports screen to manage appointments.
 
 
 <h2>Languages and Utilities Used</h2>
 
-- <b>PowerShell</b> 
-- <b>Diskpart</b>
+- <b>Java</b> 
+- <b>MySQL</b>
+- <b>XML</b>
+- <b>CSS</b>
 
 <h2>Environments Used </h2>
 
-- <b>Windows 10</b> (21H2)
+- <b>Windows 10</b>
+- <b>IntelliJ</b>
+- <b>MySQL Workbench</b>
 
 <h2>Program walk-through:</h2>
 
 <p align="center">
-Launch the utility: <br/>
+Login Screen: <br/>
 <img src="https://i.imgur.com/62TgaWL.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
