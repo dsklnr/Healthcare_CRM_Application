@@ -20,63 +20,64 @@ Project consists of Java and MySQL to create an application where doctors and nu
 <h2>Program walk-through:</h2>
 
 <p align="center">
-Login Screen: <br/>
-<img src="https://imgur.com/swKEblC.png" height="35%" width="35%" alt="Login Screen"/>
+Home Screen: <br/>
+<img src="https://imgur.com/kY3LzSs.png" height="25%" width="25%" alt="Home Screen"/>
 <br />
 <br />
-Upon successfully loging into the CRM, the user receives an alert notifying them if there is an upcoming appointment within the next 15 minutes.
+All Terms:  <br/>
+<img src="https://imgur.com/Av9naZP.png" height="25%" width="25%" alt="All Terms Screen"/>
 <br />
 <br />
-Successful Login Upcoming Appointment Alert:  <br/>
-<img src="https://imgur.com/68J2n2j.png" height="35%" width="35%" alt="Upcoming Appointment Alert"/>
+All Courses: <br/>
+<img src="https://imgur.com/A7h7mqj.png" height="25%" width="25%" alt="All Courses Screen"/>
 <br />
 <br />
-If the user is a doctor, the dashboard screen will show their upcoming appointments. If the user is a nurse, the dashboard will show all upcoming appointments. Above the top right of the dashboard table, the user can toggle between upcoming appointments within the next week or the next month.
+All Assessments:  <br/>
+<img src="https://imgur.com/OR27WYI.png" height="25%" width="25%" alt="All Assessments Screen"/>
 <br />
 <br />
-Dashboard Screen: <br/>
-<img src="https://imgur.com/2NcJ38p.png" height="100%" width="100%" alt="Dashboard Screen"/>
+ Clicking the tree white dots at the top right makes a drop down menu appear where users can delete the selected term.
 <br />
 <br />
-All Patients Screen:  <br/>
-<img src="https://imgur.com/RINn4o8.png" height="100%" width="100%" alt="Patients Screen"/>
+Edit Term:  <br/>
+<img src="https://imgur.com/28pOOGT.png" height="25%" width="25%" alt="Edit Term Screen"/>
 <br />
 <br />
-Add a Patient:  <br/>
-<img src="https://imgur.com/hsFBMrp.png" height="40%" width="40%" alt="Add Patient Screen"/>
+Add Term:  <br/>
+<img src="https://imgur.com/ERo3Dg7.png" height="25%" width="25%" alt="Add Term Screen"/>
 <br />
 <br />
-Update a Patient:  <br/>
-<img src="https://imgur.com/07MHIIU.png" height="40%" width="40%" alt="Update Patient Screen"/>
+Edit Course:  <br/>
+<img src="https://imgur.com/Lhp7Dai.png" height="25%" width="25%" alt="Edit Course Screen pt 1"/>
+<img src="https://imgur.com/JBE1TXh.png" height="25%" width="25%" alt="Edit Course Screen pt 2"/>
 <br />
 <br />
-Delete a Patient:  <br/>
-<img src="https://imgur.com/UypcF0X.png" height="100%" width="100%" alt="Delete A Patient"/>
+Delete Course:  <br/>
+<img src="https://imgur.com/MCVmAhQ.png" height="25%" width="25%" alt="Delete Course Screen"/>
 <br />
 <br />
-All Appointments Screen:  <br/>
-<img src="https://imgur.com/5F2blgB.png" height="100%" width="100%" alt="All Appointments Screen"/>
+Set Course Start Date Reminder:  <br/>
+<img src="https://imgur.com/BB31LAM.png" height="25%" width="25%" alt="Set Course Reminder Screen"/>
 <br />
 <br />
-Add an Appointment:  <br/>
-<img src="https://imgur.com/Lw4Sqi7.png" height="55%" width="55%" alt="Add Appointment Screen"/>
+Share Course Notes:  <br/>
+<img src="https://imgur.com/muuDwV3.png" height="25%" width="25%" alt="Share Course Notes Screen"/>
 <br />
 <br />
-Update an Appointment:  <br/>
-<img src="https://imgur.com/1woVO9A.png" height="55%" width="55%" alt="Update Appointment Screen"/>
+Edit Assessment:  <br/>
+<img src="https://imgur.com/UetFWx3.png" height="25%" width="25%" alt="Edit Assessment Screen pt 1"/>
+ <img src="https://imgur.com/UHVZhVS.png" height="25%" width="25%" alt="Edit Assessment Screen pt 2"/>
 <br />
 <br />
-Delete an Appointment:  <br/>
-<img src="https://imgur.com/tk8sOP4.png" height="100%" width="100%" alt="Update Patient Screen"/>
+Set Assessment Due Date Reminder:  <br/>
+<img src="https://imgur.com/idlJktR.png" height="25%" width="25%" alt="Assessment Due Date Reminder Screen"/>
 <br />
 <br />
-The business reports screen helps the hospital be aware of the most popular type of appointment and which state/province has the most patients who visit the hospital.
+Add Assessment:  <br/>
+<img src="https://imgur.com/Dn8gwWy.png" height="25%" width="25%" alt="Add Assessment Screen"/>
 <br />
 <br />
-Business Reports Screen:  <br/>
-<img src="https://imgur.com/pnTN8HC.png" height="100%" width="100%" alt="All Appointments Screen"/>
-<br />
-<br />
+
  
 </p>
 
